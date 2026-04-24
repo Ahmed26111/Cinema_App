@@ -1,5 +1,5 @@
 import 'package:cinema_app/constants/api%20constants/movie_key_constants.dart';
-import 'package:cinema_app/utils/shared/convert_string_to_datetime.dart';
+import 'package:cinema_app/utils/shared/conversion.dart';
 
 class MovieModel {
   final bool isAdult;

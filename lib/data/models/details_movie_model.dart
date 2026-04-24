@@ -1,6 +1,6 @@
 import 'package:cinema_app/data/models/company_model.dart';
 import 'package:cinema_app/data/models/genre_model.dart';
-import 'package:cinema_app/utils/shared/convert_string_to_datetime.dart';
+import 'package:cinema_app/utils/shared/conversion.dart';
 
 import '../../constants/api constants/movie_key_constants.dart';
 
