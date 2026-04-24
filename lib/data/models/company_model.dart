@@ -4,13 +4,13 @@ class CompanyModel {
   final int companyId;
   final String companyName;
   final String originCountry;
-  final String? logoPath;
+  final String? logoImagePath;
 
   CompanyModel({
     required this.companyId,
     required this.companyName,
     required this.originCountry,
-    required this.logoPath,
+    required this.logoImagePath,
   });
 
   factory CompanyModel.fromJson(Map<String, dynamic> json){
@@ -18,7 +18,7 @@ class CompanyModel {
         companyId: json[CompanyKeyConstants.id],
         companyName: json[CompanyKeyConstants.name],
         originCountry: json[CompanyKeyConstants.originCountry],
-        logoPath: json[CompanyKeyConstants.logoPath]
+        logoImagePath: json[CompanyKeyConstants.logoPath]
     );
   }
 }
