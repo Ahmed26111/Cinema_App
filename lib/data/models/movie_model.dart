@@ -4,7 +4,7 @@ import 'package:cinema_app/utils/shared/convert_string_to_datetime.dart';
 class MovieModel {
   final bool isAdult;
   final String backdropPathImage;
-  final List<int> genres;
+  final List<int> genreIds;
   final int movieId;
   final String movieTitle;
   final String originalLanguage;
@@ -16,7 +16,7 @@ class MovieModel {
   MovieModel({
     required this.isAdult,
     required this.backdropPathImage,
-    required this.genres,
+    required this.genreIds,
     required this.movieId,
     required this.movieTitle,
     required this.originalLanguage,
@@ -30,7 +30,7 @@ class MovieModel {
     return MovieModel(
         isAdult: json[MovieKeyConstants.adult],
         backdropPathImage: json[MovieKeyConstants.backdropPath],
-        genres: json[MovieKeyConstants.genreIds],
+        genreIds: json[MovieKeyConstants.genreIds],
         movieId: json[MovieKeyConstants.id],
         movieTitle: json[MovieKeyConstants.title],
         originalLanguage: json[MovieKeyConstants.originalLanguage],
