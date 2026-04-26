@@ -3,13 +3,13 @@ import 'package:cinema_app/utils/shared/conversion.dart';
 
 class MovieModel {
   final bool isAdult;
-  final String backdropPathImage;
+  final String ? backdropPathImage;
   final List<int> genreIds;
   final int movieId;
   final String movieTitle;
   final String originalLanguage;
   final String overview;
-  final String posterPathImage;
+  final String ? posterPathImage;
   final DateTime releaseDate;
   final double voteAverage;
 
@@ -30,7 +30,7 @@ class MovieModel {
     return MovieModel(
         isAdult: json[MovieKeyConstants.adult],
         backdropPathImage: json[MovieKeyConstants.backdropPath],
-        genreIds: json[MovieKeyConstants.genreIds],
+        genreIds: (json[MovieKeyConstants.genreIds] as List<dynamic>).map((element)=>element as int).toList(),
         movieId: json[MovieKeyConstants.id],
         movieTitle: json[MovieKeyConstants.title],
         originalLanguage: json[MovieKeyConstants.originalLanguage],

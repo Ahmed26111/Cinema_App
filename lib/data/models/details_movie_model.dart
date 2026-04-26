@@ -6,13 +6,13 @@ import '../../constants/api constants/movie_key_constants.dart';
 
 class DetailsMovieModel {
   final bool isAdult;
-  final String backdropPathImage;
+  final String ? backdropPathImage;
   final List<GenreModel> genres;
   final int movieId;
   final String movieTitle;
   final String originalLanguage;
   final String overview;
-  final String posterPathImage;
+  final String ? posterPathImage;
   final DateTime releaseDate;
   final double voteAverage;
   final String imdbId;
@@ -59,7 +59,9 @@ class DetailsMovieModel {
         runTime: json[MovieKeyConstants.runTime],
         status: json[MovieKeyConstants.status],
         tagLine: json[MovieKeyConstants.tagLine],
-        originCountry: json[MovieKeyConstants.originCountry],
+        originCountry: (json[MovieKeyConstants.originCountry] as List<dynamic>)
+            .map((element)=>element as String).toList()
+        ,
         productionCompanies: (json[MovieKeyConstants.productionCompanies] as List<dynamic>)
             .map((company) => CompanyModel.fromJson(company)).toList(),
     );
