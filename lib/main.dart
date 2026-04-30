@@ -1,7 +1,8 @@
 import 'dart:developer';
 
 import 'package:cinema_app/data/models/cast_model.dart';
-import 'package:cinema_app/data/models/details_movie_model.dart';
+import 'package:cinema_app/data/models/company_model.dart';
+import 'package:cinema_app/data/models/genre_model.dart';
 import 'package:cinema_app/data/models/movie_model.dart';
 import 'package:cinema_app/data/repositories/movie_repository.dart';
 import 'package:cinema_app/data/services/dio_helper.dart';

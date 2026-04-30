@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:cinema_app/constants/api%20constants/api_constants.dart';
 import 'package:cinema_app/data/models/cast_model.dart';
-import 'package:cinema_app/data/models/details_movie_model.dart';
 import 'package:cinema_app/data/models/movie_model.dart';
 import 'package:cinema_app/data/services/dio_helper.dart';
 
@@ -41,11 +40,11 @@ class MovieRepository{
       throw Exception("Failed to get the upcoming movies");
     }
   }
-  Future<DetailsMovieModel> getDetailsMovieById(int movieId) async {
+  Future<MovieModel> getDetailsMovieById(int movieId) async {
       var response = await dioHelper.getData(path: ApiConstants.movieIdEndPoint + movieId.toString(), query: {"api_key":ApiConstants.apiKey});
       if(response.statusCode == 200){
         dynamic result = response.data;
-        return DetailsMovieModel.fromJson(result);
+        return MovieModel.fromJson(result);
       }
       else{
         throw Exception("Failed to get movie details");
