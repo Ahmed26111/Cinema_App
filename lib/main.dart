@@ -1,14 +1,8 @@
-import 'dart:developer';
-
-import 'package:cinema_app/data/models/cast_model.dart';
-import 'package:cinema_app/data/models/company_model.dart';
-import 'package:cinema_app/data/models/genre_model.dart';
-import 'package:cinema_app/data/models/movie_model.dart';
-import 'package:cinema_app/data/repositories/movie_repository.dart';
-import 'package:cinema_app/data/services/dio_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main(){
+void main() async{
+  await dotenv.load(fileName: "keys.env");
   runApp(const MyApp());
 }
 
