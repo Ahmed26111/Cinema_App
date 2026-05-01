@@ -1,4 +1,4 @@
-import 'package:cinema_app/data/models/ticket_model.dart';
+import 'package:cinema_app/data/models/ticket/ticket_model.dart';
 
 class UserModel {
   final String firstName;
