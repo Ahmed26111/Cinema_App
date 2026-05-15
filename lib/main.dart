@@ -1,8 +1,9 @@
 import 'dart:developer';
 import 'package:cinema_app/data/models/ticket/ticket_model.dart';
 import 'package:cinema_app/data/models/user/user_model.dart';
+import 'package:cinema_app/ui/core/theme/theme_manager.dart';
 import 'package:cinema_app/utils/shared/hive_handler.dart';
-import 'package:cinema_app/utils/shared/routes_manager.dart';
+import 'package:cinema_app/routes/routes_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:uuid/uuid.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
+      theme: ThemeManager.getLightThemeData(),
       routerConfig: RoutesManager.routes,
     );
   }
