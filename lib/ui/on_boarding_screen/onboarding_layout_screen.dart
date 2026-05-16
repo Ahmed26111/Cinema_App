@@ -1,0 +1,92 @@
+import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
+import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
+import 'package:cinema_app/ui/core/theme/theme_manager.dart';
+import 'package:cinema_app/ui/on_boarding_screen/onboarding_change_index_cubit.dart';
+import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen1.dart';
+import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen2.dart';
+import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen3.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class OnboardingLayoutScreen extends StatelessWidget {
+  const OnboardingLayoutScreen({super.key});
+
+  final List<Widget> screens = const [
+    OnboardingScreen1(),
+    OnboardingScreen2(),
+    OnboardingScreen3(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<OnboardingChangeIndexCubit, OnboardingChangeIndexState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: ColorsManager.blackColor,
+          body: Column(
+            spacing: 10,
+            children: [
+              Expanded(
+                child: IndexedStack(
+                  index: state.index,
+                  children: screens,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 30 , horizontal: 15),
+                child: Row(
+                  children: [
+                    _getPageIndicator(state.index),
+                    Spacer(),
+                    _getFilledButton(context)
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  SizedBox _getFilledButton(BuildContext context) {
+    return SizedBox(
+      width: 60,
+      height: 60,
+      child: FilledButton(
+        onPressed: () {
+          // Todo
+          // if(context.read<OnboardingChangeIndexCubit>().state.index < 2){
+          //   context.read<OnboardingChangeIndexCubit>().changeOnboardingPageIndex();
+          // }else{
+          //   /// Navigation to sign up screen
+          // }
+
+          context.read<OnboardingChangeIndexCubit>().changeOnboardingPageIndex();
+        },
+        style: ThemeManager.getOnboardingFilledButtonStyle(),
+        child: Center(child: Icon(Icons.arrow_forward_ios_outlined)),
+      ),
+    );
+  }
+
+  Widget _getPageIndicator(int activeIndex) {
+    return Row(
+      children: List.generate(3, (index) {
+        bool isActive = (index == activeIndex);
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          margin: const EdgeInsets.only(right: 8),
+          height: 8,
+          width: (isActive) ? 24 : 8,
+          decoration: BoxDecoration(
+            color: (isActive)
+                ? ColorsManager.primaryBlueAccentColor
+                : ColorsManager.primaryBlueAccentColorLessOpacity,
+            borderRadius: BorderRadius.circular(8),
+          ),
+        );
+      }),
+    );
+  }
+}

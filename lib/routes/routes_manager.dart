@@ -1,7 +1,9 @@
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
-import 'package:cinema_app/ui/on_boarding_screen/get_active_user_cubit.dart';
-import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen.dart';
+import 'package:cinema_app/ui/on_boarding_screen/onboarding_change_index_cubit.dart';
+import 'package:cinema_app/ui/on_boarding_screen/onboarding_layout_screen.dart';
+import 'package:cinema_app/ui/splash_screen/get_active_user_cubit.dart';
+import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen1.dart';
 import 'package:cinema_app/ui/splash_screen/splash_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,11 +23,14 @@ abstract class RoutesManager {
         },
       ),
       GoRoute(
-        path: RoutesConstants.onboardingScreen,
+        path: RoutesConstants.onboardingLayoutScreen,
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           transitionDuration: const Duration(milliseconds: 700),
-          child: const OnboardingScreen(),
+          child: BlocProvider(
+            create: (context) => OnboardingChangeIndexCubit(),
+            child: OnboardingLayoutScreen(),
+          ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
@@ -41,21 +46,21 @@ abstract class RoutesManager {
       ),
       GoRoute(
         path: RoutesConstants.homeScreen,
-        pageBuilder: (context , state) => CustomTransitionPage(
-            key: state.pageKey,
-            transitionDuration: Duration(milliseconds: 700),
-            child: const HomeScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
-                child: ScaleTransition(
-                  scale: Tween<double>(begin: 0.95, end: 1.0).animate(
-                    CurvedAnimation(parent: animation, curve: Curves.easeInOut),
-                  ),
-                  child: child,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: Duration(milliseconds: 700),
+          child: const HomeScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
                 ),
-              );
-            },
+                child: child,
+              ),
+            );
+          },
         ),
       ),
     ],

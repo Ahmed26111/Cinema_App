@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/data/models/user/user_model.dart';
-import 'package:cinema_app/ui/on_boarding_screen/get_active_user_cubit.dart';
+import 'package:cinema_app/ui/splash_screen/get_active_user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
         (){
           UserModel? activeUser = context.read<GetActiveUserCubit>().getActiveUser();
           if(activeUser == null){
-            context.go(RoutesConstants.onboardingScreen);
+            context.go(RoutesConstants.onboardingLayoutScreen);
           }
           else{
             context.go(RoutesConstants.homeScreen);

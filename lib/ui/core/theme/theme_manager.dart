@@ -24,9 +24,33 @@ abstract class ThemeManager{
             fontSize: 28,
             color: ColorsManager.whiteColor
         ),
+          displayMedium: TextStyle(
+            fontFamily: "AG",
+            fontSize: 24,
+            color: ColorsManager.whiteColor
+          ),
+          displayLarge: TextStyle(
+            fontFamily: "AG",
+            fontSize: 12,
+            color: ColorsManager.greyColor ,
+          ),
+          labelMedium: TextStyle(
+              fontFamily: "AG",
+              fontSize: 16,
+              color: ColorsManager.whiteColor
+          ),
         ),
       );
     }
 
+    static ButtonStyle getOnboardingFilledButtonStyle(){
+        return FilledButton.styleFrom(
+            backgroundColor: ColorsManager.primaryBlueAccentColor ,
+            foregroundColor: ColorsManager.primaryDarkColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+        );
+    }
 
 }
