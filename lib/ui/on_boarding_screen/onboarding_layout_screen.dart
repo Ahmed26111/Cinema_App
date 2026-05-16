@@ -27,9 +27,30 @@ class OnboardingLayoutScreen extends StatelessWidget {
             spacing: 10,
             children: [
               Expanded(
-                child: IndexedStack(
-                  index: state.index,
-                  children: screens,
+                child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 850),
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                      final slideAnimation = Tween<Offset>(
+                        begin: const Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeInOut,
+                      ));
+
+                      return FadeTransition(
+                        opacity: animation,
+                        child: SlideTransition(
+                          position: slideAnimation,
+                          child: child,
+                        ),
+                      );
+                  },
+                  child: IndexedStack(
+                    key: ValueKey<int>(state.index),
+                    index: state.index,
+                    children: screens,
+                  ),
                 ),
               ),
               Padding(
@@ -61,7 +82,6 @@ class OnboardingLayoutScreen extends StatelessWidget {
           // }else{
           //   /// Navigation to sign up screen
           // }
-
           context.read<OnboardingChangeIndexCubit>().changeOnboardingPageIndex();
         },
         style: ThemeManager.getOnboardingFilledButtonStyle(),
