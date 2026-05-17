@@ -1,5 +1,4 @@
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
-import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
 import 'package:cinema_app/ui/core/theme/theme_manager.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_change_index_cubit.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen1.dart';
@@ -26,48 +25,56 @@ class OnboardingLayoutScreen extends StatelessWidget {
           body: Column(
             spacing: 10,
             children: [
-              Expanded(
-                child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 850),
-                  transitionBuilder: (Widget child, Animation<double> animation) {
-                      final slideAnimation = Tween<Offset>(
-                        begin: const Offset(1.0, 0.0),
-                        end: Offset.zero,
-                      ).animate(CurvedAnimation(
-                        parent: animation,
-                        curve: Curves.easeInOut,
-                      ));
-
-                      return FadeTransition(
-                        opacity: animation,
-                        child: SlideTransition(
-                          position: slideAnimation,
-                          child: child,
-                        ),
-                      );
-                  },
-                  child: IndexedStack(
-                    key: ValueKey<int>(state.index),
-                    index: state.index,
-                    children: screens,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30 , horizontal: 15),
-                child: Row(
-                  children: [
-                    _getPageIndicator(state.index),
-                    Spacer(),
-                    _getFilledButton(context)
-                  ],
-                ),
-              ),
+              _getAnimatedIndexedStack(state.index),
+              _getPageIndicatorAndFilledButton(state.index, context),
             ],
           ),
         );
       },
     );
+  }
+
+  Padding _getPageIndicatorAndFilledButton(int index, BuildContext context) {
+    return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30 , horizontal: 15),
+              child: Row(
+                children: [
+                  _getPageIndicator(index),
+                  Spacer(),
+                  _getFilledButton(context)
+                ],
+              ),
+            );
+  }
+
+  Expanded _getAnimatedIndexedStack(int index) {
+    return Expanded(
+              child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 350),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                    final slideAnimation = Tween<Offset>(
+                      begin: const Offset(1.0, 0.0),
+                      end: Offset.zero,
+                    ).animate(CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeInOut,
+                    ));
+
+                    return FadeTransition(
+                      opacity: animation,
+                      child: SlideTransition(
+                        position: slideAnimation,
+                        child: child,
+                      ),
+                    );
+                },
+                child: IndexedStack(
+                  key: ValueKey<int>(index),
+                  index: index,
+                  children: screens,
+                ),
+              ),
+            );
   }
 
   SizedBox _getFilledButton(BuildContext context) {

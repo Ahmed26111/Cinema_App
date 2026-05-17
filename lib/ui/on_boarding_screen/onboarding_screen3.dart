@@ -8,60 +8,64 @@ class OnboardingScreen3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+
     return Scaffold(
       backgroundColor: ColorsManager.blackColor,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 25),
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  Image.asset(
-                    "images/onboarding_3.png",
-                    width: ResponsiveSizeConstants.widthScreen(context),
-                    height: ResponsiveSizeConstants.heightScreen(context) * 0.5,
-                  ),
-                  Positioned(
-                      left: 20,
-                      top: 50,
-                      child: getRatingCard(context)
-                  ),
-                  Positioned(
-                      left: 250,
-                      top: 70,
-                      child: getDurationCard(context)
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: ResponsiveSizeConstants.heightScreen(context) * 0.05,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
-                child: Text(
-                  "Skip the Line, Catch the Film.",
-                  style: Theme.of(context).textTheme.displayMedium,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 25),
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    Image.asset(
+                      "images/onboarding_3.png",
+                      width: ResponsiveSizeConstants.widthScreen(context),
+                      height: ResponsiveSizeConstants.heightScreen(context) * (isLandscape? 0.4 :0.5),
+                    ),
+                    Positioned(
+                        left: (isLandscape)? 220 : 20,
+                        top: (isLandscape)? 25 : 60,
+                        child: _getRatingCard(context , isLandscape)
+                    ),
+                    Positioned(
+                        left: (isLandscape)? 450 :250,
+                        top: (isLandscape)? 35 :70,
+                        child: _getDurationCard(context , isLandscape)
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(
-                height: ResponsiveSizeConstants.heightScreen(context) * 0.027,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Text(
-                  "Buy tickets instantly and secure your seat before it's gone.",
-                  style: Theme.of(context).textTheme.displayLarge,
+                SizedBox(
+                  height: ResponsiveSizeConstants.heightScreen(context) * (isLandscape? 0.03 : 0.05),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                  child: Text(
+                    "Skip the Line, Catch the Film.",
+                    style: (isLandscape)? Theme.of(context).textTheme.labelMedium :Theme.of(context).textTheme.displayMedium,
+                  ),
+                ),
+                SizedBox(
+                  height: ResponsiveSizeConstants.heightScreen(context) * (isLandscape? 0.01 : 0.027),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Text(
+                    "Buy tickets instantly and secure your seat before it's gone.",
+                    style: (isLandscape)?Theme.of(context).textTheme.labelSmall :Theme.of(context).textTheme.displayLarge,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget getRatingCard(BuildContext context){
+  Widget _getRatingCard(BuildContext context , bool isLandScape){
     return Card(
       color: ColorsManager.blackColor,
       shape: RoundedRectangleBorder(
@@ -77,15 +81,15 @@ class OnboardingScreen3 extends StatelessWidget {
           spacing: 5,
           children: [
             Icon(Icons.star , color: ColorsManager.primaryBlueAccentColor,),
-            Text("Rating" , style: Theme.of(context).textTheme.displayLarge,),
-            Text("9 / 10" , style: Theme.of(context).textTheme.labelMedium,),
+            Text("Rating" , style: (isLandScape)?Theme.of(context).textTheme.labelSmall:Theme.of(context).textTheme.displayLarge,),
+            Text("9 / 10" , style: (isLandScape)?Theme.of(context).textTheme.labelLarge:Theme.of(context).textTheme.labelMedium,),
           ],
         ),
       ),
     );
   }
 
-  Widget getDurationCard(BuildContext context){
+  Widget _getDurationCard(BuildContext context ,  bool isLandScape){
     return Card(
       color: ColorsManager.blackColor,
       shape: RoundedRectangleBorder(
@@ -101,8 +105,8 @@ class OnboardingScreen3 extends StatelessWidget {
           spacing: 5,
           children: [
             Icon(Icons.access_time_outlined , color: ColorsManager.primaryBlueAccentColor,),
-            Text("Duration" , style: Theme.of(context).textTheme.displayLarge,),
-            Text("1h 20m" , style: Theme.of(context).textTheme.labelMedium,),
+            Text("Duration" , style: (isLandScape)?Theme.of(context).textTheme.labelSmall:Theme.of(context).textTheme.displayLarge,),
+            Text("1h 20m" , style: (isLandScape)?Theme.of(context).textTheme.labelLarge:Theme.of(context).textTheme.labelMedium,),
           ],
         ),
       ),

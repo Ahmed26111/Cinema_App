@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState(){
     super.initState();
     Timer(
-      Duration(seconds: 2) ,
+      Duration(seconds: 1 , milliseconds: 300) ,
         (){
           UserModel? activeUser = context.read<GetActiveUserCubit>().getActiveUser();
           if(activeUser == null){
@@ -36,6 +36,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+
     return Scaffold(
       appBar: AppBar(),
       body: Column(
@@ -43,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Image.asset(
             "images/cinemax_img.png",
             width: ResponsiveSizeConstants.widthScreen(context),
-            height: ResponsiveSizeConstants.heightScreen(context) * 0.8,
+            height: ResponsiveSizeConstants.heightScreen(context) * (isLandscape? 0.6 : 0.8),
             fit: BoxFit.contain,
           ),
         ]
