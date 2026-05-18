@@ -1,7 +1,10 @@
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
+import 'package:cinema_app/ui/forget_password_screen/forget_password_screen.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
+import 'package:cinema_app/ui/login_screen/login_screen.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_change_index_cubit.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_layout_screen.dart';
+import 'package:cinema_app/ui/signup_screen/signup_screen.dart';
 import 'package:cinema_app/ui/splash_screen/get_active_user_cubit.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen1.dart';
 import 'package:cinema_app/ui/splash_screen/splash_screen.dart';
@@ -14,6 +17,7 @@ abstract class RoutesManager {
     initialLocation: RoutesConstants.splashScreen,
     routes: <RouteBase>[
       GoRoute(
+        name: RoutesConstants.splashScreen,
         path: RoutesConstants.splashScreen,
         builder: (context, state) {
           return BlocProvider(
@@ -24,6 +28,7 @@ abstract class RoutesManager {
       ),
       GoRoute(
         path: RoutesConstants.onboardingLayoutScreen,
+        name: RoutesConstants.onboardingLayoutScreen,
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           transitionDuration: const Duration(milliseconds: 700),
@@ -46,10 +51,71 @@ abstract class RoutesManager {
       ),
       GoRoute(
         path: RoutesConstants.homeScreen,
+        name: RoutesConstants.homeScreen,
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           transitionDuration: Duration(milliseconds: 700),
           child: const HomeScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                ),
+                child: child,
+              ),
+            );
+          },
+        ),
+      ),
+      GoRoute(
+        path: RoutesConstants.loginScreen,
+        name: RoutesConstants.loginScreen,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: Duration(milliseconds: 500),
+          child: const LoginScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                ),
+                child: child,
+              ),
+            );
+          },
+        ),
+      ),
+      GoRoute(
+        path: RoutesConstants.signupScreen,
+        name: RoutesConstants.signupScreen,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: Duration(milliseconds: 200),
+          child: const SignupScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                ),
+                child: child,
+              ),
+            );
+          },
+        ),
+      ),
+      GoRoute(
+        path: RoutesConstants.forgetPasswordScreen,
+        name: RoutesConstants.forgetPasswordScreen,
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: Duration(milliseconds: 200),
+          child: const ForgetPasswordScreen(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: CurveTween(curve: Curves.easeInOut).animate(animation),

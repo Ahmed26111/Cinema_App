@@ -1,4 +1,5 @@
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
+import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/ui/core/theme/theme_manager.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_change_index_cubit.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen1.dart';
@@ -6,6 +7,7 @@ import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen2.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class OnboardingLayoutScreen extends StatelessWidget {
   const OnboardingLayoutScreen({super.key});
@@ -83,12 +85,10 @@ class OnboardingLayoutScreen extends StatelessWidget {
       height: 60,
       child: FilledButton(
         onPressed: () {
-          // Todo
           if(context.read<OnboardingChangeIndexCubit>().state.index < 2){
             context.read<OnboardingChangeIndexCubit>().changeOnboardingPageIndex();
           }else{
-            /// Navigation to sign up screen
-
+            context.go(RoutesConstants.loginScreen);
           }
         },
         style: ThemeManager.getOnboardingFilledButtonStyle(),
