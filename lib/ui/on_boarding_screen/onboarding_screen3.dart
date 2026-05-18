@@ -26,14 +26,18 @@ class OnboardingScreen3 extends StatelessWidget {
                       height: ResponsiveSizeConstants.heightScreen(context) * (isLandscape? 0.4 :0.5),
                     ),
                     Positioned(
-                        left: (isLandscape)? 220 : 20,
-                        top: (isLandscape)? 25 : 60,
-                        child: _getRatingCard(context , isLandscape)
+                      // Portrait: 6.5% from left | Landscape: 25% from left
+                      left: ResponsiveSizeConstants.widthScreen(context) * (isLandscape ? 0.25 : 0.065),
+                      // Portrait: 8% from top | Landscape: 5% from top
+                      top: ResponsiveSizeConstants.heightScreen(context) * (isLandscape ? 0.05 : 0.08),
+                      child: _getRatingCard(context, isLandscape),
                     ),
                     Positioned(
-                        left: (isLandscape)? 450 :250,
-                        top: (isLandscape)? 35 :70,
-                        child: _getDurationCard(context , isLandscape)
+                      // Portrait: 70% from left | Landscape: 60% from left
+                      left: ResponsiveSizeConstants.widthScreen(context) * (isLandscape ? 0.6 : 0.7),
+                      // Portrait: 10% from top | Landscape: 8% from top
+                      top: ResponsiveSizeConstants.heightScreen(context) * (isLandscape ? 0.08 : 0.1),
+                      child: _getDurationCard(context, isLandscape),
                     ),
                   ],
                 ),
@@ -44,7 +48,7 @@ class OnboardingScreen3 extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 28),
                   child: Text(
                     "Skip the Line, Catch the Film.",
-                    style: (isLandscape)? Theme.of(context).textTheme.labelMedium :Theme.of(context).textTheme.displayMedium,
+                    style: (isLandscape)? Theme.of(context).textTheme.labelLarge :Theme.of(context).textTheme.displayMedium,
                   ),
                 ),
                 SizedBox(
@@ -54,7 +58,7 @@ class OnboardingScreen3 extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Text(
                     "Buy tickets instantly and secure your seat before it's gone.",
-                    style: (isLandscape)?Theme.of(context).textTheme.labelSmall :Theme.of(context).textTheme.displayLarge,
+                    style: (isLandscape)?Theme.of(context).textTheme.bodyLarge :Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
               ],
@@ -81,8 +85,8 @@ class OnboardingScreen3 extends StatelessWidget {
           spacing: 5,
           children: [
             Icon(Icons.star , color: ColorsManager.primaryBlueAccentColor,),
-            Text("Rating" , style: (isLandScape)?Theme.of(context).textTheme.labelSmall:Theme.of(context).textTheme.displayLarge,),
-            Text("9 / 10" , style: (isLandScape)?Theme.of(context).textTheme.labelLarge:Theme.of(context).textTheme.labelMedium,),
+            Text("Rating" , style: (isLandScape)?Theme.of(context).textTheme.bodyLarge:Theme.of(context).textTheme.titleSmall,),
+            Text("9 / 10" , style: (isLandScape)?Theme.of(context).textTheme.titleLarge:Theme.of(context).textTheme.labelMedium,),
           ],
         ),
       ),
@@ -105,8 +109,8 @@ class OnboardingScreen3 extends StatelessWidget {
           spacing: 5,
           children: [
             Icon(Icons.access_time_outlined , color: ColorsManager.primaryBlueAccentColor,),
-            Text("Duration" , style: (isLandScape)?Theme.of(context).textTheme.labelSmall:Theme.of(context).textTheme.displayLarge,),
-            Text("1h 20m" , style: (isLandScape)?Theme.of(context).textTheme.labelLarge:Theme.of(context).textTheme.labelMedium,),
+            Text("Duration" , style: (isLandScape)?Theme.of(context).textTheme.bodyLarge:Theme.of(context).textTheme.titleSmall,),
+            Text("1h 20m" , style: (isLandScape)?Theme.of(context).textTheme.titleLarge:Theme.of(context).textTheme.labelMedium,),
           ],
         ),
       ),

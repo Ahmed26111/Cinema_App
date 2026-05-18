@@ -31,7 +31,7 @@ class OnboardingScreen2 extends StatelessWidget {
                   child: Text(
                     "Discover Your Next Favorite Film.",
                     textAlign: TextAlign.center,
-                    style: (isLandscape)? Theme.of(context).textTheme.labelMedium :Theme.of(context).textTheme.displayMedium,
+                    style: (isLandscape)? Theme.of(context).textTheme.labelLarge :Theme.of(context).textTheme.displayMedium,
                   ),
                 ),
                 SizedBox(
@@ -41,7 +41,7 @@ class OnboardingScreen2 extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Text(
                     "Explore a vast library of movies — new releases, classics, and everything in between.",
-                    style: (isLandscape)?Theme.of(context).textTheme.labelSmall :Theme.of(context).textTheme.displayLarge,
+                    style: (isLandscape)?Theme.of(context).textTheme.bodyLarge :Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
               ],

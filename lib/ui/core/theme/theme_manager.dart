@@ -19,37 +19,57 @@ abstract class ThemeManager{
           ),
         ),
         textTheme: TextTheme(
-          displaySmall: TextStyle(
-            fontFamily: "AG",
-            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.09,
-            color: ColorsManager.whiteColor
-        ),
-          displayMedium: TextStyle(
-            fontFamily: "AG",
-            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.07,
-            color: ColorsManager.whiteColor
-          ),
           displayLarge: TextStyle(
             fontFamily: "AG",
-            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.03,
-            color: ColorsManager.greyColor ,
+            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.08,
+            color: ColorsManager.whiteColor ,
           ),
-          labelSmall: TextStyle(
+          displayMedium: TextStyle(
+              fontFamily: "AG",
+              fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.07,
+              color: ColorsManager.whiteColor
+          ),
+          displaySmall: TextStyle(
             fontFamily: "AG",
-            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.01,
-            color: ColorsManager.greyColor ,
-          ),
-          labelMedium: TextStyle(
+            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.06,
+            color: ColorsManager.whiteColor
+        ),
+          labelLarge: TextStyle(
               fontFamily: "AG",
               fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.05,
               color: ColorsManager.whiteColor
           ),
-          labelLarge: TextStyle(
+          labelMedium: TextStyle(
               fontFamily: "AG",
-              fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.02,
+              fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.04,
               color: ColorsManager.whiteColor
           ),
-        ),
+          labelSmall: TextStyle(
+            fontFamily: "AG",
+            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.03,
+            color: ColorsManager.whiteColor ,
+          ),
+          titleLarge: TextStyle(
+            fontFamily: "AG",
+            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.02,
+            color: ColorsManager.whiteColor ,
+          ),
+          titleMedium: TextStyle(
+            fontFamily: "AG",
+            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.01,
+            color: ColorsManager.whiteColor ,
+          ),
+          titleSmall: TextStyle(
+            fontFamily: "AG",
+            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.03,
+            color: ColorsManager.greyColor ,
+          ),
+          bodyLarge: TextStyle(
+            fontFamily: "AG",
+            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.01,
+            color: ColorsManager.greyColor ,
+          ),
+        )
       );
     }
 

@@ -84,12 +84,12 @@ class OnboardingLayoutScreen extends StatelessWidget {
       child: FilledButton(
         onPressed: () {
           // Todo
-          // if(context.read<OnboardingChangeIndexCubit>().state.index < 2){
-          //   context.read<OnboardingChangeIndexCubit>().changeOnboardingPageIndex();
-          // }else{
-          //   /// Navigation to sign up screen
-          // }
-          context.read<OnboardingChangeIndexCubit>().changeOnboardingPageIndex();
+          if(context.read<OnboardingChangeIndexCubit>().state.index < 2){
+            context.read<OnboardingChangeIndexCubit>().changeOnboardingPageIndex();
+          }else{
+            /// Navigation to sign up screen
+
+          }
         },
         style: ThemeManager.getOnboardingFilledButtonStyle(),
         child: Center(child: Icon(Icons.arrow_forward_ios_outlined)),
