@@ -10,4 +10,6 @@ abstract class ColorsManager{
   static final Color lineDarkColor = Color(0xFFEAEAEA);
   static final Color blackColor = Color(0xFF171725);
   static final Color greyColor = Color(0xFF92929D);
+  static final Color redColor = Color(0xFFED3737);
+
 }
