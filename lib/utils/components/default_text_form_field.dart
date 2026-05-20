@@ -50,6 +50,7 @@ class DefaultTextFormField extends StatelessWidget {
             width: 0.5
           )
         ),
+        errorMaxLines: 2
       ),
       maxLines: 1,
       minLines: 1,

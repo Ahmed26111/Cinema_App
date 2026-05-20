@@ -5,6 +5,7 @@ import 'package:cinema_app/ui/login_screen/login_screen.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_change_index_cubit.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_layout_screen.dart';
 import 'package:cinema_app/ui/signup_screen/signup_screen.dart';
+import 'package:cinema_app/ui/signup_screen/validation_user_cubit.dart';
 import 'package:cinema_app/ui/splash_screen/get_active_user_cubit.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen1.dart';
 import 'package:cinema_app/ui/splash_screen/splash_screen.dart';
@@ -75,7 +76,10 @@ abstract class RoutesManager {
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           transitionDuration: Duration(milliseconds: 500),
-          child: const LoginScreen(),
+          child: BlocProvider(
+            create: (context) => ValidationUserCubit(),
+            child: LoginScreen(),
+          ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
@@ -95,7 +99,10 @@ abstract class RoutesManager {
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           transitionDuration: Duration(milliseconds: 200),
-          child: const SignupScreen(),
+          child: BlocProvider(
+            create: (context) => ValidationUserCubit(),
+            child: SignupScreen(),
+          ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
