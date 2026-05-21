@@ -1,10 +1,13 @@
+import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
+import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/ui/core/theme/theme_manager.dart';
 import 'package:cinema_app/ui/signup_screen/validation_user_cubit.dart';
 import 'package:cinema_app/utils/components/default_text_form_field.dart';
 import 'package:cinema_app/utils/shared/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -34,33 +37,27 @@ class _SignupScreenState extends State<SignupScreen> {
         child: Center(
           child: Form(
             key: _globalKey,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
-                ),
-                Text(
-                  "Let's get started",
-                  style: Theme.of(context).textTheme.displayMedium,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(context) * 0.005,
-                ),
-                Text(
-                  "The latest movie and series are here",
-                  style: Theme.of(context).textTheme.titleSmall,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(context) * 0.03,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 15,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15,),
+              child: Column(
+                children: [
+                  Text(
+                    "Let's get started",
+                    style: Theme.of(context).textTheme.displayMedium,
+                    textAlign: TextAlign.center,
                   ),
-                  child: DefaultTextFormField(
+                  SizedBox(
+                    height: ResponsiveSizeConstants.heightScreen(context) * 0.005,
+                  ),
+                  Text(
+                    "The latest movie and series are here",
+                    style: Theme.of(context).textTheme.titleSmall,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: ResponsiveSizeConstants.heightScreen(context) * 0.03,
+                  ),
+                  DefaultTextFormField(
                     controller: _firstNameController,
                     label: "First Name",
                     hint: "guest",
@@ -68,13 +65,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     maxLength: 15,
                     textInputType: TextInputType.name,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 15
+                  SizedBox(
+                    height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
                   ),
-                  child: DefaultTextFormField(
+                  DefaultTextFormField(
                     controller: _lastNameController,
                     label: "Last Name",
                     hint: "guest",
@@ -82,13 +76,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     maxLength: 15,
                     textInputType: TextInputType.name,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 15
+                  SizedBox(
+                    height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
                   ),
-                  child: DefaultTextFormField(
+                  DefaultTextFormField(
                     controller: _emailController,
                     label: "Email Address",
                     hint: "guest@gmail.com",
@@ -96,51 +87,68 @@ class _SignupScreenState extends State<SignupScreen> {
                     maxLength: 30,
                     textInputType: TextInputType.emailAddress,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 15
+                  SizedBox(
+                    height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
                   ),
-                  child: DefaultTextFormField(
+                  DefaultTextFormField(
                     controller: _passwordController,
                     label: "Password",
                     hint: "********",
                     validator: _getPasswordValidator,
                     maxLength: 15,
                     textInputType: TextInputType.visiblePassword,
+                    isPasswordField: true,
                   ),
-                ),
-                SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(context) * 0.03,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: ResponsiveSizeConstants.heightScreen(context) * 0.06,
-                    child: FilledButton(
-                      onPressed: () {
-                        if (_globalKey.currentState!.validate()) {
-                          // TODO after validation
-                        }
-                      },
-                      style: ThemeManager.getOnboardingFilledButtonStyle()
-                          .copyWith(
-                            shape: WidgetStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
+                  BlocBuilder<ValidationUserCubit,ValidationUserState>(
+                    builder: (context , state) {
+                      return _getIAgreeTermsConditionListTile(state, context);
+                    }
+                  ),
+                  SizedBox(
+                    height: ResponsiveSizeConstants.heightScreen(context) * 0.05,
+                  ),
+                  BlocBuilder<ValidationUserCubit,ValidationUserState>(
+                    builder: (context , state) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: ResponsiveSizeConstants.heightScreen(context) * 0.06,
+                          child: FilledButton(
+                            onPressed: (state.isAcceptTerms)? () {
+                              if (_globalKey.currentState!.validate()) {
+                                if (context.read<ValidationUserCubit>().addNewUser(
+                                    _firstNameController.text,
+                                    _lastNameController.text, _emailController.text,
+                                    _passwordController.text)
+                                ){
+                                  context.go(RoutesConstants.homeScreen);
+                                }
+                              }
+                            } : null,
+                            style: ThemeManager.getOnboardingFilledButtonStyle()
+                                .copyWith(
+                                  shape: WidgetStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                  ),
+                                ),
+
+                            child: Text(
+                              "Sign Up",
+                              style: (state.isAcceptTerms)
+                                  ? Theme.of(context).textTheme.displayLarge
+                                  : TextStyle(color: ColorsManager.primaryDarkColor)
+                              ,
                             ),
                           ),
-                      child: Text(
-                        "Sign Up",
-                        style: Theme.of(context).textTheme.displayLarge,
-                      ),
-                    ),
+                        ),
+                      );
+                    }
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -148,6 +156,49 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
+  CheckboxListTile _getIAgreeTermsConditionListTile(ValidationUserState state, BuildContext context) {
+    return CheckboxListTile(
+      value: state.isAcceptTerms,
+      onChanged: (value) {
+        context.read<ValidationUserCubit>().toggleAcceptTerms();
+      },
+      title: _getRichText(context),
+      controlAffinity: ListTileControlAffinity.leading,
+      checkColor: ColorsManager.whiteColor,
+      activeColor: ColorsManager.primaryBlueAccentColor,
+    );
+  }
+
+  Column _getRichText(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text(
+              "I agree to the",
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            Text(
+              " Terms and Services",
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              " and",
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            Text(
+              " Privacy Policy",
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
   String? _getNameValidator(String? text) {
     if (text == null || text.trim().isEmpty) {
       return "This Field is required";

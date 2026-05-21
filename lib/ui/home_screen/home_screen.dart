@@ -1,3 +1,4 @@
+import 'package:cinema_app/utils/shared/hive_handler.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -8,9 +9,21 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: Center(
-        child: Text(
-          "Home Screen",
-          style: Theme.of(context).textTheme.displaySmall,
+        child: Column(
+          spacing: 100,
+          children: [
+            Text("Welcome ${HiveHandler.getActiveUser()!.firstName}"),
+            Text(
+              "Home Screen",
+              style: Theme.of(context).textTheme.displaySmall,
+            ),
+            IconButton(
+                onPressed: (){
+                  HiveHandler.deleteActiveUser();
+                },
+                icon: Icon(Icons.dangerous)
+            ),
+          ],
         ),
       ),
     );

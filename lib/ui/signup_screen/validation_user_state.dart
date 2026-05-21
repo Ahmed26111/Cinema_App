@@ -1,10 +1,20 @@
 part of 'validation_user_cubit.dart';
 
 @immutable
-sealed class ValidationUserState {}
+sealed class ValidationUserState {
+  final bool isAcceptTerms;
 
-final class ValidationUserInitial extends ValidationUserState {}
+ const ValidationUserState({required this.isAcceptTerms});
+}
 
-final class ValidationUserSuccess extends ValidationUserState {}
+final class ValidationUserInitial extends ValidationUserState {
+  const ValidationUserInitial({required super.isAcceptTerms});
+}
 
-final class ValidationUserFailed extends ValidationUserState {}
+final class ValidationUserSuccess extends ValidationUserState {
+  const ValidationUserSuccess({required super.isAcceptTerms});
+}
+
+final class ValidationUserFailed extends ValidationUserState {
+  const ValidationUserFailed({required super.isAcceptTerms});
+}
