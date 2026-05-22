@@ -42,4 +42,16 @@ class UserModel {
       tickets: tickets??this.tickets,
     );
   }
+
+  factory UserModel.placeHolder(){
+    return UserModel(firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        userId: "",
+        favouritesMoviesIds: <int>[],
+        watchListMoviesIds: <int>[],
+        tickets: <TicketModel>[]);
+  }
+
 }

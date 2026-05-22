@@ -4,6 +4,7 @@ import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/ui/core/theme/theme_manager.dart';
 import 'package:cinema_app/ui/signup_screen/validation_user_cubit.dart';
 import 'package:cinema_app/utils/components/default_text_form_field.dart';
+import 'package:cinema_app/utils/components/default_user_authentication_filled_button.dart';
 import 'package:cinema_app/utils/shared/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -109,48 +110,42 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   BlocBuilder<ValidationUserCubit,ValidationUserState>(
                     builder: (context , state) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: ResponsiveSizeConstants.heightScreen(context) * 0.06,
-                          child: FilledButton(
-                            onPressed: (state.isAcceptTerms)? () {
-                              if (_globalKey.currentState!.validate()) {
-                                if (context.read<ValidationUserCubit>().addNewUser(
-                                    _firstNameController.text,
-                                    _lastNameController.text, _emailController.text,
-                                    _passwordController.text)
-                                ){
-                                  context.go(RoutesConstants.homeScreen);
-                                }
-                              }
-                            } : null,
-                            style: ThemeManager.getOnboardingFilledButtonStyle()
-                                .copyWith(
-                                  shape: WidgetStateProperty.all(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                  ),
-                                ),
-
-                            child: Text(
-                              "Sign Up",
-                              style: (state.isAcceptTerms)
-                                  ? Theme.of(context).textTheme.displayLarge
-                                  : TextStyle(color: ColorsManager.primaryDarkColor)
-                              ,
-                            ),
-                          ),
-                        ),
-                      );
+                      return _getSignupFilledButton(context, state);
                     }
                   ),
                 ],
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Padding _getSignupFilledButton(BuildContext context, ValidationUserState state) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: SizedBox(
+        width: double.infinity,
+        height: ResponsiveSizeConstants.heightScreen(context) * 0.06,
+        child: DefaultUserAuthenticationFilledButton(
+          onPressed: (state.isAcceptTerms) ? () {
+              if (_globalKey.currentState!.validate()) {
+                if (context.read<ValidationUserCubit>().addNewUser(
+                    _firstNameController.text,
+                    _lastNameController.text,
+                    _emailController.text,
+                    _passwordController.text
+                )
+                ) {
+                  context.go(RoutesConstants.homeScreen);
+                }
+              }
+            } : null,
+          text: "Sign Up",
+          textStyle: (state.isAcceptTerms)
+              ? Theme.of(context).textTheme.displayLarge
+              : TextStyle(color: ColorsManager.primaryDarkColor),
         ),
       ),
     );
@@ -290,3 +285,9 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
 }
+
+
+
+
+
+// ?

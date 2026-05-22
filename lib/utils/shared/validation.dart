@@ -3,28 +3,27 @@ import 'package:cinema_app/data/models/user/user_model.dart';
 
 abstract class Validation{
   static bool isUniqueTicketId(List<TicketModel> tickets , String newTicketId){
-    for(TicketModel ticket in tickets){
-      if(ticket.ticketId == newTicketId){
-        return false;
-      }
-    }
-    return true;
+    TicketModel temp = tickets.firstWhere((ticket)=>(ticket.ticketId == newTicketId) , orElse: ()=>TicketModel.placeHolder());
+    return (temp.ticketId == "");
   }
+
   static bool isUniqueUserId(List<UserModel> users , String newUserId){
-    for(UserModel user in users){
-      if(user.userId == newUserId){
-        return false;
-      }
-    }
-    return true;
+    UserModel temp = users.firstWhere((user)=>(user.userId == newUserId) , orElse: ()=>UserModel.placeHolder());
+    return(temp.userId == "");
   }
+
   static bool isUniqueUserEmail(List<UserModel> users , String newUserEmail){
-    for(UserModel user in users){
-      if(user.email == newUserEmail){
-        return false;
-      }
-    }
-    return true;
+    //! old way
+    // for(UserModel user in users){
+    //   if(user.email == newUserEmail){
+    //     return false;
+    //   }
+    // }
+    // return true;
+
+    //* new way
+    UserModel temp = users.firstWhere((user)=>(user.email == newUserEmail) , orElse: ()=>UserModel.placeHolder());
+    return(temp.userId == "");
   }
 
   static bool isValidateName(String name){

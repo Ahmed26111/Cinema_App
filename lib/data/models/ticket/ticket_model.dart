@@ -36,4 +36,16 @@ class TicketModel {
     );
   }
 
+  factory TicketModel.placeHolder(){
+    return TicketModel(ticketId: "",
+        userId: "",
+        movieId: 0,
+        movieName: "",
+        seatNumber: "",
+        date: DateTime.now(),
+        time: "",
+        price: 0.0,
+        hallName: "");
+  }
+
 }

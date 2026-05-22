@@ -33,7 +33,7 @@ class _DefaultTextFormFieldState extends State<DefaultTextFormField> {
     return TextFormField(
       controller: widget.controller,
       validator: widget.validator,
-      style: Theme.of(context).textTheme.titleSmall,
+      style: Theme.of(context).textTheme.headlineLarge,
       decoration: InputDecoration(
         labelText: widget.label,
         labelStyle: Theme.of(context).textTheme.labelMedium,

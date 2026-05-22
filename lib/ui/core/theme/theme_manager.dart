@@ -74,6 +74,11 @@ abstract class ThemeManager{
             fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.03,
             color: ColorsManager.primaryBlueAccentColor ,
           ),
+          headlineLarge:  TextStyle(
+            fontFamily: "AG",
+            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.035,
+            color: ColorsManager.greyColor ,
+          )
         )
       );
     }
