@@ -30,56 +30,65 @@ class _DefaultTextFormFieldState extends State<DefaultTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.controller,
-      validator: widget.validator,
-      style: Theme.of(context).textTheme.headlineLarge,
-      decoration: InputDecoration(
-        labelText: widget.label,
-        labelStyle: Theme.of(context).textTheme.labelMedium,
-        hintText: widget.hint,
-        hintStyle: Theme.of(context).textTheme.titleSmall,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25),
-          borderSide: BorderSide(
-            color: ColorsManager.primarySoftColor,
-            width: 0.5,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25),
-          borderSide: BorderSide(
-            color: ColorsManager.primarySoftColor,
-            width: 0.5,
-          ),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25),
-          borderSide: BorderSide(color: ColorsManager.redColor, width: 0.5),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25),
-          borderSide: BorderSide(color: ColorsManager.redColor, width: 0.5),
-        ),
-        errorMaxLines: 2,
-        suffixIconColor: (widget.isPasswordField)? ColorsManager.greyColor : null,
-        suffixIcon: (widget.isPasswordField) ? IconButton(
-          onPressed: () {
-            setState(() {
-              isSecure = ! isSecure;
-            });
-          },
-          icon: Icon(
-              (isSecure)
-                  ?Icons.visibility_outlined
-                  :Icons.visibility_off_outlined),
-        ): null,
+    return TextSelectionTheme(
+      data: TextSelectionThemeData(
+        cursorColor: ColorsManager.primaryBlueAccentColor,
+        selectionColor: ColorsManager.primaryBlueAccentColor,
+        selectionHandleColor: ColorsManager.primaryBlueAccentColor,
       ),
-      maxLines: 1,
-      minLines: 1,
-      maxLength: widget.maxLength,
-      keyboardType: widget.textInputType,
-      obscureText: (widget.isPasswordField) ? isSecure: false,
+      child: TextFormField(
+        controller: widget.controller,
+        validator: widget.validator,
+        style: Theme.of(context).textTheme.headlineLarge,
+        decoration: InputDecoration(
+          labelText: widget.label,
+          labelStyle: Theme.of(context).textTheme.labelMedium,
+          hintText: widget.hint,
+          hintStyle: Theme.of(context).textTheme.titleSmall,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25),
+            borderSide: BorderSide(
+              color: ColorsManager.primarySoftColor,
+              width: 0.5,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25),
+            borderSide: BorderSide(
+              color: ColorsManager.primarySoftColor,
+              width: 0.5,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25),
+            borderSide: BorderSide(color: ColorsManager.redColor, width: 0.5),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25),
+            borderSide: BorderSide(color: ColorsManager.redColor, width: 0.5),
+          ),
+          errorMaxLines: 2,
+          suffixIconColor: (widget.isPasswordField)? ColorsManager.greyColor : null,
+          suffixIcon: (widget.isPasswordField) ? IconButton(
+            onPressed: () {
+              setState(() {
+                isSecure = ! isSecure;
+              });
+            },
+            icon: Icon(
+                (isSecure)
+                    ?Icons.visibility_outlined
+                    :Icons.visibility_off_outlined),
+          ): null,
+        ),
+        maxLines: 1,
+        minLines: 1,
+        maxLength: widget.maxLength,
+        keyboardType: widget.textInputType,
+        obscureText: (widget.isPasswordField) ? isSecure: false,
+        cursorErrorColor: ColorsManager.redColor,
+
+      ),
     );
   }
 }

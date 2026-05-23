@@ -3,13 +3,11 @@ import 'package:cinema_app/data/models/user/user_model.dart';
 
 abstract class Validation{
   static bool isUniqueTicketId(List<TicketModel> tickets , String newTicketId){
-    TicketModel temp = tickets.firstWhere((ticket)=>(ticket.ticketId == newTicketId) , orElse: ()=>TicketModel.placeHolder());
-    return (temp.ticketId == "");
+    return (tickets.indexWhere((ticket)=>(ticket.ticketId == newTicketId)) == -1);
   }
 
   static bool isUniqueUserId(List<UserModel> users , String newUserId){
-    UserModel temp = users.firstWhere((user)=>(user.userId == newUserId) , orElse: ()=>UserModel.placeHolder());
-    return(temp.userId == "");
+    return (users.indexWhere((user)=>(user.userId == newUserId)) == -1);
   }
 
   static bool isUniqueUserEmail(List<UserModel> users , String newUserEmail){
@@ -22,8 +20,7 @@ abstract class Validation{
     // return true;
 
     //* new way
-    UserModel temp = users.firstWhere((user)=>(user.email == newUserEmail) , orElse: ()=>UserModel.placeHolder());
-    return(temp.userId == "");
+    return (users.indexWhere((user)=>(user.email == newUserEmail)) == -1);
   }
 
   static bool isValidateName(String name){
@@ -52,6 +49,10 @@ abstract class Validation{
 
   static bool isContainSpecialCharacter(String password){
     return RegExp(r'(?=.*?[#?!@$%^&*-])').hasMatch(password);
+  }
+
+  static UserModel isUserAccountExistInDataBase(String email , String password , List<UserModel> users){
+    return users.firstWhere((user)=>(user.email == email && user.password == password) , orElse: UserModel.placeHolder);
   }
 
 }

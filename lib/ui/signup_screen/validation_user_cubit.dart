@@ -15,27 +15,27 @@ class ValidationUserCubit extends Cubit<ValidationUserState> {
   bool isUniqueUserEmail(String email){
     List<UserModel> users = HiveHandler.getAllUsers();
     if(Validation.isUniqueUserEmail(users, email)){
-      emit(ValidationUserSuccess(isAcceptTerms: state.isAcceptTerms));
+      emit(ValidationUserIsUniqueUserEmailSuccess(isAcceptTerms: state.isAcceptTerms));
       return true;
     }
     else{
-      emit(ValidationUserFailed(isAcceptTerms: state.isAcceptTerms));
+      emit(ValidationUserIsUniqueUserEmailFailed(isAcceptTerms: state.isAcceptTerms));
       return false;
     }
   }
 
   void toggleAcceptTerms(){
-    emit(ValidationUserSuccess(isAcceptTerms: !state.isAcceptTerms));
+    emit(ValidationUserToggleIsAcceptTermCondition(isAcceptTerms: !state.isAcceptTerms));
   }
 
   bool _isUniqueUserId(String userID){
     List<UserModel> users = HiveHandler.getAllUsers();
     if(Validation.isUniqueUserId(users, userID)){
-      emit(ValidationUserSuccess(isAcceptTerms: state.isAcceptTerms));
+      emit(ValidationUserIsUniqueUserIdSuccess(isAcceptTerms: state.isAcceptTerms));
       return true;
     }
     else{
-      emit(ValidationUserFailed(isAcceptTerms: state.isAcceptTerms));
+      emit(ValidationUserIsUniqueUserIdFailed(isAcceptTerms: state.isAcceptTerms));
       return false;
     }
   }
@@ -61,6 +61,20 @@ class ValidationUserCubit extends Cubit<ValidationUserState> {
       return true;
     }
     return false;
+  }
+
+  bool isUserAccountExist(String email , String password){
+      List<UserModel> users = HiveHandler.getAllUsers();
+      UserModel userModel = Validation.isUserAccountExistInDataBase(email, password, users);
+      if(userModel.userId != ""){
+        emit(ValidationUserIsUniqueUserAccountExistSuccess(isAcceptTerms: state.isAcceptTerms));
+        HiveHandler.addAndUpdateActiveUser(userModel);
+        return true;
+      }
+      else{
+        emit(ValidationUserIsUniqueUserAccountExistFailed(isAcceptTerms: state.isAcceptTerms));
+        return false;
+      }
   }
 
 }

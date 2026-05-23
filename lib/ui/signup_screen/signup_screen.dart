@@ -30,90 +30,101 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Sign Up", style: Theme.of(context).textTheme.displaySmall),
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Form(
-            key: _globalKey,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15,),
-              child: Column(
-                children: [
-                  Text(
-                    "Let's get started",
-                    style: Theme.of(context).textTheme.displayMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: ResponsiveSizeConstants.heightScreen(context) * 0.005,
-                  ),
-                  Text(
-                    "The latest movie and series are here",
-                    style: Theme.of(context).textTheme.titleSmall,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: ResponsiveSizeConstants.heightScreen(context) * 0.03,
-                  ),
-                  DefaultTextFormField(
-                    controller: _firstNameController,
-                    label: "First Name",
-                    hint: "guest",
-                    validator: _getNameValidator,
-                    maxLength: 15,
-                    textInputType: TextInputType.name,
-                  ),
-                  SizedBox(
-                    height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
-                  ),
-                  DefaultTextFormField(
-                    controller: _lastNameController,
-                    label: "Last Name",
-                    hint: "guest",
-                    validator: _getNameValidator,
-                    maxLength: 15,
-                    textInputType: TextInputType.name,
-                  ),
-                  SizedBox(
-                    height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
-                  ),
-                  DefaultTextFormField(
-                    controller: _emailController,
-                    label: "Email Address",
-                    hint: "guest@gmail.com",
-                    validator: _getEmailValidator,
-                    maxLength: 30,
-                    textInputType: TextInputType.emailAddress,
-                  ),
-                  SizedBox(
-                    height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
-                  ),
-                  DefaultTextFormField(
-                    controller: _passwordController,
-                    label: "Password",
-                    hint: "********",
-                    validator: _getPasswordValidator,
-                    maxLength: 15,
-                    textInputType: TextInputType.visiblePassword,
-                    isPasswordField: true,
-                  ),
-                  BlocBuilder<ValidationUserCubit,ValidationUserState>(
-                    builder: (context , state) {
-                      return _getIAgreeTermsConditionListTile(state, context);
-                    }
-                  ),
-                  SizedBox(
-                    height: ResponsiveSizeConstants.heightScreen(context) * 0.05,
-                  ),
-                  BlocBuilder<ValidationUserCubit,ValidationUserState>(
-                    builder: (context , state) {
-                      return _getSignupFilledButton(context, state);
-                    }
-                  ),
-                ],
+    return GestureDetector(
+      onTap: ()=>FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Sign Up", style: Theme.of(context).textTheme.displaySmall),
+          leading: IconButton(
+              onPressed: () {
+                FocusScope.of(context).unfocus();
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.arrow_back_ios_new)
+          ),
+          automaticallyImplyLeading: false,
+        ),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Form(
+              key: _globalKey,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15,),
+                child: Column(
+                  children: [
+                    Text(
+                      "Let's get started",
+                      style: Theme.of(context).textTheme.displayMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: ResponsiveSizeConstants.heightScreen(context) * 0.005,
+                    ),
+                    Text(
+                      "The latest movie and series are here",
+                      style: Theme.of(context).textTheme.titleSmall,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: ResponsiveSizeConstants.heightScreen(context) * 0.03,
+                    ),
+                    DefaultTextFormField(
+                      controller: _firstNameController,
+                      label: "First Name",
+                      hint: "guest",
+                      validator: _getNameValidator,
+                      maxLength: 15,
+                      textInputType: TextInputType.name,
+                    ),
+                    SizedBox(
+                      height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
+                    ),
+                    DefaultTextFormField(
+                      controller: _lastNameController,
+                      label: "Last Name",
+                      hint: "guest",
+                      validator: _getNameValidator,
+                      maxLength: 15,
+                      textInputType: TextInputType.name,
+                    ),
+                    SizedBox(
+                      height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
+                    ),
+                    DefaultTextFormField(
+                      controller: _emailController,
+                      label: "Email Address",
+                      hint: "guest@gmail.com",
+                      validator: _getEmailValidator,
+                      maxLength: 30,
+                      textInputType: TextInputType.emailAddress,
+                    ),
+                    SizedBox(
+                      height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
+                    ),
+                    DefaultTextFormField(
+                      controller: _passwordController,
+                      label: "Password",
+                      hint: "********",
+                      validator: _getPasswordValidator,
+                      maxLength: 15,
+                      textInputType: TextInputType.visiblePassword,
+                      isPasswordField: true,
+                    ),
+                    BlocBuilder<ValidationUserCubit,ValidationUserState>(
+                      builder: (context , state) {
+                        return _getIAgreeTermsConditionListTile(state, context);
+                      }
+                    ),
+                    SizedBox(
+                      height: ResponsiveSizeConstants.heightScreen(context) * 0.05,
+                    ),
+                    BlocBuilder<ValidationUserCubit,ValidationUserState>(
+                      builder: (context , state) {
+                        return _getSignupFilledButton(context, state);
+                      }
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -130,7 +141,8 @@ class _SignupScreenState extends State<SignupScreen> {
         height: ResponsiveSizeConstants.heightScreen(context) * 0.06,
         child: DefaultUserAuthenticationFilledButton(
           onPressed: (state.isAcceptTerms) ? () {
-              if (_globalKey.currentState!.validate()) {
+            FocusScope.of(context).unfocus();
+            if (_globalKey.currentState!.validate()) {
                 if (context.read<ValidationUserCubit>().addNewUser(
                     _firstNameController.text,
                     _lastNameController.text,
@@ -286,8 +298,3 @@ class _SignupScreenState extends State<SignupScreen> {
 
 }
 
-
-
-
-
-// ?
