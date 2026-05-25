@@ -1,18 +1,19 @@
-import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
 import 'package:cinema_app/utils/components/default_snack_bar.dart';
 import 'package:flutter/material.dart';
 
-abstract class InvalidUserAccountSnackBar {
-  static SnackBar get(BuildContext context){
+abstract class ConfirmPasswordNotSameWithNewPasswordSnackBar {
+  static SnackBar get (BuildContext context) {
     return DefaultSnackBar.get(
         context,
-        "Invalid Username or Password\nPlease Try again" ,
+        "Passwords are not equal\nPlease,try again",
         EdgeInsets.only(
-          bottom: ResponsiveSizeConstants.heightScreen(context) - 170,
+          bottom: ResponsiveSizeConstants.heightScreen(context) - 180,
           left: 25,
           right: 25,
-        )
+        ),
     );
   }
+
+
 }

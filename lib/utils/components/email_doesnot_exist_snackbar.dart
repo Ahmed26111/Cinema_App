@@ -3,13 +3,13 @@ import 'package:cinema_app/constants/responsive%20size%20contants/responsive_siz
 import 'package:cinema_app/utils/components/default_snack_bar.dart';
 import 'package:flutter/material.dart';
 
-abstract class InvalidUserAccountSnackBar {
-  static SnackBar get(BuildContext context){
+abstract class EmailDoesNotExistSnackBar {
+  static SnackBar get(BuildContext context) {
     return DefaultSnackBar.get(
         context,
-        "Invalid Username or Password\nPlease Try again" ,
+        "Email doesn't exist \nPlease Try again",
         EdgeInsets.only(
-          bottom: ResponsiveSizeConstants.heightScreen(context) - 170,
+          bottom: ResponsiveSizeConstants.heightScreen(context) - 180,
           left: 25,
           right: 25,
         )

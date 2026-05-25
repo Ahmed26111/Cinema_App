@@ -77,4 +77,40 @@ class ValidationUserCubit extends Cubit<ValidationUserState> {
       }
   }
 
+  bool isEmailExistsForUpdatePassword(String email){
+    if(! isUniqueUserEmail(email)){
+      emit(ValidationUserIsEmailExistsSuccess(isAcceptTerms: state.isAcceptTerms));
+      return true;
+    }
+    else{
+      emit(ValidationUserIsEmailExistsFailed(isAcceptTerms: state.isAcceptTerms));
+      return false;
+    }
+  }
+
+  bool isNewPasswordEqualToConfirmPassword(String newPassword , String confirmPassword){
+    if(newPassword == confirmPassword){
+      emit(ValidationUserIsNewPasswordEqualConfirmPasswordSuccess(isAcceptTerms: state.isAcceptTerms));
+      return true;
+    }else{
+      emit(ValidationUserIsNewPasswordEqualConfirmPasswordFailed(isAcceptTerms: state.isAcceptTerms));
+      return false;
+    }
+  }
+
+  bool updateUserPasswordByEmail(String email , String password){
+    List<UserModel> users = HiveHandler.getAllUsers();
+    UserModel user =  users.firstWhere((user)=>(user.email == email) , orElse: UserModel.placeHolder);
+    if(user.userId != ""){
+      user = user.copyWith(password: password);
+      HiveHandler.addAndUpdateUsers(user);
+      emit(ValidationUserIsUpdatePasswordSuccess(isAcceptTerms: state.isAcceptTerms));
+      return true;
+    }
+    else{
+      emit(ValidationUserIsUpdatePasswordFailed(isAcceptTerms: state.isAcceptTerms));
+      return false;
+    }
+  }
+
 }

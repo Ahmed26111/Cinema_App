@@ -3,6 +3,7 @@ import 'package:cinema_app/constants/responsive%20size%20contants/responsive_siz
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/ui/core/theme/theme_manager.dart';
 import 'package:cinema_app/ui/signup_screen/validation_user_cubit.dart';
+import 'package:cinema_app/utils/components/default_authentication_title_and_subtitle.dart';
 import 'package:cinema_app/utils/components/default_text_form_field.dart';
 import 'package:cinema_app/utils/components/default_user_authentication_filled_button.dart';
 import 'package:cinema_app/utils/shared/validation.dart';
@@ -52,19 +53,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15,),
                 child: Column(
                   children: [
-                    Text(
-                      "Let's get started",
-                      style: Theme.of(context).textTheme.displayMedium,
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(
-                      height: ResponsiveSizeConstants.heightScreen(context) * 0.005,
-                    ),
-                    Text(
-                      "The latest movie and series are here",
-                      style: Theme.of(context).textTheme.titleSmall,
-                      textAlign: TextAlign.center,
-                    ),
+                    ...defaultAuthenticationTitleAndSubtitle(title: "Let's get started", subTitle: "The latest movie and series are here", context: context),
                     SizedBox(
                       height: ResponsiveSizeConstants.heightScreen(context) * 0.03,
                     ),
@@ -136,29 +125,25 @@ class _SignupScreenState extends State<SignupScreen> {
   Padding _getSignupFilledButton(BuildContext context, ValidationUserState state) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: SizedBox(
-        width: double.infinity,
-        height: ResponsiveSizeConstants.heightScreen(context) * 0.06,
-        child: DefaultUserAuthenticationFilledButton(
-          onPressed: (state.isAcceptTerms) ? () {
-            FocusScope.of(context).unfocus();
-            if (_globalKey.currentState!.validate()) {
-                if (context.read<ValidationUserCubit>().addNewUser(
-                    _firstNameController.text,
-                    _lastNameController.text,
-                    _emailController.text,
-                    _passwordController.text
-                )
-                ) {
-                  context.go(RoutesConstants.homeScreen);
-                }
+      child: DefaultUserAuthenticationFilledButton(
+        onPressed: (state.isAcceptTerms) ? () {
+          FocusScope.of(context).unfocus();
+          if (_globalKey.currentState!.validate()) {
+              if (context.read<ValidationUserCubit>().addNewUser(
+                  _firstNameController.text,
+                  _lastNameController.text,
+                  _emailController.text,
+                  _passwordController.text
+              )
+              ) {
+                context.go(RoutesConstants.homeScreen);
               }
-            } : null,
-          text: "Sign Up",
-          textStyle: (state.isAcceptTerms)
-              ? Theme.of(context).textTheme.displayLarge
-              : TextStyle(color: ColorsManager.primaryDarkColor),
-        ),
+            }
+          } : null,
+        text: "Sign Up",
+        textStyle: (state.isAcceptTerms)
+            ? Theme.of(context).textTheme.displayLarge
+            : TextStyle(color: ColorsManager.primaryDarkColor),
       ),
     );
   }

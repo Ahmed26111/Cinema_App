@@ -33,7 +33,7 @@ class _DefaultTextFormFieldState extends State<DefaultTextFormField> {
     return TextSelectionTheme(
       data: TextSelectionThemeData(
         cursorColor: ColorsManager.primaryBlueAccentColor,
-        selectionColor: ColorsManager.primaryBlueAccentColor,
+        selectionColor: ColorsManager.primaryBlueAccentColorLessOpacity,
         selectionHandleColor: ColorsManager.primaryBlueAccentColor,
       ),
       child: TextFormField(

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/ui/signup_screen/validation_user_cubit.dart';
+import 'package:cinema_app/utils/components/default_authentication_title_and_subtitle.dart';
 import 'package:cinema_app/utils/components/default_text_form_field.dart';
 import 'package:cinema_app/utils/components/default_user_authentication_filled_button.dart';
 import 'package:cinema_app/utils/components/invalid_user_account_snackbar.dart';
@@ -52,19 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 18 ,vertical: 22),
                     child: Column(
                       children: [
-                        Text(
-                          "Welcome back!",
-                          style: Theme.of(context).textTheme.displayMedium,
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(
-                          height: ResponsiveSizeConstants.heightScreen(context) * 0.005,
-                        ),
-                        Text(
-                          "Please enter you details",
-                          style: Theme.of(context).textTheme.titleSmall,
-                          textAlign: TextAlign.center,
-                        ),
+                        ...defaultAuthenticationTitleAndSubtitle(title: "Welcome back!", subTitle: "Please enter your details", context: context),
                         SizedBox(
                           height: ResponsiveSizeConstants.heightScreen(context) * 0.07,
                         ),
@@ -96,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-                        );
+              );
             }
         ),
       ),
@@ -106,17 +95,13 @@ class _LoginScreenState extends State<LoginScreen> {
   Padding _getLoginFilledButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: SizedBox(
-        width: double.infinity,
-        height: ResponsiveSizeConstants.heightScreen(context) * 0.065,
-        child: DefaultUserAuthenticationFilledButton(
-          onPressed: () {
-            FocusScope.of(context).unfocus();
-            context.read<ValidationUserCubit>().isUserAccountExist(_emailController.text, _passwordController.text);
-          },
-          text: "Login",
-          textStyle: Theme.of(context).textTheme.displayLarge,
-        ),
+      child: DefaultUserAuthenticationFilledButton(
+        onPressed: () {
+          FocusScope.of(context).unfocus();
+          context.read<ValidationUserCubit>().isUserAccountExist(_emailController.text, _passwordController.text);
+        },
+        text: "Login",
+        textStyle: Theme.of(context).textTheme.displayLarge,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
+import 'package:cinema_app/ui/create_new_password_screen/create_new_password_screen.dart';
 import 'package:cinema_app/ui/forget_password_screen/forget_password_screen.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
 import 'package:cinema_app/ui/login_screen/login_screen.dart';
@@ -122,7 +123,10 @@ abstract class RoutesManager {
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           transitionDuration: Duration(milliseconds: 200),
-          child: const ForgetPasswordScreen(),
+          child: BlocProvider(
+            create: (context) => ValidationUserCubit(),
+            child: ForgetPasswordScreen(),
+          ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
@@ -136,6 +140,32 @@ abstract class RoutesManager {
           },
         ),
       ),
+      GoRoute(
+        name: RoutesConstants.createNewPasswordScreenName,
+        path: RoutesConstants.createNewPasswordScreenUrl,
+        pageBuilder: (context ,state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionDuration: Duration(milliseconds: 200),
+            child: BlocProvider(
+              create: (context) => ValidationUserCubit(),
+              child: CreateNewPasswordScreen(email: state.pathParameters["email"]!),
+            ),
+            transitionsBuilder: (context, animation, secondaryAnimation,
+                child) {
+              return FadeTransition(
+                opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+                child: ScaleTransition(
+                  scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                    CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                  ),
+                  child: child,
+                ),
+              );
+            },
+          );
+        },
+      )
     ],
   );
 }
