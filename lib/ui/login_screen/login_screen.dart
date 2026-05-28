@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
-import 'package:cinema_app/ui/signup_screen/validation_user_cubit.dart';
+import 'package:cinema_app/ui/login_screen/login_cubit.dart';
 import 'package:cinema_app/utils/components/default_authentication_title_and_subtitle.dart';
 import 'package:cinema_app/utils/components/default_text_form_field.dart';
 import 'package:cinema_app/utils/components/default_user_authentication_filled_button.dart';
@@ -29,24 +29,25 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     FocusManager.instance.primaryFocus?.unfocus();
     return GestureDetector(
+      //? onTap to hide keyboard
       onTap: ()=>FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
           title: Text("Login", style: Theme.of(context).textTheme.displaySmall),
         ),
-        body: BlocConsumer<ValidationUserCubit,ValidationUserState>(
+        body: BlocConsumer<LoginCubit , LoginState>(
             listener: (context , state) {
               FocusScope.of(context).unfocus();
-              if(state is ValidationUserIsUniqueUserAccountExistFailed){
+              if(state is UserAccountExistFailedState){
                 ScaffoldMessenger.of(context).showSnackBar(InvalidUserAccountSnackBar.get(context));
               }
-              else if(state is ValidationUserIsUniqueUserAccountExistSuccess){
+              else if(state is UserAccountExistSuccessState){
                 context.go(RoutesConstants.homeScreen);
               }
             },
             builder: (context , state) {
               return SingleChildScrollView(
-              child: Center(
+               child: Center(
                 child: Form(
                   key: _globalKey,
                   child: Padding(
@@ -63,6 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             label: "Email Address",
                             hint: "guest@gmail.com",
                             textInputType: TextInputType.emailAddress,
+                            maxLength: 30,
                         ),
                         SizedBox(
                           height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
@@ -74,6 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             hint: "********",
                             isPasswordField: true,
                             textInputType: TextInputType.visiblePassword,
+                            maxLength: 15,
                         ),
                         _getDoNotHaveAnAccountAndForgetPasswordTextButton(context),
                         SizedBox(
@@ -98,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: DefaultUserAuthenticationFilledButton(
         onPressed: () {
           FocusScope.of(context).unfocus();
-          context.read<ValidationUserCubit>().isUserAccountExist(_emailController.text, _passwordController.text);
+          context.read<LoginCubit>().isUserAccountExist(_emailController.text, _passwordController.text);
         },
         text: "Login",
         textStyle: Theme.of(context).textTheme.displayLarge,

@@ -1,12 +1,15 @@
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
+import 'package:cinema_app/ui/create_new_password_screen/create_new_password_cubit.dart';
 import 'package:cinema_app/ui/create_new_password_screen/create_new_password_screen.dart';
+import 'package:cinema_app/ui/forget_password_screen/forget_password_cubit.dart';
 import 'package:cinema_app/ui/forget_password_screen/forget_password_screen.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
+import 'package:cinema_app/ui/login_screen/login_cubit.dart';
 import 'package:cinema_app/ui/login_screen/login_screen.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_change_index_cubit.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_layout_screen.dart';
+import 'package:cinema_app/ui/signup_screen/signup_cubit.dart';
 import 'package:cinema_app/ui/signup_screen/signup_screen.dart';
-import 'package:cinema_app/ui/signup_screen/validation_user_cubit.dart';
 import 'package:cinema_app/ui/splash_screen/get_active_user_cubit.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen1.dart';
 import 'package:cinema_app/ui/splash_screen/splash_screen.dart';
@@ -78,7 +81,7 @@ abstract class RoutesManager {
           key: state.pageKey,
           transitionDuration: Duration(milliseconds: 500),
           child: BlocProvider(
-            create: (context) => ValidationUserCubit(),
+            create: (context) => LoginCubit(),
             child: LoginScreen(),
           ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -101,7 +104,7 @@ abstract class RoutesManager {
           key: state.pageKey,
           transitionDuration: Duration(milliseconds: 200),
           child: BlocProvider(
-            create: (context) => ValidationUserCubit(),
+            create: (context) => SignupCubit(),
             child: SignupScreen(),
           ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -124,7 +127,7 @@ abstract class RoutesManager {
           key: state.pageKey,
           transitionDuration: Duration(milliseconds: 200),
           child: BlocProvider(
-            create: (context) => ValidationUserCubit(),
+            create: (context) => ForgetPasswordCubit(),
             child: ForgetPasswordScreen(),
           ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -148,7 +151,7 @@ abstract class RoutesManager {
             key: state.pageKey,
             transitionDuration: Duration(milliseconds: 200),
             child: BlocProvider(
-              create: (context) => ValidationUserCubit(),
+              create: (context) => CreateNewPasswordCubit(),
               child: CreateNewPasswordScreen(email: state.pathParameters["email"]!),
             ),
             transitionsBuilder: (context, animation, secondaryAnimation,

@@ -1,9 +1,10 @@
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
-import 'package:cinema_app/ui/signup_screen/validation_user_cubit.dart';
+import 'package:cinema_app/ui/create_new_password_screen/create_new_password_cubit.dart';
 import 'package:cinema_app/utils/components/confirm_password_not_same_with_new_password_snack_bar.dart';
 import 'package:cinema_app/utils/components/default_authentication_title_and_subtitle.dart';
 import 'package:cinema_app/utils/components/default_text_form_field.dart';
 import 'package:cinema_app/utils/components/default_user_authentication_filled_button.dart';
+import 'package:cinema_app/utils/components/failed_to_update_password_snack_bar.dart';
 import 'package:cinema_app/utils/shared/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,17 +39,21 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
             },
             icon: Icon(Icons.arrow_back_ios_new),
           ),
+          automaticallyImplyLeading: false, //? to hide default back button
         ),
-        body: BlocConsumer<ValidationUserCubit, ValidationUserState>(
+        body: BlocConsumer<CreateNewPasswordCubit, CreateNewPasswordState>(
             listener: (context, state) {
               FocusScope.of(context).unfocus();
-              if(state is ValidationUserIsNewPasswordEqualConfirmPasswordFailed){
+              if(state is NewPasswordEqualConfirmPasswordFailed){
                 ScaffoldMessenger.of(context).showSnackBar(ConfirmPasswordNotSameWithNewPasswordSnackBar.get(context));
               }
-              else if(state is ValidationUserIsUpdatePasswordFailed){
-                ScaffoldMessenger.of(context).showSnackBar(ConfirmPasswordNotSameWithNewPasswordSnackBar.get(context));
+              else if(state is NewPasswordEqualConfirmPasswordSuccess){
+                context.read<CreateNewPasswordCubit>().updateUserPasswordByEmail(widget.email, _confirmPasswordController.text);
               }
-              else if(state is ValidationUserIsUpdatePasswordSuccess){
+              else if(state is UpdatePasswordFailed){
+                ScaffoldMessenger.of(context).showSnackBar(FailedToUpdatePasswordSnackBar.get(context));
+              }
+              else if(state is UpdatePasswordSuccess){
                 context.pop();
                 context.pop();
               }
@@ -63,10 +68,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                           horizontal: 18, vertical: 35),
                       child: Column(
                         children: [
-                          ...defaultAuthenticationTitleAndSubtitle(
-                              title: "Create New Password",
-                              subTitle: "Enter you new password",
-                              context: context),
+                          ...defaultAuthenticationTitleAndSubtitle(title: "Create New Password", subTitle: "Enter you new password", context: context),
                           SizedBox(
                             height: ResponsiveSizeConstants.heightScreen(
                                 context) * 0.07,
@@ -77,6 +79,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                             label: "New Password",
                             hint: "********",
                             isPasswordField: true,
+                            textInputType: TextInputType.visiblePassword,
                             maxLength: 15,
                           ),
                           SizedBox(
@@ -89,6 +92,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                             label: "Confirm Password",
                             hint: "********",
                             isPasswordField: true,
+                            textInputType: TextInputType.visiblePassword,
                             maxLength: 15,
                           ),
                           SizedBox(
@@ -115,9 +119,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
         onPressed: (){
           FocusScope.of(context).unfocus();
           if(_globalKey.currentState!.validate()){
-            if(context.read<ValidationUserCubit>().isNewPasswordEqualToConfirmPassword(_newPasswordController.text, _confirmPasswordController.text)){
-              context.read<ValidationUserCubit>().updateUserPasswordByEmail(widget.email, _confirmPasswordController.text);
-            }
+            context.read<CreateNewPasswordCubit>().isNewPasswordEqualToConfirmPassword(_newPasswordController.text, _confirmPasswordController.text);
           }
         },
         text: "Reset",

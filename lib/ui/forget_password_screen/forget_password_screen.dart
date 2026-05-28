@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
-import 'package:cinema_app/ui/signup_screen/validation_user_cubit.dart';
+import 'package:cinema_app/ui/forget_password_screen/forget_password_cubit.dart';
 import 'package:cinema_app/utils/components/default_authentication_title_and_subtitle.dart';
 import 'package:cinema_app/utils/components/default_text_form_field.dart';
 import 'package:cinema_app/utils/components/default_user_authentication_filled_button.dart';
@@ -35,14 +35,15 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   Navigator.pop(context);
                 },
                 icon: Icon(Icons.arrow_back_ios_new)
-            )
+            ),
+            automaticallyImplyLeading: false, //? to hide default back button
         ),
-        body: BlocConsumer<ValidationUserCubit , ValidationUserState>(
+        body: BlocConsumer<ForgetPasswordCubit,ForgetPasswordState>(
           listener: (context,state){
             FocusScope.of(context).unfocus();
-            if(state is ValidationUserIsEmailExistsFailed){
+            if(state is IsEmailExistsFailed){
               ScaffoldMessenger.of(context).showSnackBar(EmailDoesNotExistSnackBar.get(context));
-            }else if(state is ValidationUserIsEmailExistsSuccess){
+            }else if(state is IsEmailExistsSuccess){
               context.pushNamed(RoutesConstants.createNewPasswordScreenName , pathParameters: {"email": _emailController.text});
             }
           },
@@ -65,6 +66,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             label: "Email Address",
                             hint: "guest@gmail.com",
                             textInputType: TextInputType.emailAddress,
+                            maxLength: 30,
                           ),
                           SizedBox(
                             height: ResponsiveSizeConstants.heightScreen(context) * 0.05,
@@ -88,7 +90,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       child: DefaultUserAuthenticationFilledButton(
         onPressed: () {
           if(_globalKey.currentState!.validate()){
-            context.read<ValidationUserCubit>().isEmailExistsForUpdatePassword(_emailController.text);
+            context.read<ForgetPasswordCubit>().isEmailExists(_emailController.text);
           }
         },
         text: "Next",
