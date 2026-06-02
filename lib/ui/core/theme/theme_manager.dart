@@ -78,7 +78,22 @@ abstract class ThemeManager{
             fontFamily: "AG",
             fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.035,
             color: ColorsManager.greyColor ,
-          )
+          ),
+          bodySmall:  TextStyle(
+            fontFamily: "AG",
+            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.017,
+            color: ColorsManager.greyColor ,
+          ),
+          headlineMedium: TextStyle(
+            fontFamily: "AG",
+            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.017,
+            color: ColorsManager.primaryBlueAccentColor ,
+          ),
+          headlineSmall:  TextStyle(
+            fontFamily: "AG",
+            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.03,
+            color: ColorsManager.redColor ,
+          ),
         )
       );
     }

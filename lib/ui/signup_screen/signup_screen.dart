@@ -3,8 +3,11 @@ import 'package:cinema_app/constants/responsive%20size%20contants/responsive_siz
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/ui/core/theme/theme_manager.dart';
 import 'package:cinema_app/utils/components/default_authentication_title_and_subtitle.dart';
+import 'package:cinema_app/utils/components/default_gesture_detector_authentication_screen.dart';
+import 'package:cinema_app/utils/components/default_pop_back_icon_button.dart';
 import 'package:cinema_app/utils/components/default_text_form_field.dart';
 import 'package:cinema_app/utils/components/default_user_authentication_filled_button.dart';
+import 'package:cinema_app/utils/components/default_user_authentication_screen.dart';
 import 'package:cinema_app/utils/components/failed_to_add_new_user_snack_bar.dart';
 import 'package:cinema_app/utils/shared/validation.dart';
 import 'package:flutter/material.dart';
@@ -31,20 +34,16 @@ class _SignupScreenState extends State<SignupScreen> {
 
   final TextEditingController _passwordController = TextEditingController();
 
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: ()=>FocusManager.instance.primaryFocus?.unfocus(),
+    final bool isLandscape = ResponsiveSizeConstants.isLandscape(context);
+
+    return DefaultGestureDetectorAuthenticationScreen(
       child: Scaffold(
         appBar: AppBar(
           title: Text("Sign Up", style: Theme.of(context).textTheme.displaySmall),
-          leading: IconButton(
-              onPressed: () {
-                FocusScope.of(context).unfocus();
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back_ios_new)
-          ),
+          leading: DefaultPopBackIconButton(),
           automaticallyImplyLeading: false, //? to hide default back button
         ),
         body: BlocConsumer<SignupCubit, SignupState>(
@@ -58,79 +57,70 @@ class _SignupScreenState extends State<SignupScreen> {
               }
           },
           builder: (context, state) {
-            return SingleChildScrollView(
-              child: Center(
-                child: Form(
-                  key: _globalKey,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18, vertical: 15,),
-                    child: Column(
-                      children: [
-                        ...defaultAuthenticationTitleAndSubtitle(
-                            title: "Let's get started",
-                            subTitle: "The latest movie and series are here",
-                            context: context),
-                        SizedBox(
-                          height: ResponsiveSizeConstants.heightScreen(
-                              context) * 0.03,
-                        ),
-                        DefaultTextFormField(
-                          controller: _firstNameController,
-                          label: "First Name",
-                          hint: "guest",
-                          validator: _getNameValidator,
-                          maxLength: 15,
-                          textInputType: TextInputType.name,
-                        ),
-                        SizedBox(
-                          height: ResponsiveSizeConstants.heightScreen(
-                              context) * 0.02,
-                        ),
-                        DefaultTextFormField(
-                          controller: _lastNameController,
-                          label: "Last Name",
-                          hint: "guest",
-                          validator: _getNameValidator,
-                          maxLength: 15,
-                          textInputType: TextInputType.name,
-                        ),
-                        SizedBox(
-                          height: ResponsiveSizeConstants.heightScreen(
-                              context) * 0.02,
-                        ),
-                        DefaultTextFormField(
-                          controller: _emailController,
-                          label: "Email Address",
-                          hint: "guest@gmail.com",
-                          validator: _getEmailValidator,
-                          maxLength: 30,
-                          textInputType: TextInputType.emailAddress,
-                        ),
-                        SizedBox(
-                          height: ResponsiveSizeConstants.heightScreen(
-                              context) * 0.02,
-                        ),
-                        DefaultTextFormField(
-                          controller: _passwordController,
-                          label: "Password",
-                          hint: "********",
-                          validator: _getPasswordValidator,
-                          maxLength: 15,
-                          textInputType: TextInputType.visiblePassword,
-                          isPasswordField: true,
-                        ),
-                        _getIAgreeTermsConditionListTile(state, context),
-                        SizedBox(
-                          height: ResponsiveSizeConstants.heightScreen(
-                              context) * 0.05,
-                        ),
-                        _getSignupFilledButton(context, state),
-                      ],
-                    ),
-                  ),
+            return DefaultUserAuthenticationScreen(
+              globalKey: _globalKey,
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15,),
+              children: [
+                ...defaultAuthenticationTitleAndSubtitle(
+                    title: "Let's get started",
+                    subTitle: "The latest movie and series are here",
+                    context: context),
+                SizedBox(
+                  height: ResponsiveSizeConstants.heightScreen(
+                      context) * 0.03,
                 ),
-              ),
+                DefaultTextFormField(
+                  controller: _firstNameController,
+                  label: "First Name",
+                  hint: "guest",
+                  validator: _getNameValidator,
+                  maxLength: 15,
+                  textInputType: TextInputType.name,
+                ),
+                SizedBox(
+                  height: ResponsiveSizeConstants.heightScreen(
+                      context) * 0.02,
+                ),
+                DefaultTextFormField(
+                  controller: _lastNameController,
+                  label: "Last Name",
+                  hint: "guest",
+                  validator: _getNameValidator,
+                  maxLength: 15,
+                  textInputType: TextInputType.name,
+                ),
+                SizedBox(
+                  height: ResponsiveSizeConstants.heightScreen(
+                      context) * 0.02,
+                ),
+                DefaultTextFormField(
+                  controller: _emailController,
+                  label: "Email Address",
+                  hint: "guest@gmail.com",
+                  validator: _getEmailValidator,
+                  maxLength: 30,
+                  textInputType: TextInputType.emailAddress,
+                ),
+                SizedBox(
+                  height: ResponsiveSizeConstants.heightScreen(
+                      context) * 0.02,
+                ),
+                DefaultTextFormField(
+                  controller: _passwordController,
+                  label: "Password",
+                  hint: "********",
+                  validator: _getPasswordValidator,
+                  maxLength: 15,
+                  textInputType: TextInputType.visiblePassword,
+                  isPasswordField: true,
+                ),
+                _getIAgreeTermsConditionListTile(state, context),
+                SizedBox(
+                  height: ResponsiveSizeConstants.heightScreen(
+                      context) * 0.05,
+                ),
+                _getSignupFilledButton(context, state),
+              ],
             );
           },
         ),

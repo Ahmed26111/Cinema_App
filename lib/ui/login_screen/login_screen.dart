@@ -4,8 +4,10 @@ import 'package:cinema_app/constants/responsive%20size%20contants/responsive_siz
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/ui/login_screen/login_cubit.dart';
 import 'package:cinema_app/utils/components/default_authentication_title_and_subtitle.dart';
+import 'package:cinema_app/utils/components/default_gesture_detector_authentication_screen.dart';
 import 'package:cinema_app/utils/components/default_text_form_field.dart';
 import 'package:cinema_app/utils/components/default_user_authentication_filled_button.dart';
+import 'package:cinema_app/utils/components/default_user_authentication_screen.dart';
 import 'package:cinema_app/utils/components/invalid_user_account_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,13 +29,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    FocusManager.instance.primaryFocus?.unfocus();
-    return GestureDetector(
-      //? onTap to hide keyboard
-      onTap: ()=>FocusManager.instance.primaryFocus?.unfocus(),
+
+    final bool isLandscape = ResponsiveSizeConstants.isLandscape(context);
+
+    return DefaultGestureDetectorAuthenticationScreen(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Login", style: Theme.of(context).textTheme.displaySmall),
+          title: Text("Login", style: (isLandscape)? Theme.of(context).textTheme.labelLarge : Theme.of(context).textTheme.displaySmall),
         ),
         body: BlocConsumer<LoginCubit , LoginState>(
             listener: (context , state) {
@@ -46,48 +48,42 @@ class _LoginScreenState extends State<LoginScreen> {
               }
             },
             builder: (context , state) {
-              return SingleChildScrollView(
-               child: Center(
-                child: Form(
-                  key: _globalKey,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18 ,vertical: 22),
-                    child: Column(
-                      children: [
-                        ...defaultAuthenticationTitleAndSubtitle(title: "Welcome back!", subTitle: "Please enter your details", context: context),
-                        SizedBox(
-                          height: ResponsiveSizeConstants.heightScreen(context) * 0.07,
-                        ),
-                        DefaultTextFormField(
-                            controller: _emailController,
-                            validator: null,
-                            label: "Email Address",
-                            hint: "guest@gmail.com",
-                            textInputType: TextInputType.emailAddress,
-                            maxLength: 30,
-                        ),
-                        SizedBox(
-                          height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
-                        ),
-                        DefaultTextFormField(
-                            controller: _passwordController,
-                            validator: null,
-                            label: "Password",
-                            hint: "********",
-                            isPasswordField: true,
-                            textInputType: TextInputType.visiblePassword,
-                            maxLength: 15,
-                        ),
-                        _getDoNotHaveAnAccountAndForgetPasswordTextButton(context),
-                        SizedBox(
-                          height: ResponsiveSizeConstants.heightScreen(context) * 0.04,
-                        ),
-                        _getLoginFilledButton(context),
-                      ],
-                    ),
+              return DefaultUserAuthenticationScreen(
+                globalKey: _globalKey,
+                padding: EdgeInsets.symmetric(horizontal: ResponsiveSizeConstants.widthScreen(context) * 0.05, vertical: 35),
+                children: [
+                  ...defaultAuthenticationTitleAndSubtitle(title: "Welcome back!", subTitle: "Please enter your details", isLandscape: isLandscape ,context: context),
+                  SizedBox(
+                    height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.05 : ResponsiveSizeConstants.heightScreen(context) * 0.07,
                   ),
-                ),
-              ),
+                  DefaultTextFormField(
+                      controller: _emailController,
+                      validator: null,
+                      label: "Email Address",
+                      hint: "guest@gmail.com",
+                      textInputType: TextInputType.emailAddress,
+                      maxLength: 30,
+                      isLandscape: isLandscape,
+                  ),
+                  SizedBox(
+                    height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.03 :ResponsiveSizeConstants.heightScreen(context) * 0.02,
+                  ),
+                  DefaultTextFormField(
+                      controller: _passwordController,
+                      validator: null,
+                      label: "Password",
+                      hint: "********",
+                      isPasswordField: true,
+                      textInputType: TextInputType.visiblePassword,
+                      maxLength: 15,
+                      isLandscape: isLandscape,
+                  ),
+                  _getDoNotHaveAnAccountAndForgetPasswordTextButton(context , isLandscape),
+                  SizedBox(
+                    height: ResponsiveSizeConstants.heightScreen(context) * 0.04,
+                  ),
+                  _getLoginFilledButton(context , isLandscape),
+                ],
               );
             }
         ),
@@ -95,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Padding _getLoginFilledButton(BuildContext context) {
+  Padding _getLoginFilledButton(BuildContext context, bool isLandscape) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: DefaultUserAuthenticationFilledButton(
@@ -104,36 +100,40 @@ class _LoginScreenState extends State<LoginScreen> {
           context.read<LoginCubit>().isUserAccountExist(_emailController.text, _passwordController.text);
         },
         text: "Login",
-        textStyle: Theme.of(context).textTheme.displayLarge,
+        textStyle: (isLandscape)? Theme.of(context).textTheme.labelLarge : Theme.of(context).textTheme.displayLarge,
+        isLandscape: isLandscape,
       ),
     );
   }
 
-  Row _getDoNotHaveAnAccountAndForgetPasswordTextButton(BuildContext context) {
-    return Row(
-      children: [
-        TextButton(
-          onPressed: () {
-            FocusScope.of(context).unfocus();
-            context.pushNamed(RoutesConstants.signupScreen);
-          },
-          child: Text(
-            "Do not have an account ?",
-            style: Theme.of(context).textTheme.bodyMedium,
+  Widget _getDoNotHaveAnAccountAndForgetPasswordTextButton(BuildContext context , bool isLandscape) {
+    return Padding(
+      padding: (isLandscape) ? EdgeInsets.symmetric(horizontal: ResponsiveSizeConstants.widthScreen(context) * 0.03) : const EdgeInsets.all(0),
+      child: Row(
+        children: [
+          TextButton(
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+              context.pushNamed(RoutesConstants.signupScreen);
+            },
+            child: Text(
+              "Do not have an account ?",
+              style: (isLandscape) ? Theme.of(context).textTheme.headlineMedium : Theme.of(context).textTheme.bodyMedium,
+            ),
           ),
-        ),
-        Spacer(),
-        TextButton(
-          onPressed: () {
-            FocusScope.of(context).unfocus();
-            context.pushNamed(RoutesConstants.forgetPasswordScreen);
-          },
-          child: Text(
-            "Forgot Password ?",
-            style: Theme.of(context).textTheme.bodyMedium,
+          Spacer(),
+          TextButton(
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+              context.pushNamed(RoutesConstants.forgetPasswordScreen);
+            },
+            child: Text(
+              "Forgot Password ?",
+              style: (isLandscape) ? Theme.of(context).textTheme.headlineMedium : Theme.of(context).textTheme.bodyMedium,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -10,7 +10,7 @@ class OnboardingScreen1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final bool isLandscape = ResponsiveSizeConstants.isLandscape(context);
     log(ResponsiveSizeConstants.widthScreen(context).toString());
     log(ResponsiveSizeConstants.heightScreen(context).toString());
     return Scaffold(

@@ -11,6 +11,7 @@ class DefaultTextFormField extends StatefulWidget {
     this.textInputType,
     this.maxLength,
     this.isPasswordField = false,
+    this.isLandscape = false,
   });
 
   final TextEditingController controller;
@@ -20,6 +21,7 @@ class DefaultTextFormField extends StatefulWidget {
   final TextInputType? textInputType;
   final int? maxLength;
   final bool isPasswordField;
+  final bool isLandscape;
 
   @override
   State<DefaultTextFormField> createState() => _DefaultTextFormFieldState();
@@ -42,7 +44,7 @@ class _DefaultTextFormFieldState extends State<DefaultTextFormField> {
         style: Theme.of(context).textTheme.headlineLarge,
         decoration: InputDecoration(
           labelText: widget.label,
-          labelStyle: Theme.of(context).textTheme.labelMedium,
+          labelStyle: (widget.isLandscape)?Theme.of(context).textTheme.labelSmall : Theme.of(context).textTheme.labelMedium,
           hintText: widget.hint,
           hintStyle: Theme.of(context).textTheme.titleSmall,
           enabledBorder: OutlineInputBorder(
@@ -80,6 +82,13 @@ class _DefaultTextFormFieldState extends State<DefaultTextFormField> {
                     ?Icons.visibility_outlined
                     :Icons.visibility_off_outlined),
           ): null,
+          // 1. Control the Error Message Font
+          errorStyle: Theme.of(context).textTheme.headlineSmall,
+          // 2. Control the MaxLength (Counter) Font
+          counterStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: ColorsManager.greyColor,
+            fontSize: 10,
+          ),
         ),
         maxLines: 1,
         minLines: 1,

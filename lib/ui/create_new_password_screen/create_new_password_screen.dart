@@ -2,8 +2,11 @@ import 'package:cinema_app/constants/responsive%20size%20contants/responsive_siz
 import 'package:cinema_app/ui/create_new_password_screen/create_new_password_cubit.dart';
 import 'package:cinema_app/utils/components/confirm_password_not_same_with_new_password_snack_bar.dart';
 import 'package:cinema_app/utils/components/default_authentication_title_and_subtitle.dart';
+import 'package:cinema_app/utils/components/default_gesture_detector_authentication_screen.dart';
+import 'package:cinema_app/utils/components/default_pop_back_icon_button.dart';
 import 'package:cinema_app/utils/components/default_text_form_field.dart';
 import 'package:cinema_app/utils/components/default_user_authentication_filled_button.dart';
+import 'package:cinema_app/utils/components/default_user_authentication_screen.dart';
 import 'package:cinema_app/utils/components/failed_to_update_password_snack_bar.dart';
 import 'package:cinema_app/utils/shared/validation.dart';
 import 'package:flutter/material.dart';
@@ -28,17 +31,10 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: ()=>FocusScope.of(context).unfocus(),
+    return DefaultGestureDetectorAuthenticationScreen(
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              FocusScope.of(context).unfocus();
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.arrow_back_ios_new),
-          ),
+          leading: DefaultPopBackIconButton(),
           automaticallyImplyLeading: false, //? to hide default back button
         ),
         body: BlocConsumer<CreateNewPasswordCubit, CreateNewPasswordState>(
@@ -59,52 +55,43 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
               }
             },
             builder: (context, state) {
-              return SingleChildScrollView(
-                child: Center(
-                  child: Form(
-                    key: _globalKey,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 18, vertical: 35),
-                      child: Column(
-                        children: [
-                          ...defaultAuthenticationTitleAndSubtitle(title: "Create New Password", subTitle: "Enter you new password", context: context),
-                          SizedBox(
-                            height: ResponsiveSizeConstants.heightScreen(
-                                context) * 0.07,
-                          ),
-                          DefaultTextFormField(
-                            controller: _newPasswordController,
-                            validator: _getPasswordValidator,
-                            label: "New Password",
-                            hint: "********",
-                            isPasswordField: true,
-                            textInputType: TextInputType.visiblePassword,
-                            maxLength: 15,
-                          ),
-                          SizedBox(
-                            height: ResponsiveSizeConstants.heightScreen(
-                                context) * 0.02,
-                          ),
-                          DefaultTextFormField(
-                            controller: _confirmPasswordController,
-                            validator: _getPasswordValidator,
-                            label: "Confirm Password",
-                            hint: "********",
-                            isPasswordField: true,
-                            textInputType: TextInputType.visiblePassword,
-                            maxLength: 15,
-                          ),
-                          SizedBox(
-                            height: ResponsiveSizeConstants.heightScreen(
-                                context) * 0.05,
-                          ),
-                          _getResetFilledButton(context),
-                        ],
-                      ),
-                    ),
+              return DefaultUserAuthenticationScreen(
+                globalKey: _globalKey,
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 35),
+                children: [
+                  ...defaultAuthenticationTitleAndSubtitle(title: "Create New Password", subTitle: "Enter you new password", context: context),
+                  SizedBox(
+                    height: ResponsiveSizeConstants.heightScreen(
+                        context) * 0.07,
                   ),
-                ),
+                  DefaultTextFormField(
+                    controller: _newPasswordController,
+                    validator: _getPasswordValidator,
+                    label: "New Password",
+                    hint: "********",
+                    isPasswordField: true,
+                    textInputType: TextInputType.visiblePassword,
+                    maxLength: 15,
+                  ),
+                  SizedBox(
+                    height: ResponsiveSizeConstants.heightScreen(
+                        context) * 0.02,
+                  ),
+                  DefaultTextFormField(
+                    controller: _confirmPasswordController,
+                    validator: _getPasswordValidator,
+                    label: "Confirm Password",
+                    hint: "********",
+                    isPasswordField: true,
+                    textInputType: TextInputType.visiblePassword,
+                    maxLength: 15,
+                  ),
+                  SizedBox(
+                    height: ResponsiveSizeConstants.heightScreen(
+                        context) * 0.05,
+                  ),
+                  _getResetFilledButton(context),
+                ],
               );
             }
         ),
