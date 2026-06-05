@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
             listener: (context , state) {
               FocusScope.of(context).unfocus();
               if(state is UserAccountExistFailedState){
-                ScaffoldMessenger.of(context).showSnackBar(InvalidUserAccountSnackBar.get(context));
+                ScaffoldMessenger.of(context).showSnackBar(InvalidUserAccountSnackBar.get(context , isLandscape));
               }
               else if(state is UserAccountExistSuccessState){
                 context.go(RoutesConstants.homeScreen);

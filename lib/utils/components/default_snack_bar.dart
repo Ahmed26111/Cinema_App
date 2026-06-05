@@ -1,4 +1,5 @@
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
+import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
 import 'package:flutter/material.dart';
 
 abstract class DefaultSnackBar {
@@ -6,14 +7,15 @@ abstract class DefaultSnackBar {
     BuildContext context,
     String title,
     EdgeInsetsGeometry? margin,
+    [bool isLandscape = false]
   ) {
     return SnackBar(
-      content: Text(title, style: Theme.of(context).textTheme.labelMedium),
+      content: Text(title, style: (isLandscape)? Theme.of(context).textTheme.titleLarge : Theme.of(context).textTheme.labelMedium),
       margin: margin,
       behavior: SnackBarBehavior.floating,
       showCloseIcon: true,
       backgroundColor: ColorsManager.primaryBlueAccentColor,
-      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+      shape: OutlineInputBorder(borderRadius: (isLandscape)? BorderRadius.circular(ResponsiveSizeConstants.widthScreen(context) * 0.022) : BorderRadius.circular(ResponsiveSizeConstants.widthScreen(context) * 0.06)),
       duration: Duration(seconds: 2),
       elevation: 10,
     );

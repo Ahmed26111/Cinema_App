@@ -24,14 +24,14 @@ class DefaultUserAuthenticationFilledButton extends StatelessWidget {
       padding: (isLandscape) ? EdgeInsets.symmetric(horizontal: ResponsiveSizeConstants.widthScreen(context) * 0.07) : const EdgeInsets.all(0),
       child: SizedBox(
         width: double.infinity,
-        height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.15 :ResponsiveSizeConstants.heightScreen(context) * 0.06,
+        height: (isLandscape)? (isLandscape && ResponsiveSizeConstants.heightScreen(context) > 500 )? ResponsiveSizeConstants.heightScreen(context) * 0.11 :  ResponsiveSizeConstants.heightScreen(context) * 0.15 :ResponsiveSizeConstants.heightScreen(context) * 0.06,
         child: FilledButton(
           onPressed: onPressed ,
           style: ThemeManager.getOnboardingFilledButtonStyle()
               .copyWith(
             shape: WidgetStateProperty.all(
               RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(ResponsiveSizeConstants.widthScreen(context) * 0.07),
               ),
             ),
           ),

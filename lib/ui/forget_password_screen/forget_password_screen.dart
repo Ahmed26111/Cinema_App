@@ -28,6 +28,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isLandscape =  ResponsiveSizeConstants.isLandscape(context);
+
     return DefaultGestureDetectorAuthenticationScreen(
       child: Scaffold(
         appBar: AppBar(
@@ -38,7 +40,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           listener: (context,state){
             FocusScope.of(context).unfocus();
             if(state is IsEmailExistsFailed){
-              ScaffoldMessenger.of(context).showSnackBar(EmailDoesNotExistSnackBar.get(context));
+              ScaffoldMessenger.of(context).showSnackBar(EmailDoesNotExistSnackBar.get(context , isLandscape));
             }else if(state is IsEmailExistsSuccess){
               context.pushNamed(RoutesConstants.createNewPasswordScreenName , pathParameters: {"email": _emailController.text});
             }
@@ -46,11 +48,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           builder: (context,state){
             return DefaultUserAuthenticationScreen(
               globalKey: _globalKey,
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 35),
+              padding: EdgeInsets.symmetric(horizontal: ResponsiveSizeConstants.widthScreen(context) * 0.05, vertical: 35),
               children: [
-                ...defaultAuthenticationTitleAndSubtitle(title: "Reset Password", subTitle: "Recover your account password", context: context),
+                ...defaultAuthenticationTitleAndSubtitle(title: "Reset Password", subTitle: "Recover your account password", context: context , isLandscape: isLandscape),
                 SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(context) * 0.07,
+                  height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.05 :ResponsiveSizeConstants.heightScreen(context) * 0.07,
                 ),
                 DefaultTextFormField(
                   controller: _emailController,
@@ -59,11 +61,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   hint: "guest@gmail.com",
                   textInputType: TextInputType.emailAddress,
                   maxLength: 30,
+                  isLandscape: isLandscape,
                 ),
                 SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(context) * 0.05,
+                  height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.06 : ResponsiveSizeConstants.heightScreen(context) * 0.05,
                 ),
-                _getNextFilledButton(context),
+                _getNextFilledButton(context , isLandscape),
               ],
             );
           }
@@ -72,7 +75,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     );
   }
 
-  Padding _getNextFilledButton(BuildContext context) {
+  Padding _getNextFilledButton(BuildContext context , bool isLandscape) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: DefaultUserAuthenticationFilledButton(
@@ -82,7 +85,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           }
         },
         text: "Next",
-        textStyle: Theme.of(context).textTheme.displayLarge,
+        textStyle: (isLandscape)? Theme.of(context).textTheme.labelLarge : Theme.of(context).textTheme.displayLarge,
+        isLandscape: isLandscape,
       ),
     );
   }

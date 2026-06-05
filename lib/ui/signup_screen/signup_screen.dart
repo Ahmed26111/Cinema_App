@@ -42,7 +42,10 @@ class _SignupScreenState extends State<SignupScreen> {
     return DefaultGestureDetectorAuthenticationScreen(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Sign Up", style: Theme.of(context).textTheme.displaySmall),
+          title: Text(
+              "Sign Up",
+              style: (isLandscape)? Theme.of(context).textTheme.labelLarge :Theme.of(context).textTheme.displaySmall
+          ),
           leading: DefaultPopBackIconButton(),
           automaticallyImplyLeading: false, //? to hide default back button
         ),
@@ -53,21 +56,22 @@ class _SignupScreenState extends State<SignupScreen> {
                 context.go(RoutesConstants.homeScreen);
               }
               else if(state is AddNewUserFailedState){
-                ScaffoldMessenger.of(context).showSnackBar(FailedToAddNewUserSnackBar.get(context));
+                ScaffoldMessenger.of(context).showSnackBar(FailedToAddNewUserSnackBar.get(context , isLandscape));
               }
           },
           builder: (context, state) {
             return DefaultUserAuthenticationScreen(
               globalKey: _globalKey,
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15,),
+              padding:  EdgeInsets.symmetric(horizontal: ResponsiveSizeConstants.widthScreen(context) * 0.05, vertical: 15,),
               children: [
                 ...defaultAuthenticationTitleAndSubtitle(
                     title: "Let's get started",
                     subTitle: "The latest movie and series are here",
-                    context: context),
+                    isLandscape: isLandscape,
+                    context: context,
+                ),
                 SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(
-                      context) * 0.03,
+                  height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.02 : ResponsiveSizeConstants.heightScreen(context) * 0.03,
                 ),
                 DefaultTextFormField(
                   controller: _firstNameController,
@@ -76,10 +80,10 @@ class _SignupScreenState extends State<SignupScreen> {
                   validator: _getNameValidator,
                   maxLength: 15,
                   textInputType: TextInputType.name,
+                  isLandscape: isLandscape,
                 ),
                 SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(
-                      context) * 0.02,
+                  height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.03 : ResponsiveSizeConstants.heightScreen(context) * 0.02,
                 ),
                 DefaultTextFormField(
                   controller: _lastNameController,
@@ -87,11 +91,11 @@ class _SignupScreenState extends State<SignupScreen> {
                   hint: "guest",
                   validator: _getNameValidator,
                   maxLength: 15,
+                  isLandscape: isLandscape,
                   textInputType: TextInputType.name,
                 ),
                 SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(
-                      context) * 0.02,
+                  height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.03 : ResponsiveSizeConstants.heightScreen(context) * 0.02,
                 ),
                 DefaultTextFormField(
                   controller: _emailController,
@@ -99,11 +103,11 @@ class _SignupScreenState extends State<SignupScreen> {
                   hint: "guest@gmail.com",
                   validator: _getEmailValidator,
                   maxLength: 30,
+                  isLandscape: isLandscape,
                   textInputType: TextInputType.emailAddress,
                 ),
                 SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(
-                      context) * 0.02,
+                  height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.03 : ResponsiveSizeConstants.heightScreen(context) * 0.02,
                 ),
                 DefaultTextFormField(
                   controller: _passwordController,
@@ -111,15 +115,15 @@ class _SignupScreenState extends State<SignupScreen> {
                   hint: "********",
                   validator: _getPasswordValidator,
                   maxLength: 15,
+                  isLandscape: isLandscape,
                   textInputType: TextInputType.visiblePassword,
                   isPasswordField: true,
                 ),
-                _getIAgreeTermsConditionListTile(state, context),
+                _getIAgreeTermsConditionListTile(state, context , isLandscape),
                 SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(
-                      context) * 0.05,
+                  height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.06 : ResponsiveSizeConstants.heightScreen(context) * 0.05,
                 ),
-                _getSignupFilledButton(context, state),
+                _getSignupFilledButton(context, state , isLandscape),
               ],
             );
           },
@@ -128,7 +132,7 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  Padding _getSignupFilledButton(BuildContext context, SignupState state) {
+  Padding _getSignupFilledButton(BuildContext context, SignupState state , bool isLandscape) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: DefaultUserAuthenticationFilledButton(
@@ -145,37 +149,38 @@ class _SignupScreenState extends State<SignupScreen> {
         } : null,
         text: "Sign Up",
         textStyle: (state.isAcceptTerms)
-            ? Theme.of(context).textTheme.displayLarge
+            ? (isLandscape)? Theme.of(context).textTheme.labelLarge : Theme.of(context).textTheme.displayLarge
             : TextStyle(color: ColorsManager.primaryDarkColor),
+        isLandscape: isLandscape,
       ),
     );
   }
 
-  CheckboxListTile _getIAgreeTermsConditionListTile(SignupState state, BuildContext context) {
+  CheckboxListTile _getIAgreeTermsConditionListTile(SignupState state, BuildContext context , bool isLandscape) {
     return CheckboxListTile(
       value: state.isAcceptTerms,
       onChanged: (value) {
         context.read<SignupCubit>().toggleAcceptTerms();
       },
-      title: _getAgreeTermConditionRichText(context),
+      title: _getAgreeTermConditionRichText(context,isLandscape),
       controlAffinity: ListTileControlAffinity.leading,
       checkColor: ColorsManager.whiteColor,
       activeColor: ColorsManager.primaryBlueAccentColor,
     );
   }
 
-  Column _getAgreeTermConditionRichText(BuildContext context) {
+  Column _getAgreeTermConditionRichText(BuildContext context , bool isLandscape) {
     return Column(
       children: [
         Row(
           children: [
             Text(
               "I agree to the",
-              style: Theme.of(context).textTheme.titleSmall,
+              style: (isLandscape)? Theme.of(context).textTheme.bodySmall : Theme.of(context).textTheme.titleSmall,
             ),
             Text(
               " Terms and Services",
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: (isLandscape)? Theme.of(context).textTheme.headlineMedium : Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),
@@ -183,11 +188,11 @@ class _SignupScreenState extends State<SignupScreen> {
           children: [
             Text(
               " and",
-              style: Theme.of(context).textTheme.titleSmall,
+              style: (isLandscape)? Theme.of(context).textTheme.bodySmall : Theme.of(context).textTheme.titleSmall,
             ),
             Text(
               " Privacy Policy",
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: (isLandscape)? Theme.of(context).textTheme.headlineMedium : Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),
