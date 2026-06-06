@@ -8,22 +8,24 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Center(
-        child: Column(
-          spacing: 100,
-          children: [
-            Text("Welcome ${HiveHandler.getActiveUser()!.firstName}"),
-            Text(
-              "Home Screen",
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
-            IconButton(
-                onPressed: (){
-                  HiveHandler.deleteActiveUser();
-                },
-                icon: Icon(Icons.dangerous)
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            spacing: 100,
+            children: [
+              Text("Welcome ${HiveHandler.getActiveUser()!.firstName}"),
+              Text(
+                "Home Screen",
+                style: Theme.of(context).textTheme.displaySmall,
+              ),
+              IconButton(
+                  onPressed: (){
+                    HiveHandler.deleteActiveUser();
+                  },
+                  icon: Icon(Icons.dangerous)
+              ),
+            ],
+          ),
         ),
       ),
     );

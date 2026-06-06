@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(InvalidUserAccountSnackBar.get(context , isLandscape));
               }
               else if(state is UserAccountExistSuccessState){
-                context.go(RoutesConstants.homeScreen);
+                context.go(RoutesConstants.layoutScreen);
               }
             },
             builder: (context , state) {

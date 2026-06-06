@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
             context.go(RoutesConstants.onboardingLayoutScreen);
           }
           else{
-            context.go(RoutesConstants.homeScreen);
+            context.go(RoutesConstants.layoutScreen);
           }
         }
     );

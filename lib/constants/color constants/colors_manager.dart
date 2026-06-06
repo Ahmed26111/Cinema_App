@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 abstract class ColorsManager{
   static final Color primaryDarkColor = Color(0xFF1F1D2B);
@@ -11,5 +11,5 @@ abstract class ColorsManager{
   static final Color blackColor = Color(0xFF171725);
   static final Color greyColor = Color(0xFF92929D);
   static final Color redColor = Color(0xFFED3737);
-
+  static final Color transparent = Colors.transparent;
 }

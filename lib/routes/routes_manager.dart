@@ -1,4 +1,6 @@
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
+import 'package:cinema_app/ui/core/layout/change_bottom_navigation_bar_index_cubit.dart';
+import 'package:cinema_app/ui/core/layout/layout_screen.dart';
 import 'package:cinema_app/ui/create_new_password_screen/create_new_password_cubit.dart';
 import 'package:cinema_app/ui/create_new_password_screen/create_new_password_screen.dart';
 import 'package:cinema_app/ui/forget_password_screen/forget_password_cubit.dart';
@@ -55,12 +57,15 @@ abstract class RoutesManager {
         ),
       ),
       GoRoute(
-        path: RoutesConstants.homeScreen,
-        name: RoutesConstants.homeScreen,
+        path: RoutesConstants.layoutScreen,
+        name: RoutesConstants.layoutScreen,
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           transitionDuration: Duration(milliseconds: 700),
-          child: const HomeScreen(),
+          child: BlocProvider(
+            create: (context) => ChangeBottomNavigationBarIndexCubit(),
+            child: LayoutScreen(),
+          ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: CurveTween(curve: Curves.easeInOut).animate(animation),

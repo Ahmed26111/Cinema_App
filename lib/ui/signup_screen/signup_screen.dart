@@ -53,7 +53,7 @@ class _SignupScreenState extends State<SignupScreen> {
           listener: (context, state) {
               FocusScope.of(context).unfocus();
               if(state is AddNewUserSuccessState){
-                context.go(RoutesConstants.homeScreen);
+                context.go(RoutesConstants.layoutScreen);
               }
               else if(state is AddNewUserFailedState){
                 ScaffoldMessenger.of(context).showSnackBar(FailedToAddNewUserSnackBar.get(context , isLandscape));
