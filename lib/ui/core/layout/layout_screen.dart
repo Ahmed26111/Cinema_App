@@ -1,6 +1,7 @@
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/ui/core/layout/change_bottom_navigation_bar_index_cubit.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
+import 'package:cinema_app/ui/home_screen/home_state_management/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,8 +13,11 @@ class LayoutScreen extends StatefulWidget {
 }
 
 class _LayoutScreenState extends State<LayoutScreen> {
-  final List<Widget> screens = const [
-    HomeScreen(),
+  final List<Widget> screens = [
+    BlocProvider(
+        create: (context) => HomeCubit(),
+        child: HomeScreen()
+    ),
     Center(
       child: Text("Search", style: TextStyle(color: Colors.white)),
     ),
@@ -31,30 +35,30 @@ class _LayoutScreenState extends State<LayoutScreen> {
       builder: (context, state) {
         return Scaffold(
           body: IndexedStack(index: state.index, children: screens),
-          bottomNavigationBar: _getCustomBottomNavigationBar(state),
+          bottomNavigationBar: _getCustomBottomNavigationBar(state , context),
         );
       },
     );
   }
 
-  Container _getCustomBottomNavigationBar(ChangeBottomNavigationBarIndexState state) {
+  Container _getCustomBottomNavigationBar(ChangeBottomNavigationBarIndexState state , BuildContext context) {
     return Container(
       height: 100,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
       decoration: BoxDecoration(color: ColorsManager.primaryDarkColor),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(0, Icons.home, "Home", state),
-          _buildNavItem(1, Icons.search, "Search", state),
-          _buildNavItem(2, Icons.local_movies_outlined, "Tickets", state),
-          _buildNavItem(3, Icons.person_outline, "Profile", state),
+          _buildNavItem(0, Icons.home, "Home", state , context),
+          _buildNavItem(1, Icons.search, "Search", state , context),
+          _buildNavItem(2, Icons.local_movies_outlined, "Tickets", state , context),
+          _buildNavItem(3, Icons.person_outline, "Profile", state , context),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(int index, IconData icon, String label , ChangeBottomNavigationBarIndexState state) {
+  Widget _buildNavItem(int index, IconData icon, String label , ChangeBottomNavigationBarIndexState state , BuildContext context) {
     bool isSelected = (state.index == index);
     return GestureDetector(
       onTap: () {

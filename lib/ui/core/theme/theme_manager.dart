@@ -95,29 +95,6 @@ abstract class ThemeManager{
             color: ColorsManager.redColor ,
           ),
         ),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: ColorsManager.primaryDarkColor,
-          selectedIconTheme: IconThemeData(
-              color: ColorsManager.primaryBlueAccentColor,
-              size: 25
-          ),
-          selectedLabelStyle: TextStyle(
-            fontFamily: "AG",
-            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.03,
-          ),
-          selectedItemColor: ColorsManager.primaryBlueAccentColor,
-          showSelectedLabels: true,
-          unselectedIconTheme: IconThemeData(
-            color: ColorsManager.greyColor,
-            size: 25,
-          ),
-          unselectedLabelStyle: TextStyle(
-            fontFamily: "AG",
-            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.012,
-            color: ColorsManager.greyColor,
-          ),
-          showUnselectedLabels: false,
-        )
       );
     }
 
