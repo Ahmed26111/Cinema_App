@@ -2,12 +2,20 @@ import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
 import 'package:cinema_app/data/models/user/user_model.dart';
 import 'package:cinema_app/ui/home_screen/home_state_management/home_cubit.dart';
+import 'package:cinema_app/utils/components/default_search_bar_widget.dart';
 import 'package:cinema_app/utils/shared/hive_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +46,14 @@ class HomeScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: null,
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: ResponsiveSizeConstants.widthScreen(context) * 0.08),
+                child: DefaultSearchBarWidget(controller: searchController, isLandscape: isLandscape),
+              ),
+            ],
+          ),
         ),
       ),
     );
