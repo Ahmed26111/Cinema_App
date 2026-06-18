@@ -21,7 +21,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
             create: (context) => HomeCubit(),
         ),
         BlocProvider(
-          create: (context) => GetUpcomingMoviesCubit(),
+          create: (context) => GetUpcomingMoviesCubit()..getUpComingMovies(),
         ),
       ],
       child: HomeScreen(),

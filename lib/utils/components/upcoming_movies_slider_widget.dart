@@ -8,9 +8,10 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 
 class UpcomingMoviesSlider extends StatefulWidget {
-  const UpcomingMoviesSlider({super.key, required this.movies, this.isDummy = false});
+  const UpcomingMoviesSlider({super.key, required this.movies, this.isDummy = false, this.isLandscape = false});
   final List<MovieModel> movies;
   final bool isDummy;
+  final bool isLandscape;
   @override
   State<UpcomingMoviesSlider> createState() => _UpcomingMoviesSliderState();
 }
@@ -52,7 +53,7 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        getMovieImageSlider(),
+        getMovieImageSlider(context),
         const SizedBox(height: 12),
         // Custom Pill Indicators
         getCustomIndicator(),
@@ -82,9 +83,9 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
       );
   }
 
-  SizedBox getMovieImageSlider() {
+  SizedBox getMovieImageSlider(BuildContext context) {
     return SizedBox(
-        height: 200, // Height of the slider
+        height: (widget.isLandscape) ? ResponsiveSizeConstants.heightScreen(context) * 0.7 : ResponsiveSizeConstants.heightScreen(context) * 0.22, // Height of the slider
         child: PageView.builder(
           controller: _pageController,
           itemCount: shuffleMovies.length,
@@ -123,7 +124,7 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
                     movie.movieTitle,
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.w700,
-                      fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.05
+                      fontSize: (widget.isLandscape)?ResponsiveSizeConstants.widthScreen(context) * 0.04:ResponsiveSizeConstants.widthScreen(context) * 0.05
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -135,7 +136,7 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
                   right: 20,
                   child: Text(
                     "On ${formatDate(movie.releaseDate, [M , " " ,dd , " , " , yyyy])}",
-                    style: Theme.of(context).textTheme.labelSmall,
+                    style: (widget.isLandscape) ? Theme.of(context).textTheme.titleLarge : Theme.of(context).textTheme.labelSmall,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

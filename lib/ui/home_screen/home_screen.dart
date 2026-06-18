@@ -4,6 +4,7 @@ import 'package:cinema_app/data/models/movie_model.dart';
 import 'package:cinema_app/data/models/user/user_model.dart';
 import 'package:cinema_app/ui/home_screen/get_upcoming_movies_state_management/get_upcoming_movies_cubit.dart';
 import 'package:cinema_app/ui/home_screen/home_state_management/home_cubit.dart';
+import 'package:cinema_app/utils/components/default_failed_to_load_widget.dart';
 import 'package:cinema_app/utils/components/default_search_bar_widget.dart';
 import 'package:cinema_app/utils/components/upcoming_movies_slider_widget.dart';
 import 'package:cinema_app/utils/components/upcoming_movies_slider_widget.dart';
@@ -25,8 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     bool isLandscape = ResponsiveSizeConstants.isLandscape(context);
-
-    context.read<GetUpcomingMoviesCubit>().getUpComingMovies();
 
     return Scaffold(
       appBar: AppBar(
@@ -72,14 +71,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               highlightColor: ColorsManager.lineDarkColor,
                             ),
                             enabled: true ,
-                            child: UpcomingMoviesSlider(movies: getDummyUpComingMovies() , isDummy: true,)
+                            child: UpcomingMoviesSlider(movies: getDummyUpComingMovies() , isDummy: true, isLandscape: isLandscape)
                         );
                       }
                       case GetUpComingMoviesSuccess():{
-                        return Skeletonizer(enabled: false , child: UpcomingMoviesSlider(movies: state.movies));
+                        return Skeletonizer(enabled: false , child: UpcomingMoviesSlider(movies: state.movies , isLandscape: isLandscape));
                       }
                       case GetUpComingMoviesFailed():{
-                        return Text(state.message);
+                        return DefaultFailedToLoadWidget(
+                            errorMessage: "Sorry, Failed to load \nthe Upcoming movies :(",
+                            helpMessage: "Please try to connect with internet",
+                            isLandscape:isLandscape
+                        );
                       }
                     }
                   },
