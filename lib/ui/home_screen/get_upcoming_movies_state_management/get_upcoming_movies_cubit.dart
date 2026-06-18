@@ -9,13 +9,15 @@ part 'get_upcoming_movies_state.dart';
 class GetUpcomingMoviesCubit extends Cubit<GetUpcomingMoviesState> {
   GetUpcomingMoviesCubit() : super(GetUpcomingMoviesInitial());
   final MovieRepository movieRepository = MovieRepository(dioHelper: DioHelper());
-  void getTopRatedMovies() async{
-    emit(GetTopRatedMoviesLoading());
+
+
+  void getUpComingMovies() async{
+    emit(GetUpComingMoviesLoading());
     try{
-      List<MovieModel> movies = await movieRepository.getTopRatedMovies();
-      emit(GetTopRatedMoviesSuccess(movies: movies));
+      List<MovieModel> movies = await movieRepository.getUpComingMovies();
+      emit(GetUpComingMoviesSuccess(movies: movies));
     }catch(e){
-      emit(GetTopRatedMoviesFailed(message: e.toString()));
+      emit(GetUpComingMoviesFailed(message: e.toString()));
     }
   }
 

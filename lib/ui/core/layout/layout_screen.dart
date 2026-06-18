@@ -1,5 +1,6 @@
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/ui/core/layout/change_bottom_navigation_bar_index_cubit.dart';
+import 'package:cinema_app/ui/home_screen/get_upcoming_movies_state_management/get_upcoming_movies_cubit.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
 import 'package:cinema_app/ui/home_screen/home_state_management/home_cubit.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +15,16 @@ class LayoutScreen extends StatefulWidget {
 
 class _LayoutScreenState extends State<LayoutScreen> {
   final List<Widget> screens = [
-    BlocProvider(
-        create: (context) => HomeCubit(),
-        child: HomeScreen()
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (context) => HomeCubit(),
+        ),
+        BlocProvider(
+          create: (context) => GetUpcomingMoviesCubit(),
+        ),
+      ],
+      child: HomeScreen(),
     ),
     Center(
       child: Text("Search", style: TextStyle(color: Colors.white)),

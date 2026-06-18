@@ -5,16 +5,16 @@ sealed class GetTopRatedMoviesState {}
 
 final class GetTopRatedMoviesInitial extends GetTopRatedMoviesState {}
 
-final class GetUpComingMoviesLoading extends GetTopRatedMoviesState {}
+final class GetTopRatedMoviesLoading extends GetTopRatedMoviesState {}
 
-final class GetUpComingMoviesSuccess extends GetTopRatedMoviesState {
+final class GetTopRatedMoviesSuccess extends GetTopRatedMoviesState {
   final List<MovieModel> movies;
 
-  GetUpComingMoviesSuccess({required this.movies});
+  GetTopRatedMoviesSuccess({required this.movies});
 }
 
-final class GetUpComingMoviesFailed extends GetTopRatedMoviesState {
+final class GetTopRatedMoviesFailed extends GetTopRatedMoviesState {
   final String message;
 
-  GetUpComingMoviesFailed({required this.message});
+  GetTopRatedMoviesFailed({required this.message});
 }
