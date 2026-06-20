@@ -15,5 +15,10 @@ abstract class ApiConstants{
   static final String movieCreditsEndPoint2 = dotenv.env['MovieCreditsEndPoint2'] ?? "";
   static final String movieSimilarEndPoint1 = dotenv.env['MovieSimilarEndPoint1'] ?? "";
   static final String movieSimilarEndPoint2 = dotenv.env['MovieSimilarEndPoint2'] ?? "";
+  static final String discoverMovieEndPoint = dotenv.env['DiscoverMovieEndPoint'] ?? "";
+  static final String popularDescending = dotenv.env['PopularDescending'] ?? "";
+  static final String topRatedDescending = dotenv.env['TopRatedDescending'] ?? "";
+  static final String upComingDescending = dotenv.env['UpcomingDescending'] ?? "";
   static final String apiKey = dotenv.env['Api_key'] ?? "";
+
 }

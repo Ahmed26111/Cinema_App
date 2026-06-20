@@ -85,7 +85,7 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
 
   SizedBox getMovieImageSlider(BuildContext context) {
     return SizedBox(
-        height: (widget.isLandscape) ? ResponsiveSizeConstants.heightScreen(context) * 0.7 : ResponsiveSizeConstants.heightScreen(context) * 0.22, // Height of the slider
+        height: (widget.isLandscape) ? ( ResponsiveSizeConstants.heightScreen(context) > 500 ) ? ResponsiveSizeConstants.heightScreen(context) * 0.4 :ResponsiveSizeConstants.heightScreen(context) * 0.7 : ResponsiveSizeConstants.heightScreen(context) * 0.22, // Height of the slider
         child: PageView.builder(
           controller: _pageController,
           itemCount: shuffleMovies.length,
@@ -104,7 +104,7 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
 
   Container getUpComingMovieContainer(MovieModel movie, BuildContext context) {
     return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 8),
+            margin: EdgeInsets.symmetric(horizontal: (widget.isLandscape && ResponsiveSizeConstants.heightScreen(context) > 500 )? 60 : 8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               image: DecorationImage(

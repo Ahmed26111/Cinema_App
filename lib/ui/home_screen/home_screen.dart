@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       }
                       case GetUpComingMoviesSuccess():{
-                        return Skeletonizer(enabled: false , child: UpcomingMoviesSlider(movies: state.movies , isLandscape: isLandscape));
+                        return UpcomingMoviesSlider(movies: state.movies , isLandscape: isLandscape);
                       }
                       case GetUpComingMoviesFailed():{
                         return DefaultFailedToLoadWidget(
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                     }
                   },
-              )
+              ),
             ],
           ),
         ),

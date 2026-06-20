@@ -1,9 +1,11 @@
 import 'dart:developer';
 
 import 'package:cinema_app/constants/api%20constants/api_constants.dart';
+import 'package:cinema_app/constants/movie%20genre%20enum/movie_genre_enum.dart';
 import 'package:cinema_app/data/models/cast_model.dart';
 import 'package:cinema_app/data/models/movie_model.dart';
 import 'package:cinema_app/data/services/dio_helper.dart';
+import 'package:cinema_app/utils/shared/conversion.dart';
 
 class MovieRepository{
   final DioHelper dioHelper;
@@ -18,6 +20,58 @@ class MovieRepository{
     }
     else{
       throw Exception("Failed to get the popular movies");
+    }
+  }
+  Future<List<MovieModel>> getPopularMoviesByGenre(MovieGenreEnum genre) async {
+    if(genre == MovieGenreEnum.all){
+      return throw Exception("Invalid Genre");
+    }
+    var response = await dioHelper.getData(path: ApiConstants.discoverMovieEndPoint , query: {"api_key": ApiConstants.apiKey , "sort_by" : ApiConstants.popularDescending , "with_genres" : genre.genreID});
+    if(response.statusCode == 200){
+      List<dynamic> results = response.data["results"];
+      return results.map((movie)=>MovieModel.fromJson(movie)).toList();
+    }
+    else{
+      throw Exception("Failed to get the popular movies by genre");
+    }
+  }
+  Future<List<MovieModel>> getTopRatedMoviesByGenre(MovieGenreEnum genre) async {
+    if (genre == MovieGenreEnum.all) {
+      return throw Exception("Invalid Genre");
+    }
+    var response = await dioHelper.getData(
+        path: ApiConstants.discoverMovieEndPoint,
+        query: {
+          "api_key": ApiConstants.apiKey,
+          "sort_by": ApiConstants.topRatedDescending,
+          "with_genres": genre.genreID
+        });
+    if (response.statusCode == 200) {
+      List<dynamic> results = response.data["results"];
+      return results.map((movie) => MovieModel.fromJson(movie)).toList();
+    }
+    else {
+      throw Exception("Failed to get the top rated movies by genre");
+    }
+  }
+  Future<List<MovieModel>> getUpComingMoviesByGenre(MovieGenreEnum genre) async {
+    if(genre == MovieGenreEnum.all){
+      return throw Exception("Invalid Genre");
+    }
+    var response = await dioHelper.getData(
+        path: ApiConstants.discoverMovieEndPoint,
+        query: {
+          "api_key": ApiConstants.apiKey,
+          "sort_by": ApiConstants.upComingDescending,
+          "with_genres": genre.genreID,
+          "primary_release_date.gte": Conversion.today()
+        });
+    if (response.statusCode == 200) {
+      List<dynamic> results = response.data["results"];
+      return results.map((movie) => MovieModel.fromJson(movie)).toList();
+    }
+    else {
+      throw Exception("Failed to get the upcoming movies by genre");
     }
   }
   Future<List<MovieModel>> getTopRatedMovies() async {

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cinema_app/constants/movie%20genre%20enum/movie_genre_enum.dart';
 import 'package:cinema_app/data/models/movie_model.dart';
 import 'package:cinema_app/data/repositories/movie_repository.dart';
 import 'package:cinema_app/data/services/dio_helper.dart';
@@ -12,13 +13,20 @@ class GetTopRatedMoviesCubit extends Cubit<GetTopRatedMoviesState> {
     dioHelper: DioHelper(),
   );
 
-  void getTopRatedMovies() async {
+  MovieGenreEnum currentMovieGenre = MovieGenreEnum.all;
+
+  void getTopRatedMovies(MovieGenreEnum genre) async {
     emit(GetTopRatedMoviesLoading());
     try {
-      List<MovieModel> movies = await movieRepository.getTopRatedMovies();
+      List<MovieModel> movies = (genre == MovieGenreEnum.all) ? await movieRepository.getTopRatedMovies() : await movieRepository.getTopRatedMoviesByGenre(genre);
       emit(GetTopRatedMoviesSuccess(movies: movies));
     } catch (e) {
       emit(GetTopRatedMoviesFailed(message: e.toString()));
     }
+  }
+
+  void changeCurrentMovieGenre(MovieGenreEnum genre){
+    currentMovieGenre = genre;
+    getTopRatedMovies(genre);
   }
 }
