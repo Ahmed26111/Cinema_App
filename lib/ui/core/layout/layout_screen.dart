@@ -1,5 +1,6 @@
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/ui/core/layout/change_bottom_navigation_bar_index_cubit.dart';
+import 'package:cinema_app/ui/home_screen/get_popular_movies_state_management/get_popular_movies_cubit.dart';
 import 'package:cinema_app/ui/home_screen/get_upcoming_movies_state_management/get_upcoming_movies_cubit.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
 import 'package:cinema_app/ui/home_screen/home_state_management/home_cubit.dart';
@@ -22,6 +23,9 @@ class _LayoutScreenState extends State<LayoutScreen> {
         ),
         BlocProvider(
           create: (context) => GetUpcomingMoviesCubit()..getUpComingMovies(),
+        ),
+        BlocProvider(
+          create: (context) => GetPopularMoviesCubit()..getPopularMovies(),
         ),
       ],
       child: HomeScreen(),

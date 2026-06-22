@@ -13,12 +13,12 @@ class GetTopRatedMoviesCubit extends Cubit<GetTopRatedMoviesState> {
     dioHelper: DioHelper(),
   );
 
-  MovieGenreEnum currentMovieGenre = MovieGenreEnum.all;
+  MovieGenreEnum currentMovieGenre = MovieGenreEnum.All;
 
   void getTopRatedMovies(MovieGenreEnum genre) async {
     emit(GetTopRatedMoviesLoading());
     try {
-      List<MovieModel> movies = (genre == MovieGenreEnum.all) ? await movieRepository.getTopRatedMovies() : await movieRepository.getTopRatedMoviesByGenre(genre);
+      List<MovieModel> movies = (genre == MovieGenreEnum.All) ? await movieRepository.getTopRatedMovies() : await movieRepository.getTopRatedMoviesByGenre(genre);
       emit(GetTopRatedMoviesSuccess(movies: movies));
     } catch (e) {
       emit(GetTopRatedMoviesFailed(message: e.toString()));

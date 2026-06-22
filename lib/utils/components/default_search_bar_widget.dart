@@ -20,7 +20,7 @@ class DefaultSearchBarWidget extends StatelessWidget {
         selectionHandleColor: ColorsManager.primaryBlueAccentColor,
       ),
       child: TextField(
-          autofocus: true,
+          autofocus: false, // Todo this will changed soon
           controller: controller,
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
             fontSize: (isLandscape)? ResponsiveSizeConstants.widthScreen(context) * 0.02 : ResponsiveSizeConstants.widthScreen(context) * 0.04

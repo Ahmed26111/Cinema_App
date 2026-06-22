@@ -12,12 +12,12 @@ class GetPopularMoviesCubit extends Cubit<GetPopularMoviesState> {
 
   final MovieRepository movieRepository = MovieRepository(dioHelper: DioHelper());
 
-  MovieGenreEnum currentMovieGenre = MovieGenreEnum.all;
+  MovieGenreEnum currentMovieGenre = MovieGenreEnum.All;
 
-  void getPopularMovies([MovieGenreEnum genre = MovieGenreEnum.all]) async{
+  void getPopularMovies([MovieGenreEnum genre = MovieGenreEnum.All]) async{
     emit(GetPopularMoviesLoading());
     try{
-      List<MovieModel> movies = (genre == MovieGenreEnum.all) ? await movieRepository.getPopularMovies() : await movieRepository.getPopularMoviesByGenre(genre);
+      List<MovieModel> movies = (genre.genreID == -1) ? await movieRepository.getPopularMovies() : await movieRepository.getPopularMoviesByGenre(genre);
       emit(GetPopularMoviesSuccess(movies: movies));
     }catch(e){
       emit(GetPopularMoviesFailed(message: e.toString()));

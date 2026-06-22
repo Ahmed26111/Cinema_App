@@ -14,7 +14,7 @@ class MovieRepository{
 
   Future<List<MovieModel>> getPopularMovies() async {
     var response = await dioHelper.getData(path: ApiConstants.moviePopularEndPoint , query: {"api_key":ApiConstants.apiKey});
-    if(response.statusCode == 200){
+    if(response.statusCode == 200 || response.statusCode == 304){
       List<dynamic> results = response.data["results"];
       return results.map((movie)=>MovieModel.fromJson(movie)).toList();
     }
@@ -23,21 +23,29 @@ class MovieRepository{
     }
   }
   Future<List<MovieModel>> getPopularMoviesByGenre(MovieGenreEnum genre) async {
-    if(genre == MovieGenreEnum.all){
-      return throw Exception("Invalid Genre");
+    // Use genreID check instead of instance check
+    if (genre.genreID == -1) {
+      return getPopularMovies();
     }
-    var response = await dioHelper.getData(path: ApiConstants.discoverMovieEndPoint , query: {"api_key": ApiConstants.apiKey , "sort_by" : ApiConstants.popularDescending , "with_genres" : genre.genreID});
-    if(response.statusCode == 200){
+
+    var response = await dioHelper.getData(
+      path: ApiConstants.discoverMovieEndPoint,
+      query: {
+        "api_key": ApiConstants.apiKey.trim(), // Safety trim
+        "sort_by": ApiConstants.popularDescending,
+        "with_genres": genre.genreID
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 304) {
       List<dynamic> results = response.data["results"];
-      return results.map((movie)=>MovieModel.fromJson(movie)).toList();
-    }
-    else{
+      return results.map((movie) => MovieModel.fromJson(movie)).toList();
+    } else {
       throw Exception("Failed to get the popular movies by genre");
     }
   }
   Future<List<MovieModel>> getTopRatedMoviesByGenre(MovieGenreEnum genre) async {
-    if (genre == MovieGenreEnum.all) {
-      return throw Exception("Invalid Genre");
+    if (genre.genreID == -1) {
+      return getTopRatedMovies();
     }
     var response = await dioHelper.getData(
         path: ApiConstants.discoverMovieEndPoint,
@@ -46,7 +54,7 @@ class MovieRepository{
           "sort_by": ApiConstants.topRatedDescending,
           "with_genres": genre.genreID
         });
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 304) {
       List<dynamic> results = response.data["results"];
       return results.map((movie) => MovieModel.fromJson(movie)).toList();
     }
@@ -55,8 +63,8 @@ class MovieRepository{
     }
   }
   Future<List<MovieModel>> getUpComingMoviesByGenre(MovieGenreEnum genre) async {
-    if(genre == MovieGenreEnum.all){
-      return throw Exception("Invalid Genre");
+    if (genre.genreID == -1) {
+      return getPopularMovies();
     }
     var response = await dioHelper.getData(
         path: ApiConstants.discoverMovieEndPoint,
@@ -66,7 +74,7 @@ class MovieRepository{
           "with_genres": genre.genreID,
           "primary_release_date.gte": Conversion.today()
         });
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 304) {
       List<dynamic> results = response.data["results"];
       return results.map((movie) => MovieModel.fromJson(movie)).toList();
     }
@@ -76,7 +84,7 @@ class MovieRepository{
   }
   Future<List<MovieModel>> getTopRatedMovies() async {
     var response = await dioHelper.getData(path: ApiConstants.movieTopRatedEndPoint, query: {"api_key":ApiConstants.apiKey});
-    if(response.statusCode == 200){
+    if(response.statusCode == 200 || response.statusCode == 304){
       List<dynamic> results = response.data["results"];
       return results.map((movie)=>MovieModel.fromJson(movie)).toList();
     }
@@ -86,7 +94,7 @@ class MovieRepository{
   }
   Future<List<MovieModel>> getUpComingMovies() async {
     var response = await dioHelper.getData(path: ApiConstants.movieUpComingEndPoint, query: {"api_key":ApiConstants.apiKey});
-    if(response.statusCode == 200){
+    if(response.statusCode == 200 || response.statusCode == 304){
       List<dynamic> results = response.data["results"];
       return results.map((movie)=>MovieModel.fromJson(movie)).toList();
     }
@@ -96,7 +104,7 @@ class MovieRepository{
   }
   Future<MovieModel> getDetailsMovieById(int movieId) async {
       var response = await dioHelper.getData(path: ApiConstants.movieIdEndPoint + movieId.toString(), query: {"api_key":ApiConstants.apiKey});
-      if(response.statusCode == 200){
+      if(response.statusCode == 200 || response.statusCode == 304){
         dynamic result = response.data;
         return MovieModel.fromJson(result);
       }
@@ -106,7 +114,7 @@ class MovieRepository{
   }
   Future<List<MovieModel>> getMoviesBySearch(String searchQuery) async {
     var response = await dioHelper.getData(path: ApiConstants.searchMovieEndPoint, query: {"api_key":ApiConstants.apiKey , "query":searchQuery});
-    if(response.statusCode == 200){
+    if(response.statusCode == 200 || response.statusCode == 304){
       List<dynamic> results = response.data["results"];
       return results.map((movie)=>MovieModel.fromJson(movie)).toList();
     }
@@ -116,7 +124,7 @@ class MovieRepository{
   }
   Future<List<CastModel>> getCastsByMovieId(int movieId) async {
     var response = await dioHelper.getData(path: ApiConstants.movieCreditsEndPoint1 + movieId.toString() + ApiConstants.movieCreditsEndPoint2, query: {"api_key":ApiConstants.apiKey});
-    if(response.statusCode == 200){
+    if(response.statusCode == 200 || response.statusCode == 304){
       List<dynamic> result = response.data["cast"];
       return result.map((cast)=>CastModel.fromJson(cast)).toList();
     }
@@ -126,7 +134,7 @@ class MovieRepository{
   }
   Future<List<MovieModel>> getSimilarMoviesById(int movieId) async {
     var response = await dioHelper.getData(path: ApiConstants.movieSimilarEndPoint1 + movieId.toString() + ApiConstants.movieSimilarEndPoint2, query: {"api_key":ApiConstants.apiKey});
-    if(response.statusCode == 200){
+    if(response.statusCode == 200 || response.statusCode == 304){
       List<dynamic> results = response.data["results"];
       return results.map((movie)=>MovieModel.fromJson(movie)).toList();
     }

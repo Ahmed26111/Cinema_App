@@ -12,14 +12,17 @@ class DioHelper{
     BaseOptions baseOptions = BaseOptions(
       baseUrl: ApiConstants.baseUrl,
       receiveDataWhenStatusError: true,
-      receiveTimeout: Duration(seconds: 30),
-      connectTimeout: Duration(seconds: 30),
+      receiveTimeout: Duration(seconds: 60),
+      connectTimeout: Duration(seconds: 60),
     );
 
     cacheOptions = CacheOptions(
-        store: MemCacheStore(),
-        policy: CachePolicy.forceCache,
-        maxStale: Duration(hours: 2)
+      store: MemCacheStore(),
+      // Use request or refreshForceCache instead of forceCache
+      policy: CachePolicy.request,
+      maxStale: const Duration(hours: 2),
+      // This allows the app to show old data if the internet is down
+      hitCacheOnErrorExcept: [401, 403],
     );
 
     dio = Dio(baseOptions);
