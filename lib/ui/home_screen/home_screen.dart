@@ -1,5 +1,6 @@
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
+import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/data/models/movie_model.dart';
 import 'package:cinema_app/data/models/user/user_model.dart';
 import 'package:cinema_app/ui/home_screen/get_popular_movies_state_management/get_popular_movies_cubit.dart';
@@ -14,6 +15,7 @@ import 'package:cinema_app/utils/components/upcoming_movies_slider_widget.dart';
 import 'package:cinema_app/utils/shared/hive_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -68,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: _getMostUpComingRow(context, isLandscape),
+                          child: _getMostUpComingRow(context, isLandscape , state),
                         ),
                         SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.035 : ResponsiveSizeConstants.heightScreen(context) * 0.01,),
                         switch(state){
@@ -111,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.035 :ResponsiveSizeConstants.heightScreen(context) * 0.022,),
                         DefaultGenresButtonsWidget(currentMovieGenre: context.read<GetPopularMoviesCubit>().currentMovieGenre , isLandscape: isLandscape,),
                         SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.035 : ResponsiveSizeConstants.heightScreen(context) * 0.02,),
-                        _getMostPopularRow(context , isLandscape),
+                        _getMostPopularRow(context , isLandscape , state),
                         SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.035 : ResponsiveSizeConstants.heightScreen(context) * 0.01,),
                         switch(state){
                          GetPopularMoviesInitial() => Skeletonizer(
@@ -161,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Row _getMostPopularRow(BuildContext context , bool isLandscape) {
+  Row _getMostPopularRow(BuildContext context , bool isLandscape , GetPopularMoviesState state) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -173,7 +175,9 @@ class _HomeScreenState extends State<HomeScreen> {
             .textTheme
             .displaySmall,),
         TextButton(
-            onPressed: () {},
+            onPressed: (state is GetPopularMoviesSuccess) ? (){
+              context.pushNamed(RoutesConstants.defaultSeeAllScreenName , pathParameters: {"appBarTitle" : "Most Popular Movie"} , extra: state.movies);
+            } : null,
             child: Text("See All", style: Theme
                 .of(context)
                 .textTheme
@@ -181,7 +185,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ?.copyWith(fontSize:
             (isLandscape)
                 ? ResponsiveSizeConstants.widthScreen(context) * 0.028
-                : ResponsiveSizeConstants.widthScreen(context) * 0.038
+                : ResponsiveSizeConstants.widthScreen(context) * 0.038 ,
+              color: (state is GetPopularMoviesSuccess) ? ColorsManager.primaryBlueAccentColor : ColorsManager.transparent,
             ),
             )
         )
@@ -189,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Row _getMostUpComingRow(BuildContext context , bool isLandscape) {
+  Row _getMostUpComingRow(BuildContext context , bool isLandscape , GetUpcomingMoviesState state) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -201,7 +206,9 @@ class _HomeScreenState extends State<HomeScreen> {
             .textTheme
             .displaySmall,),
         TextButton(
-            onPressed: () {},
+            onPressed: (state is GetUpComingMoviesSuccess)? () {
+              context.pushNamed(RoutesConstants.defaultSeeAllScreenName , pathParameters: {"appBarTitle" : "Upcoming Movie"} , extra: state.movies);
+            } : null,
             child: Text("See All", style: Theme
                 .of(context)
                 .textTheme
@@ -209,7 +216,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ?.copyWith(fontSize:
             (isLandscape)
                 ? ResponsiveSizeConstants.widthScreen(context) * 0.028
-                : ResponsiveSizeConstants.widthScreen(context) * 0.038
+                : ResponsiveSizeConstants.widthScreen(context) * 0.038 ,
+             color:  (state is GetUpComingMoviesSuccess) ? ColorsManager.primaryBlueAccentColor : ColorsManager.transparent,
             ),
             )
         )

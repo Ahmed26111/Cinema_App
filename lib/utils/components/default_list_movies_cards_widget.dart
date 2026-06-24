@@ -1,5 +1,6 @@
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/data/models/movie_model.dart';
+import 'package:cinema_app/utils/components/default_movie_rate_container.dart';
 import 'package:cinema_app/utils/shared/conversion.dart';
 import 'package:flutter/material.dart';
 
@@ -62,7 +63,10 @@ class _DefaultListMoviesCardsWidgetState extends State<DefaultListMoviesCardsWid
             children: [
               Align(
                 alignment: Alignment.topRight,
-                child: _getRateContainer(movie.voteAverage),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0 , right: 8.0),
+                  child: DefaultMovieRateContainer(movieRate: movie.voteAverage,),
+                ),
               )
             ],
           ),
@@ -82,14 +86,14 @@ class _DefaultListMoviesCardsWidgetState extends State<DefaultListMoviesCardsWid
                 children: [
                   Text(
                       movie.movieTitle ,
-                      style: (widget.isLandscape) ? Theme.of(context).textTheme.labelSmall : Theme.of(context).textTheme.labelLarge,
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(fontSize: 14 , fontWeight: FontWeight.bold),//? make it fixed size
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                   ),
                   Text(
                     genresString,
-                    style: (widget.isLandscape) ? Theme.of(context).textTheme.bodySmall : Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 10),//? make it fixed size
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
@@ -100,36 +104,6 @@ class _DefaultListMoviesCardsWidgetState extends State<DefaultListMoviesCardsWid
           ),
         )
       ],
-    );
-  }
-
-  Widget _getRateContainer(double movieRate) {
-    return Padding(
-      padding: const EdgeInsets.only(right:  8.0 , top: 8),
-      child: Container(
-        height: 24,
-        width: 56,
-        decoration: BoxDecoration(
-          color: ColorsManager.primarySoftColorLessOpacity,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Center(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.star_rate_rounded , color: ColorsManager.orangeColor,),
-              Text(
-                movieRate.toStringAsFixed(1),
-                style: TextStyle(
-                  color: ColorsManager.orangeColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 

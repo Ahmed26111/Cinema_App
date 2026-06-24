@@ -1,4 +1,5 @@
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
+import 'package:cinema_app/data/models/movie_model.dart';
 import 'package:cinema_app/ui/core/layout/change_bottom_navigation_bar_index_cubit.dart';
 import 'package:cinema_app/ui/core/layout/layout_screen.dart';
 import 'package:cinema_app/ui/create_new_password_screen/create_new_password_cubit.dart';
@@ -15,6 +16,7 @@ import 'package:cinema_app/ui/signup_screen/signup_screen.dart';
 import 'package:cinema_app/ui/splash_screen/get_active_user_cubit.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen1.dart';
 import 'package:cinema_app/ui/splash_screen/splash_screen.dart';
+import 'package:cinema_app/utils/components/default_see_all_movies_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -161,6 +163,29 @@ abstract class RoutesManager {
             ),
             transitionsBuilder: (context, animation, secondaryAnimation,
                 child) {
+              return FadeTransition(
+                opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+                child: ScaleTransition(
+                  scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                    CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                  ),
+                  child: child,
+                ),
+              );
+            },
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutesConstants.defaultSeeAllScreenName,
+        path: RoutesConstants.defaultSeeAllScreenUrl,
+        pageBuilder: (context ,state) {
+          final movies = state.extra as List<MovieModel>;
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionDuration: Duration(milliseconds: 200),
+            child: DefaultSeeAllMoviesWidget(appBarTitle: state.pathParameters["appBarTitle"]!, movies: movies),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               return FadeTransition(
                 opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
                 child: ScaleTransition(

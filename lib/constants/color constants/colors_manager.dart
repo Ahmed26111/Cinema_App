@@ -12,6 +12,7 @@ abstract class ColorsManager{
   static final Color blackColor = Color(0xFF171725);
   static final Color greyColor = Color(0xFF92929D);
   static final Color redColor = Color(0xFFED3737);
-  static final Color orangeColor = Color.fromRGBO(255, 135, 0, 0.8);
+  static final Color orangeColorLessOpacity = Color.fromRGBO(255, 135, 0, 0.8);
+  static final Color orangeColor = Color(0xFFFF8700);
   static final Color transparent = Colors.transparent;
 }
