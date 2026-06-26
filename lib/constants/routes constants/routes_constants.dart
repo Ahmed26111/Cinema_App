@@ -9,4 +9,5 @@ abstract class RoutesConstants{
   static final String createNewPasswordScreenName = "/createNewPasswordScreen";
   static final String defaultSeeAllScreenUrl = "/defaultSeeAllScreen:appBarTitle";
   static final String defaultSeeAllScreenName = "/defaultSeeAllScreen";
+  static final String searchResultScreen = "/searchResultScreen";
 }

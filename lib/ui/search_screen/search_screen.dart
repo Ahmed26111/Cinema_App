@@ -5,6 +5,7 @@ import 'package:cinema_app/utils/components/default_details_movie_card_widget.da
 import 'package:cinema_app/utils/components/default_failed_to_load_widget.dart';
 import 'package:cinema_app/utils/components/default_genres_buttons_widget.dart';
 import 'package:cinema_app/utils/components/default_search_bar_widget.dart';
+import 'package:cinema_app/utils/components/get_movies_vertical_list_view.dart';
 import 'package:cinema_app/utils/shared/getDummyMovies.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,18 +59,20 @@ class _SearchScreenState extends State<SearchScreen> {
                                   highlightColor: ColorsManager.lineDarkColor,
                                 ),
                                 enabled: true,
-                                child: _getTopRatedMoviesList(
-                                    getDummyMovies(20), isLandscape , true),
+                                child: GetMoviesVerticalListView(
+                                  movies: getDummyMovies(10),
+                                  isLandscape: isLandscape,
+                                  isDummy: true,
+                                ),
                               ),
                             ),
-                        GetTopRatedMoviesSuccess() => Expanded(child: _getTopRatedMoviesList(state.movies, isLandscape)),
+                        GetTopRatedMoviesSuccess() => Expanded(child: GetMoviesVerticalListView(movies: state.movies, isLandscape: isLandscape)),
                         GetTopRatedMoviesFailed() => DefaultFailedToLoadWidget(
                             errorMessage: "Sorry, Failed to load \nthe Top Rated movies :(",
                             helpMessage: "Please try to connect with internet",
                             isLandscape: isLandscape
                         ),
                       }
-                     // _getTopRatedMoviesList(isLandscape),
                     ],
                   ),
                 ),
@@ -77,14 +80,6 @@ class _SearchScreenState extends State<SearchScreen> {
             );
           }
       ),
-    );
-  }
-
-  Widget _getTopRatedMoviesList(List<MovieModel> movies, bool isLandscape , [bool isDummy = false]) {
-    return ListView.separated(
-      itemCount: movies.length,
-      itemBuilder: (BuildContext context, int index) => DefaultDetailsMovieCardWidget(movieModel: movies[index], isLandscape: isLandscape , isDummy: isDummy,),
-      separatorBuilder: (BuildContext context, int index) => SizedBox(height: 16,),
     );
   }
 }
