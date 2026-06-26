@@ -7,10 +7,11 @@ import 'package:flutter/material.dart';
 import '../../constants/api constants/api_constants.dart';
 
 class DefaultDetailsMovieCardWidget extends StatelessWidget {
-  const DefaultDetailsMovieCardWidget({super.key, required this.movieModel, required this.isLandscape});
+  const DefaultDetailsMovieCardWidget({super.key, required this.movieModel, required this.isLandscape, this.isDummy = false});
 
   final MovieModel movieModel;
   final bool isLandscape;
+  final bool isDummy;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class DefaultDetailsMovieCardWidget extends StatelessWidget {
           width: 120,
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: NetworkImage("${ApiConstants.baseImageUrl}${movieModel.posterPathImage}")
+                image: (isDummy)? AssetImage("images/circular_avatar.png") : NetworkImage("${ApiConstants.baseImageUrl}${movieModel.posterPathImage}")
             ),
             borderRadius: BorderRadius.circular(14),
           ),
@@ -44,7 +45,7 @@ class DefaultDetailsMovieCardWidget extends StatelessWidget {
             spacing: 14,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _getIsAdultOrFamilyButton(context),
+              _getOriginalLanguageButton(context),
               Text(
                 movieModel.movieTitle ,
                 style: (isLandscape) ? Theme.of(context).textTheme.labelSmall : Theme.of(context).textTheme.labelLarge,
@@ -60,7 +61,7 @@ class DefaultDetailsMovieCardWidget extends StatelessWidget {
     );
   }
 
-  FilledButton _getIsAdultOrFamilyButton(BuildContext context) {
+  FilledButton _getOriginalLanguageButton(BuildContext context) {
     return FilledButton(
       onPressed: () {},
       style: FilledButton.styleFrom(
@@ -71,7 +72,7 @@ class DefaultDetailsMovieCardWidget extends StatelessWidget {
           )
       ),
       child: Text(
-        (movieModel.isAdult) ? "Adult" : "Family",
+        movieModel.originalLanguage,
         style: Theme
             .of(context)
             .textTheme

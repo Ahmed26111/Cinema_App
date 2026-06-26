@@ -12,6 +12,7 @@ import 'package:cinema_app/utils/components/default_list_movies_cards_widget.dar
 import 'package:cinema_app/utils/components/default_search_bar_widget.dart';
 import 'package:cinema_app/utils/components/upcoming_movies_slider_widget.dart';
 import 'package:cinema_app/utils/components/upcoming_movies_slider_widget.dart';
+import 'package:cinema_app/utils/shared/getDummyMovies.dart';
 import 'package:cinema_app/utils/shared/hive_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: ResponsiveSizeConstants.widthScreen(context) * 0.08 , vertical: (isLandscape)?0:10),
-                child: DefaultSearchBarWidget(controller: searchController, isLandscape: isLandscape),
+                child: DefaultSearchBarWidget(controller: searchController, hintText: "Search a title.." , isLandscape: isLandscape),
               ),
               SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.005,),
               BlocBuilder<GetUpcomingMoviesCubit , GetUpcomingMoviesState>(
@@ -111,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         _getCategoriesText(context , isLandscape),
                         SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.035 :ResponsiveSizeConstants.heightScreen(context) * 0.022,),
-                        DefaultGenresButtonsWidget(currentMovieGenre: context.read<GetPopularMoviesCubit>().currentMovieGenre , isLandscape: isLandscape,),
+                        DefaultGenresButtonsWidget(currentMovieGenre: context.read<GetPopularMoviesCubit>().currentMovieGenre , isLandscape: isLandscape, onTapButton: (movieGenre)=>context.read<GetPopularMoviesCubit>().changeCurrentMovieGenre(movieGenre),),
                         SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.035 : ResponsiveSizeConstants.heightScreen(context) * 0.02,),
                         _getMostPopularRow(context , isLandscape , state),
                         SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.035 : ResponsiveSizeConstants.heightScreen(context) * 0.01,),
@@ -223,30 +224,6 @@ class _HomeScreenState extends State<HomeScreen> {
         )
       ],
     );
-  }
-
-  List<MovieModel> getDummyMovies(int lengthOfDummies){
-    return List.generate(lengthOfDummies, (index){
-      return MovieModel(
-          isAdult: true,
-          backdropPathImage: "/c6BPbkO5Npt1OdwttAxCFo06wtH.jpg",
-          genreIds: null,
-          movieId: 00000,
-          movieTitle: "hgcgfhydc",
-          originalLanguage: "",
-          overview: "",
-          posterPathImage: null,
-          releaseDate: DateTime.now(),
-          voteAverage: 0,
-          genres: null,
-          imdbId: "",
-          runTime: 0,
-          status: "",
-          tagLine: "",
-          originCountry: [],
-          productionCompanies: []
-      );
-    });
   }
 
 

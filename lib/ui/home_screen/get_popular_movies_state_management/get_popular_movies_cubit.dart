@@ -17,7 +17,7 @@ class GetPopularMoviesCubit extends Cubit<GetPopularMoviesState> {
   void getPopularMovies([MovieGenreEnum genre = MovieGenreEnum.All]) async{
     emit(GetPopularMoviesLoading());
     try{
-      List<MovieModel> movies = (genre.genreID == -1) ? await movieRepository.getPopularMovies() : await movieRepository.getPopularMoviesByGenre(genre);
+      List<MovieModel> movies = (genre.genreID == MovieGenreEnum.All.genreID) ? await movieRepository.getPopularMovies() : await movieRepository.getPopularMoviesByGenre(genre);
       emit(GetPopularMoviesSuccess(movies: movies));
     }catch(e){
       emit(GetPopularMoviesFailed(message: e.toString()));

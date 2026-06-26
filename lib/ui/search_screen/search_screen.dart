@@ -1,0 +1,90 @@
+import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
+import 'package:cinema_app/data/models/movie_model.dart';
+import 'package:cinema_app/ui/home_screen/get_top_rated_movies_state_management/get_top_rated_movies_cubit.dart';
+import 'package:cinema_app/utils/components/default_details_movie_card_widget.dart';
+import 'package:cinema_app/utils/components/default_failed_to_load_widget.dart';
+import 'package:cinema_app/utils/components/default_genres_buttons_widget.dart';
+import 'package:cinema_app/utils/components/default_search_bar_widget.dart';
+import 'package:cinema_app/utils/shared/getDummyMovies.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+
+import '../../constants/color constants/colors_manager.dart';
+
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
+
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isLandscape = ResponsiveSizeConstants.isLandscape(context);
+    return Scaffold(
+      body: BlocBuilder<GetTopRatedMoviesCubit , GetTopRatedMoviesState>(
+          builder: (context , state) {
+            return SafeArea(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24 , vertical: 14),
+                  child: Column(
+                    children: [
+                      DefaultSearchBarWidget(controller: _searchController, hintText: "Type title, categories, years, etc" ,isLandscape: isLandscape),
+                      SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.045 : ResponsiveSizeConstants.heightScreen(context) * 0.03,),
+                      DefaultGenresButtonsWidget(currentMovieGenre: context
+                          .read<GetTopRatedMoviesCubit>()
+                          .currentMovieGenre,
+                        onTapButton: (genre) =>
+                            context
+                                .read<
+                                GetTopRatedMoviesCubit>()
+                                .changeCurrentMovieGenre(genre),
+                        isLandscape: isLandscape,
+                      ),
+                      SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.045 : ResponsiveSizeConstants.heightScreen(context) * 0.03,),
+                      switch(state){
+                        GetTopRatedMoviesInitial() || GetTopRatedMoviesLoading()  =>
+                            Expanded(
+                              child: Skeletonizer(
+                                containersColor: ColorsManager.greyColor,
+                                effect: ShimmerEffect(
+                                  baseColor: ColorsManager.greyColor,
+                                  highlightColor: ColorsManager.lineDarkColor,
+                                ),
+                                enabled: true,
+                                child: _getTopRatedMoviesList(
+                                    getDummyMovies(20), isLandscape , true),
+                              ),
+                            ),
+                        GetTopRatedMoviesSuccess() => Expanded(child: _getTopRatedMoviesList(state.movies, isLandscape)),
+                        GetTopRatedMoviesFailed() => DefaultFailedToLoadWidget(
+                            errorMessage: "Sorry, Failed to load \nthe Top Rated movies :(",
+                            helpMessage: "Please try to connect with internet",
+                            isLandscape: isLandscape
+                        ),
+                      }
+                     // _getTopRatedMoviesList(isLandscape),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
+      ),
+    );
+  }
+
+  Widget _getTopRatedMoviesList(List<MovieModel> movies, bool isLandscape , [bool isDummy = false]) {
+    return ListView.separated(
+      itemCount: movies.length,
+      itemBuilder: (BuildContext context, int index) => DefaultDetailsMovieCardWidget(movieModel: movies[index], isLandscape: isLandscape , isDummy: isDummy,),
+      separatorBuilder: (BuildContext context, int index) => SizedBox(height: 16,),
+    );
+  }
+}

@@ -1,9 +1,12 @@
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/ui/core/layout/change_bottom_navigation_bar_index_cubit.dart';
 import 'package:cinema_app/ui/home_screen/get_popular_movies_state_management/get_popular_movies_cubit.dart';
+import 'package:cinema_app/ui/home_screen/get_top_rated_movies_state_management/get_top_rated_movies_cubit.dart';
 import 'package:cinema_app/ui/home_screen/get_upcoming_movies_state_management/get_upcoming_movies_cubit.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
 import 'package:cinema_app/ui/home_screen/home_state_management/home_cubit.dart';
+import 'package:cinema_app/ui/search_screen/search_screen.dart';
+import 'package:cinema_app/utils/shared/hive_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,14 +33,30 @@ class _LayoutScreenState extends State<LayoutScreen> {
       ],
       child: HomeScreen(),
     ),
-    Center(
-      child: Text("Search", style: TextStyle(color: Colors.white)),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (context) => GetTopRatedMoviesCubit()..getTopRatedMovies(),
+        ),
+      ],
+      child: SearchScreen(),
     ),
     Center(
       child: Text("Tickets", style: TextStyle(color: Colors.white)),
     ),
     Center(
-      child: Text("Profile", style: TextStyle(color: Colors.white)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Profile", style: TextStyle(color: Colors.white)),
+          IconButton(
+            onPressed: () {
+              HiveHandler.deleteActiveUser();
+            },
+            icon: Icon(Icons.logout , color: ColorsManager.whiteColor, size: 25,),
+          ),
+        ],
+      ),
     ),
   ];
 

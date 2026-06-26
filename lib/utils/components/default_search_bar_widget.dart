@@ -5,11 +5,13 @@ import 'package:cinema_app/constants/responsive%20size%20contants/responsive_siz
 import 'package:flutter/material.dart';
 
 class DefaultSearchBarWidget extends StatelessWidget {
-  const DefaultSearchBarWidget({super.key, required this.controller, required this.isLandscape});
+  const DefaultSearchBarWidget({super.key, required this.controller, required this.isLandscape, required this.hintText});
 
   final TextEditingController controller;
 
   final bool isLandscape;
+
+  final String hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class DefaultSearchBarWidget extends StatelessWidget {
             fontSize: (isLandscape)? ResponsiveSizeConstants.widthScreen(context) * 0.02 : ResponsiveSizeConstants.widthScreen(context) * 0.04
           ),
           decoration: InputDecoration(
-            hintText: "search a title..",
+            hintText: hintText,
             hintStyle: Theme.of(context).textTheme.headlineLarge?.copyWith(
                 fontSize: (isLandscape)? ResponsiveSizeConstants.widthScreen(context) * 0.02 : ResponsiveSizeConstants.widthScreen(context) * 0.04
             ),
@@ -59,8 +61,6 @@ class DefaultSearchBarWidget extends StatelessWidget {
             ),
             prefixIcon: Icon(Icons.search_outlined , size: 22),
             prefixIconColor: ColorsManager.greyColor,
-            suffixIcon: Icon(Icons.tune , size: 22,),
-            suffixIconColor: ColorsManager.whiteGreyColor,
           ),
           onEditingComplete: (){
             FocusScope.of(context).unfocus();

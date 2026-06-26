@@ -15,10 +15,10 @@ class GetTopRatedMoviesCubit extends Cubit<GetTopRatedMoviesState> {
 
   MovieGenreEnum currentMovieGenre = MovieGenreEnum.All;
 
-  void getTopRatedMovies(MovieGenreEnum genre) async {
+  void getTopRatedMovies([MovieGenreEnum genre = MovieGenreEnum.All]) async {
     emit(GetTopRatedMoviesLoading());
     try {
-      List<MovieModel> movies = (genre == MovieGenreEnum.All) ? await movieRepository.getTopRatedMovies() : await movieRepository.getTopRatedMoviesByGenre(genre);
+      List<MovieModel> movies = (genre.genreID == MovieGenreEnum.All.genreID) ? await movieRepository.getTopRatedMovies() : await movieRepository.getTopRatedMoviesByGenre(genre);
       emit(GetTopRatedMoviesSuccess(movies: movies));
     } catch (e) {
       emit(GetTopRatedMoviesFailed(message: e.toString()));
