@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cinema_app/constants/api%20constants/api_constants.dart';
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
@@ -102,20 +103,34 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
       );
   }
 
-  Container getUpComingMovieContainer(MovieModel movie, BuildContext context) {
+  Widget getUpComingMovieContainer(MovieModel movie, BuildContext context) {
+    double horizontalMargin = (widget.isLandscape && ResponsiveSizeConstants.heightScreen(context) > 500 )? 60 : 8;
+    
     return Container(
-            margin: EdgeInsets.symmetric(horizontal: (widget.isLandscape && ResponsiveSizeConstants.heightScreen(context) > 500 )? 60 : 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              image: DecorationImage(
-                image: (!widget.isDummy)?NetworkImage(
-                  "${ApiConstants.baseImageUrl}${movie.backdropPathImage}",
-                ):AssetImage("images/Onboarding_2.png"),
-                fit: BoxFit.cover,
-              ),
-            ),
+            margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
             child: Stack(
               children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: (widget.isDummy)
+                      ? Image.asset("images/Onboarding_2.png", fit: BoxFit.cover, width: double.infinity, height: double.infinity)
+                      : CachedNetworkImage(
+                          imageUrl: "${ApiConstants.baseImageUrl}${movie.backdropPathImage}",
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                          placeholder: (context, url) => Container(
+                            color: ColorsManager.primarySoftColor,
+                            child: Center(child: CircularProgressIndicator(strokeWidth: 2 , color: ColorsManager.primaryBlueAccentColor,)),
+                          ),
+                          errorWidget: (context, url, error) => Image.asset(
+                            "images/default_poster.png",
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                ),
                 Positioned(
                   bottom: 40,
                   left: 20,
@@ -147,13 +162,9 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
   }
 
   List<MovieModel> getTopSixShuffleUpComingMovies(){
-    List<MovieModel> shuffleMovies = [];
-    widget.movies.shuffle();
-    final int lengthOfMovies = (widget.movies.length > 6) ? 6 : widget.movies.length;
-    for(int i = 0; i < lengthOfMovies;i++){
-      shuffleMovies.add(widget.movies[i]);
-    }
-    return shuffleMovies;
+    List<MovieModel> shuffleMovies = List.from(widget.movies);
+    shuffleMovies.shuffle();
+    return shuffleMovies.take(6).toList();
   }
 
 }

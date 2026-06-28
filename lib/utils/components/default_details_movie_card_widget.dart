@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/data/models/movie_model.dart';
 import 'package:cinema_app/utils/components/default_movie_rate_container.dart';
@@ -18,17 +19,32 @@ class DefaultDetailsMovieCardWidget extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
+        SizedBox(
           height: 180,
           width: 120,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: (isDummy)? AssetImage("images/circular_avatar.png") : NetworkImage("${ApiConstants.baseImageUrl}${movieModel.posterPathImage}")
-            ),
-            borderRadius: BorderRadius.circular(14),
-          ),
           child: Stack(
             children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: (isDummy)
+                    ? Image.asset("images/circular_avatar.png", fit: BoxFit.cover, height: 180, width: 120)
+                    : CachedNetworkImage(
+                  imageUrl: "${ApiConstants.baseImageUrl}${movieModel.posterPathImage}",
+                  fit: BoxFit.cover,
+                  height: 180,
+                  width: 120,
+                  placeholder: (context, url) => Container(
+                    color: ColorsManager.primarySoftColor,
+                    child: Center(child: CircularProgressIndicator(strokeWidth: 2, color: ColorsManager.primaryBlueAccentColor,)),
+                  ),
+                  errorWidget: (context, url, error) => Image.asset(
+                    "images/default_poster.png",
+                    width: 120,
+                    height: 180,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(

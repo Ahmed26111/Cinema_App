@@ -38,14 +38,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     children: [
                       DefaultSearchBarWidget(controller: _searchController, hintText: "Type title, categories, years, etc" ,isLandscape: isLandscape),
                       SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.045 : ResponsiveSizeConstants.heightScreen(context) * 0.03,),
-                      DefaultGenresButtonsWidget(currentMovieGenre: context
-                          .read<GetTopRatedMoviesCubit>()
-                          .currentMovieGenre,
-                        onTapButton: (genre) =>
-                            context
-                                .read<
-                                GetTopRatedMoviesCubit>()
-                                .changeCurrentMovieGenre(genre),
+                      DefaultGenresButtonsWidget(
+                        currentMovieGenre: context.read<GetTopRatedMoviesCubit>().currentMovieGenre,
+                        onTapButton: (genre) => context.read<GetTopRatedMoviesCubit>().changeCurrentMovieGenre(genre),
                         isLandscape: isLandscape,
                       ),
                       SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.045 : ResponsiveSizeConstants.heightScreen(context) * 0.03,),

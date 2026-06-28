@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/ui/core/theme/theme_manager.dart';
@@ -9,14 +11,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class OnboardingLayoutScreen extends StatelessWidget {
+class OnboardingLayoutScreen extends StatefulWidget {
   const OnboardingLayoutScreen({super.key});
 
+  @override
+  State<OnboardingLayoutScreen> createState() => _OnboardingLayoutScreenState();
+}
+
+class _OnboardingLayoutScreenState extends State<OnboardingLayoutScreen> {
   final List<Widget> screens = const [
     OnboardingScreen1(),
     OnboardingScreen2(),
     OnboardingScreen3(),
   ];
+
+  late final PageController _pageController;
+
+   @override
+  void initState() {
+     super.initState();
+      _pageController = PageController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +42,8 @@ class OnboardingLayoutScreen extends StatelessWidget {
           body: Column(
             spacing: 10,
             children: [
-              _getAnimatedIndexedStack(state.index),
-              _getPageIndicatorAndFilledButton(state.index, context),
+              _getPageView(),
+              _getPageIndicatorAndFilledButton(state.index, context , state),
             ],
           ),
         );
@@ -36,63 +51,55 @@ class OnboardingLayoutScreen extends StatelessWidget {
     );
   }
 
-  Padding _getPageIndicatorAndFilledButton(int index, BuildContext context) {
+  Padding _getPageIndicatorAndFilledButton(int index, BuildContext context, OnboardingChangeIndexState state) {
     return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30 , horizontal: 15),
-              child: Row(
-                children: [
-                  _getPageIndicator(index),
-                  Spacer(),
-                  _getFilledButton(context)
-                ],
-              ),
-            );
+      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+      child: Row(
+        children: [
+          _getPageIndicator(index),
+          Spacer(),
+          _getFilledButton(context, state)
+        ],
+      ),
+    );
   }
 
-  Expanded _getAnimatedIndexedStack(int index) {
+  Expanded _getPageView() {
     return Expanded(
-              child: AnimatedSwitcher(
-                duration: Duration(milliseconds: 350),
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                    final slideAnimation = Tween<Offset>(
-                      begin: const Offset(1.0, 0.0),
-                      end: Offset.zero,
-                    ).animate(CurvedAnimation(
-                      parent: animation,
-                      curve: Curves.easeInOut,
-                    ));
-
-                    return FadeTransition(
-                      opacity: animation,
-                      child: SlideTransition(
-                        position: slideAnimation,
-                        child: child,
-                      ),
-                    );
-                },
-                child: IndexedStack(
-                  key: ValueKey<int>(index),
-                  index: index,
-                  children: screens,
-                ),
-              ),
-            );
+      child: PageView.builder(
+        controller: _pageController,
+        itemCount: screens.length,
+        itemBuilder: (context, index) => screens[index],
+        scrollDirection: Axis.horizontal,
+        onPageChanged: (index) {
+          context.read<OnboardingChangeIndexCubit>().changeOnboardingPageIndex(index);
+        },
+      ),
+    );
   }
 
-  SizedBox _getFilledButton(BuildContext context) {
+  SizedBox _getFilledButton(BuildContext context , OnboardingChangeIndexState state) {
     return SizedBox(
-      width: 60,
+      width: (state.index == 2 ) ? 140 :  60,
       height: 60,
       child: FilledButton(
         onPressed: () {
           if(context.read<OnboardingChangeIndexCubit>().state.index < 2){
-            context.read<OnboardingChangeIndexCubit>().changeOnboardingPageIndex();
+            _pageController.nextPage(duration: Duration(milliseconds: 450), curve: Curves.easeInOut);
+            context.read<OnboardingChangeIndexCubit>().changeOnboardingPageIndex(state.index + 1);
           }else{
             context.go(RoutesConstants.loginScreen);
           }
         },
-        style: ThemeManager.getOnboardingFilledButtonStyle(),
-        child: Center(child: Icon(Icons.arrow_forward_ios_outlined)),
+        style: (state.index != 2) ? ThemeManager
+            .getOnboardingFilledButtonStyle() : ThemeManager.getOnboardingFilledButtonStyle().copyWith(
+            shape: WidgetStateProperty.resolveWith(
+                (widgets) => RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+            )
+        ),
+        child: Center(child: (state.index == 2) ? Text("Get Started" , style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14 , fontWeight: FontWeight.bold),) : Icon(Icons.arrow_forward_ios_outlined)),
       ),
     );
   }
@@ -115,5 +122,11 @@ class OnboardingLayoutScreen extends StatelessWidget {
         );
       }),
     );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 }

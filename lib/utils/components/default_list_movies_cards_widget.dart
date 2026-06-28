@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/data/models/movie_model.dart';
 import 'package:cinema_app/utils/components/default_movie_rate_container.dart';
@@ -33,7 +34,7 @@ class _DefaultListMoviesCardsWidgetState extends State<DefaultListMoviesCardsWid
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemBuilder: (context , index) => _getMovieCard(topTenMovies[index] , context),
-        separatorBuilder: (context , index) => SizedBox(width: 15,),
+        separatorBuilder: (context , index) => const SizedBox(width: 15,),
         itemCount: topTenMovies.length,
       ),
     );
@@ -47,20 +48,36 @@ class _DefaultListMoviesCardsWidgetState extends State<DefaultListMoviesCardsWid
 
     return Column(
       children: [
-        Container(
+        SizedBox(
           height: 230,
           width: 150,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: (widget.isDummy)? AssetImage("images/circular_avatar.png") : NetworkImage(
-                    "${ApiConstants.baseImageUrl}${movie.posterPathImage}"),
-                fit: BoxFit.cover
-            ),
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-          ),
           child: Stack(
             children: [
+              // Use CachedNetworkImage for professional image handling
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(15), 
+                  topRight: Radius.circular(15)
+                ),
+                child: (widget.isDummy)
+                    ? Image.asset("images/circular_avatar.png", fit: BoxFit.cover, height: 230, width: 150)
+                    : CachedNetworkImage(
+                        imageUrl: "${ApiConstants.baseImageUrl}${movie.posterPathImage}",
+                        fit: BoxFit.cover,
+                        height: 230,
+                        width: 150,
+                        placeholder: (context, url) => Container(
+                          color: ColorsManager.primarySoftColor,
+                          child: Center(child: CircularProgressIndicator(strokeWidth: 2 , color: ColorsManager.primaryBlueAccentColor,)),
+                        ),
+                        errorWidget: (context, url, error) => Image.asset(
+                            "images/default_poster.png",
+                            width: 150,
+                            height: 230,
+                            fit: BoxFit.cover,
+                        ),
+                      ),
+              ),
               Align(
                 alignment: Alignment.topRight,
                 child: Padding(
@@ -76,7 +93,7 @@ class _DefaultListMoviesCardsWidgetState extends State<DefaultListMoviesCardsWid
           width: 150,
           decoration: BoxDecoration(
             color: ColorsManager.primarySoftColor,
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12) , bottomRight: Radius.circular(12)),
+            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12) , bottomRight: Radius.circular(12)),
           ),
           child: Center(
             child: Padding(
@@ -86,14 +103,14 @@ class _DefaultListMoviesCardsWidgetState extends State<DefaultListMoviesCardsWid
                 children: [
                   Text(
                       movie.movieTitle ,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(fontSize: 14 , fontWeight: FontWeight.bold),//? make it fixed size
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(fontSize: 14 , fontWeight: FontWeight.bold),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                   ),
                   Text(
                     genresString,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 10),//? make it fixed size
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 10),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
@@ -108,13 +125,9 @@ class _DefaultListMoviesCardsWidgetState extends State<DefaultListMoviesCardsWid
   }
 
   List<MovieModel> getTopTenShuffleUpComingMovies(){
-    List<MovieModel> shuffleMovies = [];
-    widget.movies.shuffle();
-    final int lengthOfMovies = (widget.movies.length > 10) ? 10 : widget.movies.length;
-    for(int i = 0; i < lengthOfMovies;i++){
-      shuffleMovies.add(widget.movies[i]);
-    }
-    return shuffleMovies;
+    List<MovieModel> shuffleMovies = List.from(widget.movies);
+    shuffleMovies.shuffle();
+    return shuffleMovies.take(10).toList();
   }
 
 }

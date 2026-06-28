@@ -60,12 +60,32 @@ class _LayoutScreenState extends State<LayoutScreen> {
     ),
   ];
 
+  late final PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChangeBottomNavigationBarIndexCubit, ChangeBottomNavigationBarIndexState>(
       builder: (context, state) {
         return Scaffold(
-          body: IndexedStack(index: state.index, children: screens),
+          body: Column(
+            children: [
+              Expanded(
+                child: PageView.builder(
+                    itemCount: screens.length,
+                    itemBuilder: (context , index) => screens[index],
+                    scrollDirection: Axis.horizontal,
+                    controller: _pageController,
+                    physics: NeverScrollableScrollPhysics(),
+                ),
+              ),
+            ],
+          ),
           bottomNavigationBar: _getCustomBottomNavigationBar(state , context),
         );
       },
@@ -93,6 +113,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
     bool isSelected = (state.index == index);
     return GestureDetector(
       onTap: () {
+        _pageController.animateToPage(index, duration: Duration(milliseconds: 200), curve: Curves.bounceInOut);
         context.read<ChangeBottomNavigationBarIndexCubit>().changeBottomNavigationBarIndex(index , screens.length);
       },
       child: AnimatedContainer(
@@ -129,5 +150,11 @@ class _LayoutScreenState extends State<LayoutScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
   }
 }

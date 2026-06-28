@@ -40,9 +40,12 @@ class DefaultGenresButtonsWidget extends StatelessWidget {
   }
 
   Widget _getGenreBoxContainer(MovieGenreEnum movieGenre , BuildContext context){
+    final double baseSize = ResponsiveSizeConstants.shortestSide(context);
+    final bool isSelected = movieGenre.genreID == currentMovieGenre.genreID;
+
     return GestureDetector(
       onTap: (){
-        if(currentMovieGenre.genreID != movieGenre.genreID){
+        if(!isSelected){
           onTapButton.call(movieGenre);
         }
       },
@@ -53,11 +56,9 @@ class DefaultGenresButtonsWidget extends StatelessWidget {
         constraints: BoxConstraints(
           minWidth: 70,
           minHeight: 40,
-          maxWidth: 90,
-          maxHeight: 50,
         ),
         decoration: BoxDecoration(
-          color: (movieGenre.genreID == currentMovieGenre.genreID)
+          color: (isSelected)
               ? ColorsManager.primarySoftColor
               : ColorsManager.transparent,
           borderRadius: BorderRadius.circular(10),
@@ -65,12 +66,14 @@ class DefaultGenresButtonsWidget extends StatelessWidget {
         child: Center(
           child: Text(
             movieGenre.name,
-            style: (movieGenre.genreID == currentMovieGenre.genreID)
+            style: (isSelected)
                 ? Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: (isLandscape)? ResponsiveSizeConstants.widthScreen(context) * 0.025 : ResponsiveSizeConstants.widthScreen(context) * 0.045
-                )
-                : (isLandscape)? Theme.of(context).textTheme.titleLarge : Theme.of(context).textTheme.labelMedium,
+                    fontWeight: FontWeight.bold,
+                    fontSize: baseSize * 0.045, // Now stays stable at ~16
+                  )
+                : Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontSize: baseSize * 0.04, // Now stays stable at ~14.4
+                  ),
           ),
         ),
       ),
