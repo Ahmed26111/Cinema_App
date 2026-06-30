@@ -7,12 +7,22 @@ import 'package:cinema_app/constants/responsive%20size%20contants/responsive_siz
 import 'package:cinema_app/data/models/movie_model.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../constants/routes constants/routes_constants.dart';
 
 class UpcomingMoviesSlider extends StatefulWidget {
-  const UpcomingMoviesSlider({super.key, required this.movies, this.isDummy = false, this.isLandscape = false});
+  const UpcomingMoviesSlider({
+    super.key,
+    required this.movies,
+    this.isDummy = false,
+    this.isLandscape = false,
+  });
+
   final List<MovieModel> movies;
   final bool isDummy;
   final bool isLandscape;
+
   @override
   State<UpcomingMoviesSlider> createState() => _UpcomingMoviesSliderState();
 }
@@ -22,6 +32,7 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
   late PageController _pageController;
   late List<MovieModel> shuffleMovies;
   Timer? _timer;
+
   @override
   void initState() {
     super.initState();
@@ -40,7 +51,6 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
         );
       }
     });
-
   }
 
   @override
@@ -64,107 +74,139 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
 
   Row getCustomIndicator() {
     return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(
-          // Display dots (limited to 5 or 6 for UI neatness)
-          shuffleMovies.length > 6 ? 6 : shuffleMovies.length,
-              (index) => AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            margin: const EdgeInsets.symmetric(horizontal: 4),
-            height: 8,
-            width: _currentPage == index ? 24 : 8, // Pill shape for active
-            decoration: BoxDecoration(
-              color: _currentPage == index
-                  ? ColorsManager.primaryBlueAccentColor
-                  : ColorsManager.primarySoftColor,
-              borderRadius: BorderRadius.circular(4),
-            ),
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        // Display dots (limited to 5 or 6 for UI neatness)
+        shuffleMovies.length > 6 ? 6 : shuffleMovies.length,
+        (index) => AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          height: 8,
+          width: _currentPage == index ? 24 : 8,
+          // Pill shape for active
+          decoration: BoxDecoration(
+            color: _currentPage == index
+                ? ColorsManager.primaryBlueAccentColor
+                : ColorsManager.primarySoftColor,
+            borderRadius: BorderRadius.circular(4),
           ),
         ),
-      );
+      ),
+    );
   }
 
   SizedBox getMovieImageSlider(BuildContext context) {
     return SizedBox(
-        height: (widget.isLandscape) ? ( ResponsiveSizeConstants.heightScreen(context) > 500 ) ? ResponsiveSizeConstants.heightScreen(context) * 0.4 :ResponsiveSizeConstants.heightScreen(context) * 0.7 : ResponsiveSizeConstants.heightScreen(context) * 0.22, // Height of the slider
-        child: PageView.builder(
-          controller: _pageController,
-          itemCount: shuffleMovies.length,
-          onPageChanged: (index) {
-            setState(() {
-              _currentPage = index;
-            });
-          },
-          itemBuilder: (context, index) {
-            final movie = shuffleMovies[index];
-            return getUpComingMovieContainer(movie, context);
-          },
-        ),
-      );
+      height: (widget.isLandscape)
+          ? (ResponsiveSizeConstants.heightScreen(context) > 500)
+                ? ResponsiveSizeConstants.heightScreen(context) * 0.4
+                : ResponsiveSizeConstants.heightScreen(context) * 0.7
+          : ResponsiveSizeConstants.heightScreen(context) * 0.22,
+      // Height of the slider
+      child: PageView.builder(
+        controller: _pageController,
+        itemCount: shuffleMovies.length,
+        onPageChanged: (index) {
+          setState(() {
+            _currentPage = index;
+          });
+        },
+        itemBuilder: (context, index) {
+          final movie = shuffleMovies[index];
+          return getUpComingMovieContainer(movie, context);
+        },
+      ),
+    );
   }
 
   Widget getUpComingMovieContainer(MovieModel movie, BuildContext context) {
-    double horizontalMargin = (widget.isLandscape && ResponsiveSizeConstants.heightScreen(context) > 500 )? 60 : 8;
-    
-    return Container(
-            margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: (widget.isDummy)
-                      ? Image.asset("images/Onboarding_2.png", fit: BoxFit.cover, width: double.infinity, height: double.infinity)
-                      : CachedNetworkImage(
-                          imageUrl: "${ApiConstants.baseImageUrl}${movie.backdropPathImage}",
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: double.infinity,
-                          placeholder: (context, url) => Container(
-                            color: ColorsManager.primarySoftColor,
-                            child: Center(child: CircularProgressIndicator(strokeWidth: 2 , color: ColorsManager.primaryBlueAccentColor,)),
-                          ),
-                          errorWidget: (context, url, error) => Image.asset(
-                            "images/default_poster.png",
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.cover,
+    double horizontalMargin =
+        (widget.isLandscape &&
+            ResponsiveSizeConstants.heightScreen(context) > 500)
+        ? 60
+        : 8;
+
+    return GestureDetector(
+      onTap: () {
+        context.pushNamed(
+          RoutesConstants.detailsMovieScreenName,
+          pathParameters: {"movieId": movie.movieId.toString()},
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: (widget.isDummy)
+                  ? Image.asset(
+                      "images/Onboarding_2.png",
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                    )
+                  : CachedNetworkImage(
+                      imageUrl:
+                          "${ApiConstants.baseImageUrl}${movie.backdropPathImage}",
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                      placeholder: (context, url) => Container(
+                        color: ColorsManager.primarySoftColor,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: ColorsManager.primaryBlueAccentColor,
                           ),
                         ),
-                ),
-                Positioned(
-                  bottom: 40,
-                  left: 20,
-                  right: 20,
-                  child: Text(
-                    movie.movieTitle,
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      fontSize: (widget.isLandscape)?ResponsiveSizeConstants.widthScreen(context) * 0.04:ResponsiveSizeConstants.widthScreen(context) * 0.05
+                      ),
+                      errorWidget: (context, url, error) => Image.asset(
+                        "images/default_poster.png",
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                Positioned(
-                  bottom: 20,
-                  left: 20,
-                  right: 20,
-                  child: Text(
-                    "On ${formatDate(movie.releaseDate, [M , " " ,dd , " , " , yyyy])}",
-                    style: (widget.isLandscape) ? Theme.of(context).textTheme.titleLarge : Theme.of(context).textTheme.labelSmall,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
             ),
-          );
+            Positioned(
+              bottom: 40,
+              left: 20,
+              right: 20,
+              child: Text(
+                movie.movieTitle,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  fontSize: (widget.isLandscape)
+                      ? ResponsiveSizeConstants.widthScreen(context) * 0.04
+                      : ResponsiveSizeConstants.widthScreen(context) * 0.05,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Positioned(
+              bottom: 20,
+              left: 20,
+              right: 20,
+              child: Text(
+                "On ${formatDate(movie.releaseDate, [M, " ", dd, " , ", yyyy])}",
+                style: (widget.isLandscape)
+                    ? Theme.of(context).textTheme.titleLarge
+                    : Theme.of(context).textTheme.labelSmall,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
-  List<MovieModel> getTopSixShuffleUpComingMovies(){
+  List<MovieModel> getTopSixShuffleUpComingMovies() {
     List<MovieModel> shuffleMovies = List.from(widget.movies);
     shuffleMovies.shuffle();
     return shuffleMovies.take(6).toList();
   }
-
 }

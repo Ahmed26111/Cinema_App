@@ -4,6 +4,8 @@ import 'package:cinema_app/ui/core/layout/change_bottom_navigation_bar_index_cub
 import 'package:cinema_app/ui/core/layout/layout_screen.dart';
 import 'package:cinema_app/ui/create_new_password_screen/create_new_password_cubit.dart';
 import 'package:cinema_app/ui/create_new_password_screen/create_new_password_screen.dart';
+import 'package:cinema_app/ui/details_movie_screen/details_movie_cubit.dart';
+import 'package:cinema_app/ui/details_movie_screen/details_movie_screen.dart';
 import 'package:cinema_app/ui/forget_password_screen/forget_password_cubit.dart';
 import 'package:cinema_app/ui/forget_password_screen/forget_password_screen.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
@@ -211,6 +213,32 @@ abstract class RoutesManager {
             child: BlocProvider(
               create: (context) => SearchResultCubit(),
               child: SearchResultScreen(),
+            ),
+            transitionsBuilder: (context, animation, secondaryAnimation,
+                child) {
+              return FadeTransition(
+                opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+                child: ScaleTransition(
+                  scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                    CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                  ),
+                  child: child,
+                ),
+              );
+            },
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutesConstants.detailsMovieScreenName,
+        path: RoutesConstants.detailsMovieScreenUrl,
+        pageBuilder: (context ,state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            transitionDuration: Duration(milliseconds: 200),
+            child: BlocProvider(
+              create: (context) => DetailsMovieCubit()..getDetailsMovieModel(int.parse(state.pathParameters["movieId"] ?? "-1")),
+              child: DetailsMovieScreen(movieId: int.parse(state.pathParameters["movieId"] ?? "-1")),
             ),
             transitionsBuilder: (context, animation, secondaryAnimation,
                 child) {

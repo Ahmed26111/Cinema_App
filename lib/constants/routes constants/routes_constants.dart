@@ -10,4 +10,6 @@ abstract class RoutesConstants{
   static final String defaultSeeAllScreenUrl = "/defaultSeeAllScreen:appBarTitle";
   static final String defaultSeeAllScreenName = "/defaultSeeAllScreen";
   static final String searchResultScreen = "/searchResultScreen";
+  static final String detailsMovieScreenUrl = "/detailsMovieScreen:movieId";
+  static final String detailsMovieScreenName = "/detailsMovieScreen";
 }

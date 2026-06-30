@@ -4,8 +4,10 @@ import 'package:cinema_app/data/models/movie_model.dart';
 import 'package:cinema_app/utils/components/default_movie_rate_container.dart';
 import 'package:cinema_app/utils/shared/conversion.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../constants/api constants/api_constants.dart';
+import '../../constants/routes constants/routes_constants.dart';
 
 class DefaultDetailsMovieCardWidget extends StatelessWidget {
   const DefaultDetailsMovieCardWidget({super.key, required this.movieModel, required this.isLandscape, this.isDummy = false});
@@ -16,64 +18,69 @@ class DefaultDetailsMovieCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 180,
-          width: 120,
-          child: Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(14),
-                child: (isDummy)
-                    ? Image.asset("images/circular_avatar.png", fit: BoxFit.cover, height: 180, width: 120)
-                    : CachedNetworkImage(
-                  imageUrl: "${ApiConstants.baseImageUrl}${movieModel.posterPathImage}",
-                  fit: BoxFit.cover,
-                  height: 180,
-                  width: 120,
-                  placeholder: (context, url) => Container(
-                    color: ColorsManager.primarySoftColor,
-                    child: Center(child: CircularProgressIndicator(strokeWidth: 2, color: ColorsManager.primaryBlueAccentColor,)),
-                  ),
-                  errorWidget: (context, url, error) => Image.asset(
-                    "images/default_poster.png",
-                    width: 120,
-                    height: 180,
+    return GestureDetector(
+      onTap: (){
+        context.pushNamed(RoutesConstants.detailsMovieScreenName , pathParameters: {"movieId" : movieModel.movieId.toString()});
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 180,
+            width: 120,
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: (isDummy)
+                      ? Image.asset("images/circular_avatar.png", fit: BoxFit.cover, height: 180, width: 120)
+                      : CachedNetworkImage(
+                    imageUrl: "${ApiConstants.baseImageUrl}${movieModel.posterPathImage}",
                     fit: BoxFit.cover,
+                    height: 180,
+                    width: 120,
+                    placeholder: (context, url) => Container(
+                      color: ColorsManager.primarySoftColor,
+                      child: Center(child: CircularProgressIndicator(strokeWidth: 2, color: ColorsManager.primaryBlueAccentColor,)),
+                    ),
+                    errorWidget: (context, url, error) => Image.asset(
+                      "images/default_poster.png",
+                      width: 120,
+                      height: 180,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0 , left: 8.0),
-                  child: DefaultMovieRateContainer(movieRate: movieModel.voteAverage,),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8.0 , left: 8.0),
+                    child: DefaultMovieRateContainer(movieRate: movieModel.voteAverage,),
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(width: 16,),
+          Expanded(
+            child: Column(
+              spacing: 14,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _getOriginalLanguageButton(context),
+                Text(
+                  movieModel.movieTitle ,
+                  style: (isLandscape) ? Theme.of(context).textTheme.labelSmall : Theme.of(context).textTheme.labelLarge,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              )
-            ],
-          ),
-        ),
-        SizedBox(width: 16,),
-        Expanded(
-          child: Column(
-            spacing: 14,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _getOriginalLanguageButton(context),
-              Text(
-                movieModel.movieTitle ,
-                style: (isLandscape) ? Theme.of(context).textTheme.labelSmall : Theme.of(context).textTheme.labelLarge,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              _getReleaseYearRow(context , isLandscape),
-              _getGenreRow(context , isLandscape),
-            ],
-          ),
-        )
-      ],
+                _getReleaseYearRow(context , isLandscape),
+                _getGenreRow(context , isLandscape),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 

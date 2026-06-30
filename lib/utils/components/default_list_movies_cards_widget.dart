@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
+import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/data/models/movie_model.dart';
 import 'package:cinema_app/utils/components/default_movie_rate_container.dart';
 import 'package:cinema_app/utils/shared/conversion.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../constants/api constants/api_constants.dart';
 
@@ -46,81 +48,86 @@ class _DefaultListMoviesCardsWidgetState extends State<DefaultListMoviesCardsWid
         ?.map((id) => Conversion.getGenreNameByGenreId(id))
         .join(', ') ?? '';
 
-    return Column(
-      children: [
-        SizedBox(
-          height: 230,
-          width: 150,
-          child: Stack(
-            children: [
-              // Use CachedNetworkImage for professional image handling
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(15), 
-                  topRight: Radius.circular(15)
-                ),
-                child: (widget.isDummy)
-                    ? Image.asset("images/circular_avatar.png", fit: BoxFit.cover, height: 230, width: 150)
-                    : CachedNetworkImage(
-                        imageUrl: "${ApiConstants.baseImageUrl}${movie.posterPathImage}",
-                        fit: BoxFit.cover,
-                        height: 230,
-                        width: 150,
-                        placeholder: (context, url) => Container(
-                          color: ColorsManager.primarySoftColor,
-                          child: Center(child: CircularProgressIndicator(strokeWidth: 2 , color: ColorsManager.primaryBlueAccentColor,)),
+    return GestureDetector(
+      onTap: (){
+        context.pushNamed(RoutesConstants.detailsMovieScreenName , pathParameters: {"movieId" : movie.movieId.toString()});
+      },
+      child: Column(
+        children: [
+          SizedBox(
+            height: 230,
+            width: 150,
+            child: Stack(
+              children: [
+                // Use CachedNetworkImage for professional image handling
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15)
+                  ),
+                  child: (widget.isDummy)
+                      ? Image.asset("images/circular_avatar.png", fit: BoxFit.cover, height: 230, width: 150)
+                      : CachedNetworkImage(
+                          imageUrl: "${ApiConstants.baseImageUrl}${movie.posterPathImage}",
+                          fit: BoxFit.cover,
+                          height: 230,
+                          width: 150,
+                          placeholder: (context, url) => Container(
+                            color: ColorsManager.primarySoftColor,
+                            child: Center(child: CircularProgressIndicator(strokeWidth: 2 , color: ColorsManager.primaryBlueAccentColor,)),
+                          ),
+                          errorWidget: (context, url, error) => Image.asset(
+                              "images/default_poster.png",
+                              width: 150,
+                              height: 230,
+                              fit: BoxFit.cover,
+                          ),
                         ),
-                        errorWidget: (context, url, error) => Image.asset(
-                            "images/default_poster.png",
-                            width: 150,
-                            height: 230,
-                            fit: BoxFit.cover,
-                        ),
-                      ),
-              ),
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0 , right: 8.0),
-                  child: DefaultMovieRateContainer(movieRate: movie.voteAverage,),
                 ),
-              )
-            ],
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8.0 , right: 8.0),
+                    child: DefaultMovieRateContainer(movieRate: movie.voteAverage,),
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-        Container(
-          height: 50,
-          width: 150,
-          decoration: BoxDecoration(
-            color: ColorsManager.primarySoftColor,
-            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12) , bottomRight: Radius.circular(12)),
-          ),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                      movie.movieTitle ,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(fontSize: 14 , fontWeight: FontWeight.bold),
+          Container(
+            height: 50,
+            width: 150,
+            decoration: BoxDecoration(
+              color: ColorsManager.primarySoftColor,
+              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12) , bottomRight: Radius.circular(12)),
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                        movie.movieTitle ,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(fontSize: 14 , fontWeight: FontWeight.bold),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                    ),
+                    Text(
+                      genresString,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 10),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    genresString,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 10),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 

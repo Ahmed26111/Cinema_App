@@ -6,6 +6,8 @@ abstract class ColorsManager{
   static final Color primaryBlueAccentColorLessOpacity = Color.fromRGBO(18, 205, 217,0.3);
   static final Color primarySoftColor = Color(0xFF252836);
   static final Color primarySoftColorLessOpacity = Color.fromRGBO(37, 40, 54, 0.3);
+  static final Color primarySoftColorLessOpacityLinearGradientEnd = Color.fromRGBO(37, 40, 54, 0.01);
+  static final Color primarySoftColorLessOpacityLinearGradientStart = Color.fromRGBO(37, 40, 54, 0.5);
   static final Color whiteGreyColor = Color(0xFFEBEBEF);
   static final Color whiteColor = Color(0xFFFFFFFF);
   static final Color lineDarkColor = Color(0xFFEAEAEA);
