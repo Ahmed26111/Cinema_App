@@ -33,7 +33,7 @@ class DefaultDetailsMovieCardWidget extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(14),
                   child: (isDummy)
-                      ? Image.asset("images/circular_avatar.png", fit: BoxFit.cover, height: 180, width: 120)
+                      ? Image.asset("images/default_male_avatar.png", fit: BoxFit.cover, height: 180, width: 120)
                       : CachedNetworkImage(
                     imageUrl: "${ApiConstants.baseImageUrl}${movieModel.posterPathImage}",
                     fit: BoxFit.cover,

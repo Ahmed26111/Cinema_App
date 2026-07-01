@@ -20,5 +20,7 @@ abstract class ApiConstants{
   static final String topRatedDescending = dotenv.env['TopRatedDescending'] ?? "";
   static final String upComingDescending = dotenv.env['UpcomingDescending'] ?? "";
   static final String apiKey = dotenv.env['Api_key'] ?? "";
+  static final String movieCertificateEndPoint1 = dotenv.env['MovieCertificateEndPoint1'] ?? "";
+  static final String movieCertificateEndPoint2 = dotenv.env['MovieCertificateEndPoint2'] ?? "";
 
 }

@@ -66,7 +66,7 @@ class _DefaultListMoviesCardsWidgetState extends State<DefaultListMoviesCardsWid
                     topRight: Radius.circular(15)
                   ),
                   child: (widget.isDummy)
-                      ? Image.asset("images/circular_avatar.png", fit: BoxFit.cover, height: 230, width: 150)
+                      ? Image.asset("images/default_male_avatar.png", fit: BoxFit.cover, height: 230, width: 150)
                       : CachedNetworkImage(
                           imageUrl: "${ApiConstants.baseImageUrl}${movie.posterPathImage}",
                           fit: BoxFit.cover,

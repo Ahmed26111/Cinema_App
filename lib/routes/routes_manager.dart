@@ -4,8 +4,11 @@ import 'package:cinema_app/ui/core/layout/change_bottom_navigation_bar_index_cub
 import 'package:cinema_app/ui/core/layout/layout_screen.dart';
 import 'package:cinema_app/ui/create_new_password_screen/create_new_password_cubit.dart';
 import 'package:cinema_app/ui/create_new_password_screen/create_new_password_screen.dart';
+import 'package:cinema_app/ui/details_movie_screen/cast_cubit.dart';
 import 'package:cinema_app/ui/details_movie_screen/details_movie_cubit.dart';
 import 'package:cinema_app/ui/details_movie_screen/details_movie_screen.dart';
+import 'package:cinema_app/ui/details_movie_screen/movie_certification_cubit.dart';
+import 'package:cinema_app/ui/details_movie_screen/similar_movies_cubit.dart';
 import 'package:cinema_app/ui/forget_password_screen/forget_password_cubit.dart';
 import 'package:cinema_app/ui/forget_password_screen/forget_password_screen.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
@@ -236,8 +239,21 @@ abstract class RoutesManager {
           return CustomTransitionPage(
             key: state.pageKey,
             transitionDuration: Duration(milliseconds: 200),
-            child: BlocProvider(
-              create: (context) => DetailsMovieCubit()..getDetailsMovieModel(int.parse(state.pathParameters["movieId"] ?? "-1")),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => DetailsMovieCubit()..getDetailsMovieModel(int.parse(state.pathParameters["movieId"] ?? "-1")),
+                ),
+                BlocProvider(
+                  create: (context) => MovieCertificationCubit()..getMovieCertification(int.parse(state.pathParameters["movieId"] ?? "-1")),
+                ),
+                BlocProvider(
+                  create: (context) => CastCubit()..getCastsByMovieId(int.parse(state.pathParameters["movieId"] ?? "-1")),
+                ),
+                BlocProvider(
+                  create: (context) => SimilarMoviesCubit()..getSimilarMoviesByMovieId(int.parse(state.pathParameters["movieId"] ?? "-1")),
+                ),
+              ],
               child: DetailsMovieScreen(movieId: int.parse(state.pathParameters["movieId"] ?? "-1")),
             ),
             transitionsBuilder: (context, animation, secondaryAnimation,

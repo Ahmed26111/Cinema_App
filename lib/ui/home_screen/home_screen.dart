@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        leading: Image.asset("images/circular_avatar.png")
+        leading: Image.asset("images/default_male_avatar.png")
       ),
       body: SingleChildScrollView(
         child: Center(

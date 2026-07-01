@@ -142,4 +142,27 @@ class MovieRepository{
       throw Exception("Failed to get similar movies");
     }
   }
+
+  Future<String> getMovieCertification(int movieId) async {
+    var response = await dioHelper.getData(
+        path: ApiConstants.movieCertificateEndPoint1 + movieId.toString() + ApiConstants.movieCertificateEndPoint2,
+        query: {"api_key": ApiConstants.apiKey}
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 304) {
+      List results = response.data["results"];
+      // Find the US rating as a default
+      var usRating = results.firstWhere((e) => e["iso_3166_1"] == "US", orElse: () => results.first);
+
+      List<dynamic> usCertifications = usRating["release_dates"];
+
+      var usCertification = usCertifications.firstWhere((cert) => (cert["certification"] != "") , orElse: ()=> {"certification" : "G"});
+
+      return usCertification["certification"];
+    }
+    else{
+      throw Exception("Failed to load movie certification");
+    }
+  }
+
 }
