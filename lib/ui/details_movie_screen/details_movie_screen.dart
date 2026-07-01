@@ -5,10 +5,10 @@ import 'package:cinema_app/data/models/cast_model.dart';
 import 'package:cinema_app/data/models/company_model.dart';
 import 'package:cinema_app/data/models/genre_model.dart';
 import 'package:cinema_app/data/models/movie_model.dart';
-import 'package:cinema_app/ui/details_movie_screen/cast_cubit.dart';
-import 'package:cinema_app/ui/details_movie_screen/details_movie_cubit.dart';
-import 'package:cinema_app/ui/details_movie_screen/movie_certification_cubit.dart';
-import 'package:cinema_app/ui/details_movie_screen/similar_movies_cubit.dart';
+import 'package:cinema_app/ui/details_movie_screen/cast_cubit/cast_cubit.dart';
+import 'package:cinema_app/ui/details_movie_screen/details_movie_cubit/details_movie_cubit.dart';
+import 'package:cinema_app/ui/details_movie_screen/movie_certification_cubit/movie_certification_cubit.dart';
+import 'package:cinema_app/ui/details_movie_screen/similar_movies_cubit/similar_movies_cubit.dart';
 import 'package:cinema_app/utils/components/default_failed_to_load_widget.dart';
 import 'package:cinema_app/utils/components/default_list_movies_cards_widget.dart';
 import 'package:cinema_app/utils/components/default_movie_rate_container.dart';
@@ -255,7 +255,7 @@ class DetailsMovieScreen extends StatelessWidget {
                   ...[
                     FilledButton.icon(
                       onPressed: (){
-                        // TODO push to tickets screen
+                        context.push(RoutesConstants.ticketsReserveScreen , extra: movie);
                       },
                       label: Text("Buy Tickets") ,
                       icon: Icon(Icons.local_movies_sharp),

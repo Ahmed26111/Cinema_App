@@ -4,11 +4,11 @@ import 'package:cinema_app/ui/core/layout/change_bottom_navigation_bar_index_cub
 import 'package:cinema_app/ui/core/layout/layout_screen.dart';
 import 'package:cinema_app/ui/create_new_password_screen/create_new_password_cubit.dart';
 import 'package:cinema_app/ui/create_new_password_screen/create_new_password_screen.dart';
-import 'package:cinema_app/ui/details_movie_screen/cast_cubit.dart';
-import 'package:cinema_app/ui/details_movie_screen/details_movie_cubit.dart';
+import 'package:cinema_app/ui/details_movie_screen/cast_cubit/cast_cubit.dart';
+import 'package:cinema_app/ui/details_movie_screen/details_movie_cubit/details_movie_cubit.dart';
 import 'package:cinema_app/ui/details_movie_screen/details_movie_screen.dart';
-import 'package:cinema_app/ui/details_movie_screen/movie_certification_cubit.dart';
-import 'package:cinema_app/ui/details_movie_screen/similar_movies_cubit.dart';
+import 'package:cinema_app/ui/details_movie_screen/movie_certification_cubit/movie_certification_cubit.dart';
+import 'package:cinema_app/ui/details_movie_screen/similar_movies_cubit/similar_movies_cubit.dart';
 import 'package:cinema_app/ui/forget_password_screen/forget_password_cubit.dart';
 import 'package:cinema_app/ui/forget_password_screen/forget_password_screen.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
@@ -23,7 +23,10 @@ import 'package:cinema_app/ui/signup_screen/signup_screen.dart';
 import 'package:cinema_app/ui/splash_screen/get_active_user_cubit.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen1.dart';
 import 'package:cinema_app/ui/splash_screen/splash_screen.dart';
+import 'package:cinema_app/ui/tickets_reserve_screen/tickets_reserve_cubit/tickets_reserve_cubit.dart';
+import 'package:cinema_app/ui/tickets_reserve_screen/tickets_reserve_screen.dart';
 import 'package:cinema_app/utils/components/default_see_all_movies_widget.dart';
+import 'package:cinema_app/utils/shared/get_selected_date_time.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -269,6 +272,33 @@ abstract class RoutesManager {
               );
             },
           );
+        },
+      ),
+      GoRoute(
+        path: RoutesConstants.ticketsReserveScreen,
+        name: RoutesConstants.ticketsReserveScreen,
+        pageBuilder: (context, state) {
+          final MovieModel movie = state.extra as MovieModel;
+          final DateTime selectedDate = getSelectedDateTime(movie.releaseDate);
+          return CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: Duration(milliseconds: 200),
+          child: BlocProvider(
+            create: (context) => TicketsReserveCubit(selectedDate)..getSeats(movie.movieId),
+            child: TicketsReserveScreen(movieModel: movie),
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                ),
+                child: child,
+              ),
+            );
+          },
+        );
         },
       ),
     ],
