@@ -7,7 +7,7 @@ abstract class DefaultSnackBar {
     BuildContext context,
     String title,
     EdgeInsetsGeometry? margin,
-    [bool isLandscape = false]
+    [bool isLandscape = false,]
   ) {
     return SnackBar(
       content: Text(title, style: (isLandscape)? Theme.of(context).textTheme.titleLarge : Theme.of(context).textTheme.labelMedium),

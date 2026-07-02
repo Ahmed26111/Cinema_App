@@ -167,10 +167,9 @@ class DetailsMovieScreen extends StatelessWidget {
                     },
                     blendMode: BlendMode.dstATop,
                     child: CachedNetworkImage(
-                      imageUrl: '${ApiConstants.baseImageUrl}${movie
-                          .posterPathImage}',
+                      imageUrl: '${ApiConstants.baseImageUrl}${movie.posterPathImage}',
                       width: double.infinity,
-                      height: 550,
+                      height: ResponsiveSizeConstants.heightScreen(context) * 0.68,
                       fit: BoxFit.cover,
                       placeholder: (context, url) =>
                           Container(
@@ -475,54 +474,47 @@ class DetailsMovieScreen extends StatelessWidget {
         Text("Cast and Crew" , style: Theme.of(context).textTheme.displaySmall),
         SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.027,),
         SizedBox(
-          height: 130,
+          height: 150,
           width: double.infinity,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemBuilder: (BuildContext context, int index)=>SizedBox(
-              height: 130,
-              width: 180,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: "${ApiConstants.baseImageUrl}${casts[index].profileImagePath}",
-                    height: 100,
-                    width: 80,
-                    placeholder: (context, url) =>
-                        Container(
-                          color: ColorsManager.primarySoftColor,
-                          child: Center(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: ColorsManager.primaryBlueAccentColor,
-                              )
-                          ),
+            itemBuilder: (BuildContext context, int index)=>Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CachedNetworkImage(
+                  imageUrl: "${ApiConstants.baseImageUrl}${casts[index].profileImagePath}",
+                  height: 100,
+                  width: 80,
+                  placeholder: (context, url) =>
+                      Container(
+                        color: ColorsManager.primarySoftColor,
+                        child: Center(
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: ColorsManager.primaryBlueAccentColor,
+                            )
                         ),
-                    errorWidget: (context, url, error) =>
-                        Image.asset(
-                          (casts[index].gender == 0)
-                              ? "images/default_male_avatar.png"
-                              : "images/default_female_avatar.png",
-                          width: 80,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        ),
-                  ),
-                  SizedBox(width: 8,),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(casts[index].name , style: Theme.of(context).textTheme.labelMedium,overflow: TextOverflow.ellipsis,maxLines: 3,),
-                        Text(casts[index].characterName , style: Theme.of(context).textTheme.titleSmall,overflow: TextOverflow.ellipsis,maxLines: 3,),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                      ),
+                  errorWidget: (context, url, error) =>
+                      Image.asset(
+                        (casts[index].gender == 0)
+                            ? "images/default_male_avatar.png"
+                            : "images/default_female_avatar.png",
+                        width: 80,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                ),
+                SizedBox(height: 10,),
+                Expanded(
+                  child: Text(casts[index].name , style: Theme.of(context).textTheme.labelMedium,overflow: TextOverflow.ellipsis,maxLines: 3,),
+                ),
+                Expanded(
+                    child: Text(casts[index].characterName, style: Theme.of(context).textTheme.titleSmall, overflow: TextOverflow.ellipsis, maxLines: 3,)
+                ),
+              ],
             ),
-            separatorBuilder: (BuildContext context, int index)=>SizedBox(width: 8,),
+            separatorBuilder: (BuildContext context, int index)=>SizedBox(width: 20,),
             itemCount: casts.length,
           ),
         )
@@ -537,52 +529,48 @@ class DetailsMovieScreen extends StatelessWidget {
           Text("Production Company" , style: Theme.of(context).textTheme.displaySmall),
           SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.027,),
           SizedBox(
-            height: 80,
+            height: 130,
             width: double.infinity,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemBuilder: (BuildContext context, int index)=>SizedBox(
-                height: 80,
-                width: 200,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CachedNetworkImage(
-                      imageUrl: "${ApiConstants.baseImageUrl}${companies?[index].logoImagePath}",
-                      height: 80,
-                      width: 80,
-                      placeholder: (context, url) =>
-                          Container(
-                            color: ColorsManager.primarySoftColor,
-                            child: Center(
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: ColorsManager.primaryBlueAccentColor,
-                                )
-                            ),
+              itemBuilder: (BuildContext context, int index)=>Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: "${ApiConstants.baseImageUrl}${companies?[index].logoImagePath}",
+                    height: 80,
+                    width: 80,
+                    placeholder: (context, url) =>
+                        Container(
+                          color: ColorsManager.primarySoftColor,
+                          child: Center(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: ColorsManager.primaryBlueAccentColor,
+                              )
                           ),
-                      errorWidget: (context, url, error) =>
-                          Image.asset(
-                            "images/default_company_logo.png",
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.cover,
-                          ),
+                        ),
+                    errorWidget: (context, url, error) =>
+                        Image.asset(
+                          "images/default_company_logo.png",
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                        ),
+                  ),
+                  SizedBox(height: 10,),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(companies?[index].companyName??"unknown company" , style: Theme.of(context).textTheme.labelMedium,overflow: TextOverflow.ellipsis,maxLines: 3,),
+                        Text(companies?[index].originCountry??"unknown origin country" , style: Theme.of(context).textTheme.titleSmall,overflow: TextOverflow.ellipsis,maxLines: 3,),
+                      ],
                     ),
-                    SizedBox(width: 10,),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(companies?[index].companyName??"unknown company" , style: Theme.of(context).textTheme.labelMedium,overflow: TextOverflow.ellipsis,maxLines: 3,),
-                          Text(companies?[index].originCountry??"unknown origin country" , style: Theme.of(context).textTheme.titleSmall,overflow: TextOverflow.ellipsis,maxLines: 3,),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
-              separatorBuilder: (BuildContext context, int index)=>SizedBox(width: 10,),
+              separatorBuilder: (BuildContext context, int index)=>SizedBox(width: 20,),
               itemCount: companies?.length ?? 0,
             ),
           )

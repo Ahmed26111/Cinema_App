@@ -3,6 +3,7 @@ import 'package:cinema_app/constants/hall%20tickets%20enum/hall_enum.dart';
 import 'package:cinema_app/constants/period%20tickets%20enum/period_enum.dart';
 import 'package:cinema_app/constants/seat%20status%20enum/seat_status_enum.dart';
 import 'package:cinema_app/ui/tickets_reserve_screen/tickets_reserve_cubit/tickets_reserve_cubit.dart';
+import 'package:cinema_app/utils/shared/seats_utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,60 +19,8 @@ class SeatsCinemaWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 50,
-                child: Center(
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    children: List.generate(4, (index){
-                      return _getDefaultSeatIcon(state.seats[0][index].seatStatus, state.seats[0][index].seatNumber, context);
-                    }),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 50,
-                child: ListView(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  children: List.generate(6, (index){
-                      return _getDefaultSeatIcon(state.seats[1][index].seatStatus, state.seats[1][index].seatNumber, context);
-                  }),
-                ),
-              ),
-              SizedBox(
-                height: 50,
-                child: ListView(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  children: List.generate(8, (index){
-                    return _getDefaultSeatIcon(state.seats[2][index].seatStatus, state.seats[2][index].seatNumber, context);
-                  }),
-                ),
-              ),
-              SizedBox(
-                height: 50,
-                child: ListView(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  children: List.generate(6, (index){
-                    return _getDefaultSeatIcon(state.seats[3][index].seatStatus, state.seats[3][index].seatNumber, context);
-                  }),
-                ),
-              ),
-              SizedBox(
-                height: 50,
-                child: Center(
-                  child: ListView(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    children: List.generate(4, (index){
-                      return _getDefaultSeatIcon(state.seats[4][index].seatStatus, state.seats[4][index].seatNumber, context);
-                    }),
-                  ),
-                ),
-              ),
+              for(int i=0 ; i<5; i++)
+              _getRowSeatsWidget(i, context, state),
             ],
           ),
         );
@@ -98,6 +47,21 @@ class SeatsCinemaWidget extends StatelessWidget {
                 : ColorsManager.whiteColor,
             size: 25,
         ),
+    );
+  }
+
+  Widget _getRowSeatsWidget(int whichRow , BuildContext context , TicketsReserveState state){
+    return SizedBox(
+      height: 50,
+      child: Center(
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          children: List.generate(getSizeOfEachRow(whichRow), (index){
+            return _getDefaultSeatIcon(state.seats[whichRow][index].seatStatus, state.seats[whichRow][index].seatNumber, context);
+          }),
+        ),
+      ),
     );
   }
 }

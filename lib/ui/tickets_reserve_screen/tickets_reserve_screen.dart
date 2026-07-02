@@ -7,6 +7,9 @@ import 'package:cinema_app/data/models/movie_model.dart';
 import 'package:cinema_app/ui/tickets_reserve_screen/seats_cinema/seats_cinema_widget.dart';
 import 'package:cinema_app/ui/tickets_reserve_screen/tickets_reserve_cubit/tickets_reserve_cubit.dart';
 import 'package:cinema_app/utils/components/cinema_screen_widget.dart';
+import 'package:cinema_app/utils/components/failed_to_buy_tickets_snackbar.dart';
+import 'package:cinema_app/utils/components/seats_are_empty_snackbar.dart';
+import 'package:cinema_app/utils/components/tickets_are_bought_successfully_snackbar.dart';
 import 'package:cinema_app/utils/shared/get_selected_date_time.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +52,65 @@ class _TicketsReserveScreenState extends State<TicketsReserveScreen> {
           maxLines: 1,
         ),
       ),
-      body: BlocBuilder<TicketsReserveCubit, TicketsReserveState>(
+      body: BlocConsumer<TicketsReserveCubit, TicketsReserveState>(
+        listener: (context , state){
+          if(state is TicketsReserveChairsAreSelected){
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (dialogContext) => AlertDialog(
+                backgroundColor: ColorsManager.primarySoftColor,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 10),
+                    Text(
+                      "Are you sure you want to\nbuy these tickets?",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                  ],
+                ),
+                actionsAlignment: MainAxisAlignment.spaceEvenly,
+                actions: [
+                  // No Button
+                  TextButton(
+                    onPressed: () => Navigator.pop(dialogContext),
+                    child: Text(
+                      "No",
+                      style: TextStyle(color: ColorsManager.greyColor),
+                    ),
+                  ),
+                  // Yes Button
+                  FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: ColorsManager.primaryBlueAccentColor,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(dialogContext);
+                      context.read<TicketsReserveCubit>().buyTickets(
+                        widget.movieModel.movieId,
+                        widget.movieModel.movieTitle,
+                      );
+                    },
+                    child: const Text("Yes"),
+                  ),
+                ],
+              ),
+            );
+          }
+          else if(state is TicketsReserveAllChairsAreNotSelected){
+            ScaffoldMessenger.of(context).showSnackBar(SeatsAreEmptySnackBar.get(context));
+          }
+          else if(state is TicketsReserveBuyTicketsFailed){
+            ScaffoldMessenger.of(context).showSnackBar(FailedToBuyTicketsSnackBar.get(context));
+          }
+          else if(state is TicketsReserveBuyTicketsSuccessfully){
+            ScaffoldMessenger.of(context).showSnackBar(TicketsAreBoughtSuccessfullySnackBar.get(context));
+            context.pop();
+          }
+        },
         builder: (context, state) {
           return SingleChildScrollView(
             child: Center(
@@ -79,7 +140,7 @@ class _TicketsReserveScreenState extends State<TicketsReserveScreen> {
                             imageUrl: '${ApiConstants.baseImageUrl}${widget.movieModel
                                 .posterPathImage}',
                             width: double.infinity,
-                            height: 500,
+                            height: ResponsiveSizeConstants.heightScreen(context) * 0.625,
                             fit: BoxFit.cover,
                             placeholder: (context, url) =>
                                 Container(
@@ -274,51 +335,7 @@ class _TicketsReserveScreenState extends State<TicketsReserveScreen> {
   Widget _getBuyTicketButton(BuildContext context){
     return FilledButton(
       onPressed: (){
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (dialogContext) => AlertDialog(
-            backgroundColor: ColorsManager.primarySoftColor,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 10),
-                Text(
-                  "Are you sure you want to\nbuy these tickets?",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-              ],
-            ),
-            actionsAlignment: MainAxisAlignment.spaceEvenly,
-            actions: [
-              // No Button
-              TextButton(
-                onPressed: () => Navigator.pop(dialogContext),
-                child: Text(
-                  "No",
-                  style: TextStyle(color: ColorsManager.greyColor),
-                ),
-              ),
-              // Yes Button
-              FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: ColorsManager.primaryBlueAccentColor,
-                ),
-                onPressed: () {
-                  Navigator.pop(dialogContext);
-                  context.read<TicketsReserveCubit>().buyTickets(
-                    widget.movieModel.movieId,
-                    widget.movieModel.movieTitle,
-                  );
-                  context.pop();
-                },
-                child: const Text("Yes"),
-              ),
-            ],
-          ),
-        );
+        context.read<TicketsReserveCubit>().isAllChairsNotSelected();
       },
       style: FilledButton.styleFrom(
         backgroundColor: ColorsManager.primaryBlueAccentColor,

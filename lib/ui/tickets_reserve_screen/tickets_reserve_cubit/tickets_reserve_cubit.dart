@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:cinema_app/constants/period%20tickets%20enum/period_enum.dart';
 import 'package:cinema_app/constants/seat%20status%20enum/seat_status_enum.dart';
@@ -9,6 +11,7 @@ import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../constants/hall tickets enum/hall_enum.dart';
+import '../../../utils/shared/seats_utilities.dart';
 
 part 'tickets_reserve_state.dart';
 
@@ -130,34 +133,12 @@ class TicketsReserveCubit extends Cubit<TicketsReserveState> {
   List<List<SeatModel>> _getSeats(int movieId){
     getReservedSeats(movieId);
     return List.generate(5, (rowIndex){
-      return List.generate(_getSizeOfEachRow(rowIndex), (childIndex){
-        final String seatNumber = "${_getRowName(rowIndex)}$childIndex";
+      return List.generate(getSizeOfEachRow(rowIndex), (childIndex){
+        final String seatNumber = "${getRowName(rowIndex)}$childIndex";
         final bool isReserved = state.reservedSeats.contains(seatNumber);
         return SeatModel(seatStatus: (isReserved)?SeatStatusEnum.reserved:SeatStatusEnum.available, seatNumber: seatNumber);
       });
     });
-  }
-
-  int _getSizeOfEachRow(int rowNumber){
-    switch(rowNumber){
-      case 0 : return 4;
-      case 1 : return 6;
-      case 2 : return 8;
-      case 3 : return 6;
-      case 4 : return 4;
-      default: return -1;
-    }
-  }
-
-  String _getRowName(int rowNumber){
-    switch(rowNumber){
-      case 0 : return "A";
-      case 1 : return "B";
-      case 2 : return "C";
-      case 3 : return "D";
-      case 4 : return "E";
-      default: return "";
-    }
   }
 
   void changeTotalPrice(){
@@ -177,13 +158,51 @@ class TicketsReserveCubit extends Cubit<TicketsReserveState> {
     );
   }
 
+  void isAllChairsNotSelected(){
+    List<SeatModel> selectedSeats = [];
+    for (var rowSeats in state.seats) {
+      selectedSeats.addAll(rowSeats.where((seat) => seat.seatStatus == SeatStatusEnum.selected).toList());
+    }
+    if(selectedSeats.isEmpty){
+      emit(TicketsReserveAllChairsAreNotSelected(
+          selectedDate: state.selectedDate,
+          selectedPeriod: state.selectedPeriod,
+          selectedHall: state.selectedHall,
+          reservedSeats: state.reservedSeats,
+          seats: state.seats,
+          totalPrice: state.totalPrice
+      ));
+    }
+    else{
+      emit(TicketsReserveChairsAreSelected(
+          selectedDate: state.selectedDate,
+          selectedPeriod: state.selectedPeriod,
+          selectedHall: state.selectedHall,
+          reservedSeats: state.reservedSeats,
+          seats: state.seats,
+          totalPrice: state.totalPrice
+      ));
+    }
+  }
+
   void buyTickets(int movieId , String movieName){
     List<SeatModel> selectedSeats = [];
     for (var rowSeats in state.seats) {
       selectedSeats.addAll(rowSeats.where((seat) => seat.seatStatus == SeatStatusEnum.selected).toList());
     }
 
-    if(selectedSeats == [])return;
+    if(selectedSeats.isEmpty){
+      emit(TicketsReserveBuyTicketsFailed(
+        selectedDate: state.selectedDate,
+        selectedPeriod: state.selectedPeriod,
+        selectedHall: state.selectedHall,
+        reservedSeats: state.reservedSeats,
+        seats: state.seats,
+        totalPrice: state.totalPrice,
+      )
+      );
+      return;
+    }
 
     UserModel userModel = HiveHandler.getActiveUser()!;
 
@@ -198,10 +217,22 @@ class TicketsReserveCubit extends Cubit<TicketsReserveState> {
             time: state.selectedPeriod.periodTime,
             price: state.selectedPeriod.periodPrice,
             hallName: state.selectedHall.hallName
-        )
-    ).toList();
+        )).toList();
 
     List<TicketModel> oldReservedTickets = HiveHandler.getReservedTickets();
+
+    for (var value in oldReservedTickets) {
+      log("\n===================================\nTicket ID: ${value.ticketId}\nUser ID: ${value.userId}"
+          "\nMovie ID: ${value.movieId}"
+          "\nMovie Title: ${value.movieName}"
+          "\nSeat Number: ${value.seatNumber}"
+          "\nDate: ${value.date}"
+          "\nTime: ${value.time}"
+          "\nHall name: ${value.hallName}"
+          "\nPrice: ${value.price}"
+      );
+    }
+
     oldReservedTickets.addAll(tickets);
     HiveHandler.addAndUpdateReservedTickets(oldReservedTickets);
 

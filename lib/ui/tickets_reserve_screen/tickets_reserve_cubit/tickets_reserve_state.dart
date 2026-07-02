@@ -105,3 +105,36 @@ final class TicketsReserveBuyTicketsSuccessfully extends TicketsReserveState {
     required super.totalPrice,
   });
 }
+
+final class TicketsReserveBuyTicketsFailed extends TicketsReserveState {
+  const TicketsReserveBuyTicketsFailed({
+    required super.selectedDate,
+    required super.selectedPeriod,
+    required super.selectedHall,
+    required super.reservedSeats,
+    required super.seats,
+    required super.totalPrice,
+  });
+}
+
+final class TicketsReserveAllChairsAreNotSelected extends TicketsReserveState {
+  const TicketsReserveAllChairsAreNotSelected({
+    required super.selectedDate,
+    required super.selectedPeriod,
+    required super.selectedHall,
+    required super.reservedSeats,
+    required super.seats,
+    required super.totalPrice,
+  });
+}
+
+final class TicketsReserveChairsAreSelected extends TicketsReserveState {
+  const TicketsReserveChairsAreSelected({
+    required super.selectedDate,
+    required super.selectedPeriod,
+    required super.selectedHall,
+    required super.reservedSeats,
+    required super.seats,
+    required super.totalPrice,
+  });
+}
