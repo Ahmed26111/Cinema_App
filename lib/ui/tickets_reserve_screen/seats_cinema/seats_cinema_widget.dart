@@ -1,6 +1,7 @@
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/constants/hall%20tickets%20enum/hall_enum.dart';
 import 'package:cinema_app/constants/period%20tickets%20enum/period_enum.dart';
+import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
 import 'package:cinema_app/constants/seat%20status%20enum/seat_status_enum.dart';
 import 'package:cinema_app/ui/tickets_reserve_screen/tickets_reserve_cubit/tickets_reserve_cubit.dart';
 import 'package:cinema_app/utils/shared/seats_utilities.dart';
@@ -21,10 +22,31 @@ class SeatsCinemaWidget extends StatelessWidget {
             children: [
               for(int i=0 ; i<5; i++)
               _getRowSeatsWidget(i, context, state),
+              SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.015,),
+              _getSeatsInfoWidget(context),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _getSeatsInfoWidget(BuildContext context){
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.chair , color: ColorsManager.greyColor, size: 18,),
+        SizedBox(width: 8,),
+        Text("Available" , style: Theme.of(context).textTheme.titleSmall,),
+        SizedBox(width: 12,),
+        Icon(Icons.chair , color: ColorsManager.primaryBlueAccentColor, size: 18,),
+        SizedBox(width: 8,),
+        Text("Reserved" , style: Theme.of(context).textTheme.titleSmall,),
+        SizedBox(width: 12,),
+        Icon(Icons.chair , color: ColorsManager.whiteColor, size: 18,),
+        SizedBox(width: 8,),
+        Text("Selected" , style: Theme.of(context).textTheme.titleSmall,),
+      ],
     );
   }
 

@@ -13,7 +13,8 @@ class TicketAdapter extends TypeAdapter<TicketModel> {
         date: reader.read() as DateTime,
         time: reader.readString(),
         price: reader.readDouble(),
-        hallName: reader.readString()
+        hallName: reader.readString(),
+        moviePosterImage: reader.readString(),
     );
   }
 
@@ -31,6 +32,7 @@ class TicketAdapter extends TypeAdapter<TicketModel> {
     writer.writeString(obj.time);
     writer.writeDouble(obj.price);
     writer.writeString(obj.hallName);
+    writer.writeString(obj.moviePosterImage);
   }
 
 }

@@ -6,6 +6,8 @@ import 'package:cinema_app/ui/home_screen/get_upcoming_movies_state_management/g
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
 import 'package:cinema_app/ui/home_screen/home_state_management/home_cubit.dart';
 import 'package:cinema_app/ui/search_screen/search_screen.dart';
+import 'package:cinema_app/ui/tickets_screen/tickets_screen.dart';
+import 'package:cinema_app/ui/tickets_screen/tickets_state_management/tickets_cubit.dart';
 import 'package:cinema_app/utils/shared/hive_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +24,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
     MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => HomeCubit(),
+          create: (context) => HomeCubit(),
         ),
         BlocProvider(
           create: (context) => GetUpcomingMoviesCubit()..getUpComingMovies(),
@@ -33,16 +35,13 @@ class _LayoutScreenState extends State<LayoutScreen> {
       ],
       child: HomeScreen(),
     ),
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(
-            create: (context) => GetTopRatedMoviesCubit()..getTopRatedMovies(),
-        ),
-      ],
+    BlocProvider(
+      create: (context) => GetTopRatedMoviesCubit()..getTopRatedMovies(),
       child: SearchScreen(),
     ),
-    Center(
-      child: Text("Tickets", style: TextStyle(color: Colors.white)),
+    BlocProvider(
+        create: (context) => TicketsCubit()..getUserTickets(),
+        child: TicketsScreen(),
     ),
     Center(
       child: Column(
@@ -53,40 +52,21 @@ class _LayoutScreenState extends State<LayoutScreen> {
             onPressed: () {
               HiveHandler.deleteActiveUser();
             },
-            icon: Icon(Icons.logout , color: ColorsManager.whiteColor, size: 25,),
+            icon: Icon(
+              Icons.logout, color: ColorsManager.whiteColor, size: 25,),
           ),
         ],
       ),
     ),
   ];
 
-  late final PageController _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChangeBottomNavigationBarIndexCubit, ChangeBottomNavigationBarIndexState>(
       builder: (context, state) {
         return Scaffold(
-          body: Column(
-            children: [
-              Expanded(
-                child: PageView.builder(
-                    itemCount: screens.length,
-                    itemBuilder: (context , index) => screens[index],
-                    scrollDirection: Axis.horizontal,
-                    controller: _pageController,
-                    physics: NeverScrollableScrollPhysics(),
-                ),
-              ),
-            ],
-          ),
-          bottomNavigationBar: _getCustomBottomNavigationBar(state , context),
+          body: IndexedStack(index: state.index, children: screens),
+          bottomNavigationBar: _getCustomBottomNavigationBar(state, context),
         );
       },
     );
@@ -113,7 +93,6 @@ class _LayoutScreenState extends State<LayoutScreen> {
     bool isSelected = (state.index == index);
     return GestureDetector(
       onTap: () {
-        _pageController.animateToPage(index, duration: Duration(milliseconds: 200), curve: Curves.bounceInOut);
         context.read<ChangeBottomNavigationBarIndexCubit>().changeBottomNavigationBarIndex(index , screens.length);
       },
       child: AnimatedContainer(
@@ -152,9 +131,4 @@ class _LayoutScreenState extends State<LayoutScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _pageController.dispose();
-  }
 }

@@ -18,6 +18,7 @@ import 'package:cinema_app/ui/on_boarding_screen/onboarding_change_index_cubit.d
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_layout_screen.dart';
 import 'package:cinema_app/ui/search_result_screen/search_result_cubit.dart';
 import 'package:cinema_app/ui/search_result_screen/search_result_screen.dart';
+import 'package:cinema_app/ui/show_your_seat_screen/show_your_seat_screen.dart';
 import 'package:cinema_app/ui/signup_screen/signup_cubit.dart';
 import 'package:cinema_app/ui/signup_screen/signup_screen.dart';
 import 'package:cinema_app/ui/splash_screen/get_active_user_cubit.dart';
@@ -287,6 +288,28 @@ abstract class RoutesManager {
             create: (context) => TicketsReserveCubit(selectedDate)..getSeats(movie.movieId),
             child: TicketsReserveScreen(movieModel: movie),
           ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                ),
+                child: child,
+              ),
+            );
+          },
+        );
+        },
+      ),
+      GoRoute(
+        path: RoutesConstants.showYourSeatScreenUrl,
+        name: RoutesConstants.showYourSeatScreenName,
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: Duration(milliseconds: 200),
+          child: ShowYourSeatScreen(moviePosterImage: state.pathParameters["moviePosterImage"] ?? "", movieTitle: state.pathParameters["movieTitle"] ?? "" , seatNumber: state.pathParameters["seatNumber"] ?? "",),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: CurveTween(curve: Curves.easeInOut).animate(animation),

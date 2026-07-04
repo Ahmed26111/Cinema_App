@@ -3,6 +3,7 @@ class TicketModel {
   final String userId;
   final int movieId;
   final String movieName;
+  final String moviePosterImage;
   final String seatNumber;
   final DateTime date;
   final String time;
@@ -14,6 +15,7 @@ class TicketModel {
     required this.userId,
     required this.movieId,
     required this.movieName,
+    required this.moviePosterImage,
     required this.seatNumber,
     required this.date,
     required this.time,
@@ -22,7 +24,7 @@ class TicketModel {
   });
 
   TicketModel copyWith(
-      {String ? ticketId , String ? userId, int ? movieId, String ? movieName, String? seatNumber, DateTime? date, String ? time, double ? price, String ? hallName}) {
+      {String ? ticketId , String ? userId, int ? movieId, String ? movieName, String? seatNumber, DateTime? date, String ? time, double ? price, String ? hallName , String ? moviePosterImage}) {
     return TicketModel(
         ticketId: ticketId ?? this.ticketId,
         userId: userId ?? this.userId,
@@ -33,6 +35,7 @@ class TicketModel {
         time: time ?? this.time,
         price: price ?? this.price,
         hallName: hallName ?? this.hallName ,
+        moviePosterImage: moviePosterImage ?? this.moviePosterImage,
     );
   }
 
@@ -45,7 +48,9 @@ class TicketModel {
         date: DateTime.now(),
         time: "",
         price: 0.0,
-        hallName: "");
+        hallName: "",
+        moviePosterImage: "",
+    );
   }
 
 }

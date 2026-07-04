@@ -6,6 +6,7 @@ import 'package:cinema_app/constants/period%20tickets%20enum/period_enum.dart';
 import 'package:cinema_app/data/models/movie_model.dart';
 import 'package:cinema_app/ui/tickets_reserve_screen/seats_cinema/seats_cinema_widget.dart';
 import 'package:cinema_app/ui/tickets_reserve_screen/tickets_reserve_cubit/tickets_reserve_cubit.dart';
+import 'package:cinema_app/ui/tickets_screen/tickets_state_management/tickets_cubit.dart';
 import 'package:cinema_app/utils/components/cinema_screen_widget.dart';
 import 'package:cinema_app/utils/components/failed_to_buy_tickets_snackbar.dart';
 import 'package:cinema_app/utils/components/seats_are_empty_snackbar.dart';
@@ -92,6 +93,7 @@ class _TicketsReserveScreenState extends State<TicketsReserveScreen> {
                       context.read<TicketsReserveCubit>().buyTickets(
                         widget.movieModel.movieId,
                         widget.movieModel.movieTitle,
+                        widget.movieModel.posterPathImage ?? "",
                       );
                     },
                     child: const Text("Yes"),
@@ -100,16 +102,21 @@ class _TicketsReserveScreenState extends State<TicketsReserveScreen> {
               ),
             );
           }
+
           else if(state is TicketsReserveAllChairsAreNotSelected){
             ScaffoldMessenger.of(context).showSnackBar(SeatsAreEmptySnackBar.get(context));
           }
+
           else if(state is TicketsReserveBuyTicketsFailed){
             ScaffoldMessenger.of(context).showSnackBar(FailedToBuyTicketsSnackBar.get(context));
           }
+
           else if(state is TicketsReserveBuyTicketsSuccessfully){
             ScaffoldMessenger.of(context).showSnackBar(TicketsAreBoughtSuccessfullySnackBar.get(context));
+            context.read<TicketsCubit>().getUserTickets();
             context.pop();
           }
+
         },
         builder: (context, state) {
           return SingleChildScrollView(
@@ -188,9 +195,9 @@ class _TicketsReserveScreenState extends State<TicketsReserveScreen> {
                     CinemaScreenWidget(),
                     SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.01,),
                     _getSeatsWidget(),
-                    SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.01,),
-                    _getTotalPrice(state, context),
                     SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.02,),
+                    _getTotalPrice(state, context),
+                    SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.025,),
                     _getBuyTicketButton(context),
                   ],
                 ),

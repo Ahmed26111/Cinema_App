@@ -185,7 +185,7 @@ class TicketsReserveCubit extends Cubit<TicketsReserveState> {
     }
   }
 
-  void buyTickets(int movieId , String movieName){
+  void buyTickets(int movieId , String movieName , String moviePosterImage){
     List<SeatModel> selectedSeats = [];
     for (var rowSeats in state.seats) {
       selectedSeats.addAll(rowSeats.where((seat) => seat.seatStatus == SeatStatusEnum.selected).toList());
@@ -216,22 +216,11 @@ class TicketsReserveCubit extends Cubit<TicketsReserveState> {
             date: state.selectedDate,
             time: state.selectedPeriod.periodTime,
             price: state.selectedPeriod.periodPrice,
-            hallName: state.selectedHall.hallName
+            hallName: state.selectedHall.hallName,
+            moviePosterImage: moviePosterImage,
         )).toList();
 
     List<TicketModel> oldReservedTickets = HiveHandler.getReservedTickets();
-
-    for (var value in oldReservedTickets) {
-      log("\n===================================\nTicket ID: ${value.ticketId}\nUser ID: ${value.userId}"
-          "\nMovie ID: ${value.movieId}"
-          "\nMovie Title: ${value.movieName}"
-          "\nSeat Number: ${value.seatNumber}"
-          "\nDate: ${value.date}"
-          "\nTime: ${value.time}"
-          "\nHall name: ${value.hallName}"
-          "\nPrice: ${value.price}"
-      );
-    }
 
     oldReservedTickets.addAll(tickets);
     HiveHandler.addAndUpdateReservedTickets(oldReservedTickets);
