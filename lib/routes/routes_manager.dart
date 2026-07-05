@@ -16,6 +16,7 @@ import 'package:cinema_app/ui/login_screen/login_cubit.dart';
 import 'package:cinema_app/ui/login_screen/login_screen.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_change_index_cubit.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_layout_screen.dart';
+import 'package:cinema_app/ui/profile_screen/profile_state_management/profile_cubit.dart';
 import 'package:cinema_app/ui/search_result_screen/search_result_cubit.dart';
 import 'package:cinema_app/ui/search_result_screen/search_result_screen.dart';
 import 'package:cinema_app/ui/show_your_seat_screen/show_your_seat_screen.dart';
@@ -100,6 +101,9 @@ abstract class RoutesManager {
               ),
               BlocProvider(
                 create: (context) => GetPopularMoviesCubit()..getPopularMovies(),
+              ),
+              BlocProvider(
+                create: (context) => ProfileCubit()..getActiveUser(),
               ),
             ],
             child: LayoutScreen(),
