@@ -32,6 +32,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../ui/home_screen/get_popular_movies_state_management/get_popular_movies_cubit.dart';
+import '../ui/home_screen/get_top_rated_movies_state_management/get_top_rated_movies_cubit.dart';
+import '../ui/home_screen/get_upcoming_movies_state_management/get_upcoming_movies_cubit.dart';
+import '../ui/home_screen/home_state_management/home_cubit.dart';
+import '../ui/tickets_screen/tickets_state_management/tickets_cubit.dart';
+
 abstract class RoutesManager {
   static final GoRouter routes = GoRouter(
     initialLocation: RoutesConstants.splashScreen,
@@ -75,8 +81,27 @@ abstract class RoutesManager {
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           transitionDuration: Duration(milliseconds: 700),
-          child: BlocProvider(
-            create: (context) => ChangeBottomNavigationBarIndexCubit(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => ChangeBottomNavigationBarIndexCubit(),
+              ),
+              BlocProvider(
+                create: (context) => TicketsCubit()..getUserTickets(),
+              ),
+              BlocProvider(
+                create: (context) => GetTopRatedMoviesCubit()..getTopRatedMovies(),
+              ),
+              BlocProvider(
+                create: (context) => HomeCubit(),
+              ),
+              BlocProvider(
+                create: (context) => GetUpcomingMoviesCubit()..getUpComingMovies(),
+              ),
+              BlocProvider(
+                create: (context) => GetPopularMoviesCubit()..getPopularMovies(),
+              ),
+            ],
             child: LayoutScreen(),
           ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {

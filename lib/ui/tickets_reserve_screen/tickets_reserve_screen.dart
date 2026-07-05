@@ -113,8 +113,8 @@ class _TicketsReserveScreenState extends State<TicketsReserveScreen> {
 
           else if(state is TicketsReserveBuyTicketsSuccessfully){
             ScaffoldMessenger.of(context).showSnackBar(TicketsAreBoughtSuccessfullySnackBar.get(context));
-            context.read<TicketsCubit>().getUserTickets();
             context.pop();
+            context.read<TicketsCubit>().getUserTickets();
           }
 
         },

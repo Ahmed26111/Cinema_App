@@ -2,6 +2,7 @@ import 'package:cinema_app/constants/responsive%20size%20contants/responsive_siz
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/data/models/ticket/ticket_model.dart';
 import 'package:cinema_app/ui/tickets_screen/tickets_state_management/tickets_cubit.dart';
+import 'package:cinema_app/utils/components/default_empty_list_widget.dart';
 import 'package:cinema_app/utils/components/default_failed_to_load_widget.dart';
 import 'package:cinema_app/utils/components/ticket_container_widget.dart';
 import 'package:date_format/date_format.dart';
@@ -43,6 +44,19 @@ class TicketsScreen extends StatelessWidget {
                         _getTicketsInfo(context, TicketModel.placeHolder()),
                     ],
                   ),
+                ),
+              );
+            }
+            case TicketsEmpty() : {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    DefaultEmptyListWidget(
+                        message: "There is no tickets yet!",
+                        helpMessage: "book a ticket for best movies now",
+                    ),
+                  ],
                 ),
               );
             }
@@ -226,6 +240,7 @@ class TicketsScreen extends StatelessWidget {
       },
       child: TicketContainerWidget(
         height: ResponsiveSizeConstants.heightScreen(context)*0.1875,
+        color: ColorsManager.lineDarkColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

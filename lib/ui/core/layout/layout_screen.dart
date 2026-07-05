@@ -5,6 +5,7 @@ import 'package:cinema_app/ui/home_screen/get_top_rated_movies_state_management/
 import 'package:cinema_app/ui/home_screen/get_upcoming_movies_state_management/get_upcoming_movies_cubit.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
 import 'package:cinema_app/ui/home_screen/home_state_management/home_cubit.dart';
+import 'package:cinema_app/ui/profile_screen/profile_screen.dart';
 import 'package:cinema_app/ui/search_screen/search_screen.dart';
 import 'package:cinema_app/ui/tickets_screen/tickets_screen.dart';
 import 'package:cinema_app/ui/tickets_screen/tickets_state_management/tickets_cubit.dart';
@@ -21,43 +22,10 @@ class LayoutScreen extends StatefulWidget {
 
 class _LayoutScreenState extends State<LayoutScreen> {
   final List<Widget> screens = [
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => HomeCubit(),
-        ),
-        BlocProvider(
-          create: (context) => GetUpcomingMoviesCubit()..getUpComingMovies(),
-        ),
-        BlocProvider(
-          create: (context) => GetPopularMoviesCubit()..getPopularMovies(),
-        ),
-      ],
-      child: HomeScreen(),
-    ),
-    BlocProvider(
-      create: (context) => GetTopRatedMoviesCubit()..getTopRatedMovies(),
-      child: SearchScreen(),
-    ),
-    BlocProvider(
-        create: (context) => TicketsCubit()..getUserTickets(),
-        child: TicketsScreen(),
-    ),
-    Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Profile", style: TextStyle(color: Colors.white)),
-          IconButton(
-            onPressed: () {
-              HiveHandler.deleteActiveUser();
-            },
-            icon: Icon(
-              Icons.logout, color: ColorsManager.whiteColor, size: 25,),
-          ),
-        ],
-      ),
-    ),
+    HomeScreen(),
+    SearchScreen(),
+    TicketsScreen(),
+    ProfileScreen(),
   ];
 
   @override
@@ -94,6 +62,10 @@ class _LayoutScreenState extends State<LayoutScreen> {
     return GestureDetector(
       onTap: () {
         context.read<ChangeBottomNavigationBarIndexCubit>().changeBottomNavigationBarIndex(index , screens.length);
+        // If user clicked the "Tickets" tab (index 2)
+        if (index == 2) {
+          context.read<TicketsCubit>().getUserTickets();
+        }
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 700),

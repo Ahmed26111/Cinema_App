@@ -229,6 +229,7 @@ class TicketsReserveCubit extends Cubit<TicketsReserveState> {
     oldUserTickets.addAll(tickets);
     userModel = userModel.copyWith(tickets: oldUserTickets);
     HiveHandler.addAndUpdateActiveUser(userModel);
+    HiveHandler.addAndUpdateUsers(userModel);
 
     emit(TicketsReserveBuyTicketsSuccessfully(
         selectedDate: state.selectedDate,

@@ -16,7 +16,11 @@ class TicketsCubit extends Cubit<TicketsState> {
       UserModel ? activeUser = HiveHandler.getActiveUser();
       if(activeUser != null){
         List<TicketModel> tickets = activeUser.tickets;
-        emit(TicketsSuccess(tickets: tickets));
+        if(tickets.isEmpty){
+          emit(TicketsEmpty());
+        }else{
+          emit(TicketsSuccess(tickets: tickets));
+        }
       }
       else{
         throw Exception("Failed to get your tickets");
