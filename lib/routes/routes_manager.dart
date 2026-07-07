@@ -1,5 +1,6 @@
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/data/models/movie/movie_model.dart';
+import 'package:cinema_app/ui/about_us_screen/about_us_screen.dart';
 import 'package:cinema_app/ui/core/layout/change_bottom_navigation_bar_index_cubit.dart';
 import 'package:cinema_app/ui/core/layout/layout_screen.dart';
 import 'package:cinema_app/ui/create_new_password_screen/create_new_password_cubit.dart';
@@ -15,6 +16,7 @@ import 'package:cinema_app/ui/favourite_movies_screen/favourite_movies_screen.da
 import 'package:cinema_app/ui/forget_password_screen/forget_password_cubit.dart';
 import 'package:cinema_app/ui/forget_password_screen/forget_password_screen.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
+import 'package:cinema_app/ui/legal_and_policies_screen/legal_and_policies_screen.dart';
 import 'package:cinema_app/ui/login_screen/login_cubit.dart';
 import 'package:cinema_app/ui/login_screen/login_screen.dart';
 import 'package:cinema_app/ui/on_boarding_screen/onboarding_change_index_cubit.dart';
@@ -408,6 +410,50 @@ abstract class RoutesManager {
           key: state.pageKey,
           transitionDuration: Duration(milliseconds: 200),
           child: WatchListMoviesScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                ),
+                child: child,
+              ),
+            );
+          },
+        );
+        },
+      ),
+      GoRoute(
+        path: RoutesConstants.legalAndPoliciesScreen,
+        name: RoutesConstants.legalAndPoliciesScreen,
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: Duration(milliseconds: 200),
+          child: LegalAndPoliciesScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                ),
+                child: child,
+              ),
+            );
+          },
+        );
+        },
+      ),
+      GoRoute(
+        path: RoutesConstants.aboutUsScreen,
+        name: RoutesConstants.aboutUsScreen,
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: Duration(milliseconds: 200),
+          child: AboutUsScreen(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: CurveTween(curve: Curves.easeInOut).animate(animation),

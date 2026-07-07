@@ -10,6 +10,7 @@ import 'package:cinema_app/utils/components/default_user_authentication_filled_b
 import 'package:cinema_app/utils/components/default_user_authentication_screen.dart';
 import 'package:cinema_app/utils/components/failed_to_add_new_user_snack_bar.dart';
 import 'package:cinema_app/utils/shared/validation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -169,36 +170,43 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  Column _getAgreeTermConditionRichText(BuildContext context , bool isLandscape) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text(
-              "I agree to the",
-              style: (isLandscape)? Theme.of(context).textTheme.bodySmall : Theme.of(context).textTheme.titleSmall,
-            ),
-            Text(
-              " Terms and Services",
-              style: (isLandscape)? Theme.of(context).textTheme.headlineMedium : Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Text(
-              " and",
-              style: (isLandscape)? Theme.of(context).textTheme.bodySmall : Theme.of(context).textTheme.titleSmall,
-            ),
-            Text(
-              " Privacy Policy",
-              style: (isLandscape)? Theme.of(context).textTheme.headlineMedium : Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
-      ],
+  Widget _getAgreeTermConditionRichText(BuildContext context, bool isLandscape) {
+    // Determine the styles based on orientation
+    final TextStyle? normalStyle = isLandscape
+        ? Theme.of(context).textTheme.bodySmall
+        : Theme.of(context).textTheme.titleSmall;
+
+    final TextStyle? linkStyle = isLandscape
+        ? Theme.of(context).textTheme.headlineMedium
+        : Theme.of(context).textTheme.bodyMedium;
+
+    return RichText(
+      text: TextSpan(
+        style: normalStyle,
+        children: [
+          const TextSpan(text: "I agree to the"),
+          TextSpan(
+            text: " Terms and Services",
+            style: linkStyle,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                context.pushNamed(RoutesConstants.legalAndPoliciesScreen);
+              },
+          ),
+          const TextSpan(text: " and"),
+          TextSpan(
+            text: " Privacy Policy",
+            style: linkStyle,
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                context.pushNamed(RoutesConstants.legalAndPoliciesScreen);
+              },
+          ),
+        ],
+      ),
     );
   }
+
   String? _getNameValidator(String? text) {
     if (text == null || text.trim().isEmpty) {
       return "This Field is required";

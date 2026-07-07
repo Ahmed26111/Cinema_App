@@ -18,4 +18,6 @@ abstract class RoutesConstants{
   static final String editProfileScreen = "/editProfileScreen";
   static final String favouriteMoviesScreen = "/favouriteMoviesScreen";
   static final String watchListMoviesScreen = "/watchListMoviesScreen";
+  static final String legalAndPoliciesScreen = "/legalAndPoliciesScreen";
+  static final String aboutUsScreen = "/aboutUsScreen";
 }

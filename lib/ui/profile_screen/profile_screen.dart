@@ -116,6 +116,52 @@ class ProfileScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text("Account" , style: Theme.of(context).textTheme.displaySmall,),
+                            SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.02,),
+                            ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: ColorsManager.primarySoftColor,
+                                radius: 20,
+                                child: Icon(Icons.lock_outline , color: ColorsManager.greyColor,size: 25,),
+                              ),
+                              title: Text("Change Password" , style: Theme.of(context).textTheme.labelMedium,),
+                              trailing: IconButton(
+                                onPressed: (){
+                                  // Todo push to change password screen
+                                },
+                                icon: Icon(Icons.arrow_forward_ios_rounded),
+                                iconSize: 20,
+                                color: ColorsManager.primaryBlueAccentColor,
+                              ),
+                            ),
+                            SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.005,),
+                            Divider(color: ColorsManager.primarySoftColor, indent: 14, endIndent: 30,),
+                            SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.005,),
+                            ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: ColorsManager.primarySoftColor,
+                                radius: 20,
+                                child: Icon(Icons.person_remove , color: ColorsManager.greyColor,size: 25,),
+                              ),
+                              title: Text("Delete Account" , style: Theme.of(context).textTheme.labelMedium,),
+                              trailing: IconButton(
+                                onPressed: (){
+                                  // Todo push to delete Account
+                                },
+                                icon: Icon(Icons.arrow_forward_ios_rounded),
+                                iconSize: 20,
+                                color: ColorsManager.primaryBlueAccentColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                      SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.01,),
+                      _getDefaultCardInfo(Padding(
+                        padding: const EdgeInsets.only(left: 14 , top: 24 ,bottom: 24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                             Text("More" , style: Theme.of(context).textTheme.displaySmall,),
                             SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.02,),
                             ListTile(
@@ -127,7 +173,7 @@ class ProfileScreen extends StatelessWidget {
                               title: Text("Legal and Policies" , style: Theme.of(context).textTheme.labelMedium,),
                               trailing: IconButton(
                                 onPressed: (){
-                                  // TODO push to Legal and Policies screen
+                                  context.pushNamed(RoutesConstants.legalAndPoliciesScreen);
                                 },
                                 icon: Icon(Icons.arrow_forward_ios_rounded),
                                 iconSize: 20,
@@ -146,7 +192,7 @@ class ProfileScreen extends StatelessWidget {
                               title: Text("About Us" , style: Theme.of(context).textTheme.labelMedium,),
                               trailing: IconButton(
                                 onPressed: (){
-                                  // TODO push to About Us screen
+                                  context.pushNamed(RoutesConstants.aboutUsScreen);
                                 },
                                 icon: Icon(Icons.arrow_forward_ios_rounded),
                                 iconSize: 20,
