@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
-import 'package:cinema_app/data/models/movie_model.dart';
+import 'package:cinema_app/data/models/movie/movie_model.dart';
 import 'package:cinema_app/utils/components/default_movie_rate_container.dart';
 import 'package:cinema_app/utils/shared/conversion.dart';
 import 'package:flutter/material.dart';

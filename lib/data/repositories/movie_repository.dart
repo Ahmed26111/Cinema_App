@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cinema_app/constants/api%20constants/api_constants.dart';
 import 'package:cinema_app/constants/movie%20genre%20enum/movie_genre_enum.dart';
 import 'package:cinema_app/data/models/cast_model.dart';
-import 'package:cinema_app/data/models/movie_model.dart';
+import 'package:cinema_app/data/models/movie/movie_model.dart';
 import 'package:cinema_app/data/services/dio_helper.dart';
 import 'package:cinema_app/utils/shared/conversion.dart';
 

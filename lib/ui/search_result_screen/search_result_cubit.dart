@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:cinema_app/data/models/movie_model.dart';
+import 'package:cinema_app/data/models/movie/movie_model.dart';
 import 'package:cinema_app/data/repositories/movie_repository.dart';
 import 'package:cinema_app/data/services/dio_helper.dart';
 import 'package:cinema_app/utils/shared/debouncer.dart';

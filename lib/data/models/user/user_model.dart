@@ -1,23 +1,25 @@
+import 'package:cinema_app/data/models/movie/movie_model.dart';
 import 'package:cinema_app/data/models/ticket/ticket_model.dart';
+import 'package:equatable/equatable.dart';
 
-class UserModel {
+class UserModel extends Equatable{
   final String firstName;
   final String lastName;
   final String email;
   final String password;
   final String userId;
-  final List<int> favouritesMoviesIds;
-  final List<int> watchListMoviesIds;
+  final List<MovieModel> favouritesMovies;
+  final List<MovieModel> watchListMovies;
   final List<TicketModel> tickets;
 
-  UserModel({
+  const UserModel({
     required this.firstName,
     required this.lastName,
     required this.email,
     required this.password,
     required this.userId,
-    required this.favouritesMoviesIds,
-    required this.watchListMoviesIds,
+    required this.favouritesMovies,
+    required this.watchListMovies,
     required this.tickets,
   });
 
@@ -27,8 +29,8 @@ class UserModel {
     String? email,
     String? password,
     String? userId,
-    List<int>? favouritesMoviesIds,
-    List<int>? watchListMoviesIds,
+    List<MovieModel>? favouritesMovies,
+    List<MovieModel>? watchListMovies,
     List<TicketModel>? tickets,
   }) {
     return UserModel(
@@ -37,8 +39,8 @@ class UserModel {
       email: email??this.email,
       password: password??this.password,
       userId: userId??this.userId,
-      favouritesMoviesIds: favouritesMoviesIds??this.favouritesMoviesIds,
-      watchListMoviesIds: watchListMoviesIds??this.watchListMoviesIds,
+      favouritesMovies: favouritesMovies??this.favouritesMovies,
+      watchListMovies: watchListMovies??this.watchListMovies,
       tickets: tickets??this.tickets,
     );
   }
@@ -49,9 +51,13 @@ class UserModel {
         email: "",
         password: "",
         userId: "",
-        favouritesMoviesIds: <int>[],
-        watchListMoviesIds: <int>[],
+        favouritesMovies: <MovieModel>[],
+        watchListMovies: <MovieModel>[],
         tickets: <TicketModel>[]);
   }
+
+  @override
+  List<Object?> get props => [userId];
+
 
 }

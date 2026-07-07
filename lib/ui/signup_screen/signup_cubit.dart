@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cinema_app/data/models/movie/movie_model.dart';
 import 'package:cinema_app/data/models/ticket/ticket_model.dart';
 import 'package:cinema_app/data/models/user/user_model.dart';
 import 'package:cinema_app/data/repositories/validation_repository.dart';
@@ -27,8 +28,8 @@ class SignupCubit extends Cubit<SignupState> {
           email: email,
           password: password,
           userId: userId,
-          favouritesMoviesIds: <int>[],
-          watchListMoviesIds: <int>[],
+          favouritesMovies: <MovieModel>[],
+          watchListMovies: <MovieModel>[],
           tickets: <TicketModel>[]
       );
       HiveHandler.addAndUpdateUsers(userModel);

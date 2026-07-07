@@ -1,3 +1,4 @@
+import 'package:cinema_app/data/models/movie/movie_model.dart';
 import 'package:cinema_app/data/models/ticket/ticket_model.dart';
 import 'package:cinema_app/data/models/user/user_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -11,8 +12,8 @@ class UserAdapter extends TypeAdapter<UserModel> {
         email: reader.readString(),
         password: reader.readString(),
         userId: reader.readString(),
-        favouritesMoviesIds: reader.readIntList().cast<int>(),
-        watchListMoviesIds: reader.readIntList().cast<int>(),
+        favouritesMovies: reader.readList().cast<MovieModel>(),
+        watchListMovies: reader.readList().cast<MovieModel>(),
         tickets: reader.readList().cast<TicketModel>(),
     );
   }
@@ -27,8 +28,8 @@ class UserAdapter extends TypeAdapter<UserModel> {
     writer.writeString(obj.email);
     writer.writeString(obj.password);
     writer.writeString(obj.userId);
-    writer.writeIntList(obj.favouritesMoviesIds);
-    writer.writeIntList(obj.watchListMoviesIds);
+    writer.writeList(obj.favouritesMovies);
+    writer.writeList(obj.watchListMovies);
     writer.writeList(obj.tickets);
   }
 

@@ -1,5 +1,5 @@
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
-import 'package:cinema_app/data/models/movie_model.dart';
+import 'package:cinema_app/data/models/movie/movie_model.dart';
 import 'package:cinema_app/ui/core/layout/change_bottom_navigation_bar_index_cubit.dart';
 import 'package:cinema_app/ui/core/layout/layout_screen.dart';
 import 'package:cinema_app/ui/create_new_password_screen/create_new_password_cubit.dart';
@@ -9,6 +9,9 @@ import 'package:cinema_app/ui/details_movie_screen/details_movie_cubit/details_m
 import 'package:cinema_app/ui/details_movie_screen/details_movie_screen.dart';
 import 'package:cinema_app/ui/details_movie_screen/movie_certification_cubit/movie_certification_cubit.dart';
 import 'package:cinema_app/ui/details_movie_screen/similar_movies_cubit/similar_movies_cubit.dart';
+import 'package:cinema_app/ui/edit_profile_screen/edit_profile_screen.dart';
+import 'package:cinema_app/ui/edit_profile_screen/edit_profile_state_management/edit_profile_cubit.dart';
+import 'package:cinema_app/ui/favourite_movies_screen/favourite_movies_screen.dart';
 import 'package:cinema_app/ui/forget_password_screen/forget_password_cubit.dart';
 import 'package:cinema_app/ui/forget_password_screen/forget_password_screen.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
@@ -27,12 +30,15 @@ import 'package:cinema_app/ui/on_boarding_screen/onboarding_screen1.dart';
 import 'package:cinema_app/ui/splash_screen/splash_screen.dart';
 import 'package:cinema_app/ui/tickets_reserve_screen/tickets_reserve_cubit/tickets_reserve_cubit.dart';
 import 'package:cinema_app/ui/tickets_reserve_screen/tickets_reserve_screen.dart';
+import 'package:cinema_app/ui/watch_list_movies_screen/watch_list_movies_screen.dart';
+import 'package:cinema_app/ui/watch_list_movies_screen/watch_list_movies_state_management/watch_list_movies_cubit.dart';
 import 'package:cinema_app/utils/components/default_see_all_movies_widget.dart';
 import 'package:cinema_app/utils/shared/get_selected_date_time.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../ui/favourite_movies_screen/favourite_movies_state_management/favourite_movies_cubit.dart';
 import '../ui/home_screen/get_popular_movies_state_management/get_popular_movies_cubit.dart';
 import '../ui/home_screen/get_top_rated_movies_state_management/get_top_rated_movies_cubit.dart';
 import '../ui/home_screen/get_upcoming_movies_state_management/get_upcoming_movies_cubit.dart';
@@ -94,16 +100,10 @@ abstract class RoutesManager {
                 create: (context) => GetTopRatedMoviesCubit()..getTopRatedMovies(),
               ),
               BlocProvider(
-                create: (context) => HomeCubit(),
-              ),
-              BlocProvider(
                 create: (context) => GetUpcomingMoviesCubit()..getUpComingMovies(),
               ),
               BlocProvider(
                 create: (context) => GetPopularMoviesCubit()..getPopularMovies(),
-              ),
-              BlocProvider(
-                create: (context) => ProfileCubit()..getActiveUser(),
               ),
             ],
             child: LayoutScreen(),
@@ -339,6 +339,75 @@ abstract class RoutesManager {
           key: state.pageKey,
           transitionDuration: Duration(milliseconds: 200),
           child: ShowYourSeatScreen(moviePosterImage: state.pathParameters["moviePosterImage"] ?? "", movieTitle: state.pathParameters["movieTitle"] ?? "" , seatNumber: state.pathParameters["seatNumber"] ?? "",),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                ),
+                child: child,
+              ),
+            );
+          },
+        );
+        },
+      ),
+      GoRoute(
+        path: RoutesConstants.editProfileScreen,
+        name: RoutesConstants.editProfileScreen,
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: Duration(milliseconds: 200),
+          child: BlocProvider(
+            create: (context) => EditProfileCubit(),
+            child: EditProfileScreen(),
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                ),
+                child: child,
+              ),
+            );
+          },
+        );
+        },
+      ),
+      GoRoute(
+        path: RoutesConstants.favouriteMoviesScreen,
+        name: RoutesConstants.favouriteMoviesScreen,
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: Duration(milliseconds: 200),
+          child: FavouriteMoviesScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                ),
+                child: child,
+              ),
+            );
+          },
+        );
+        },
+      ),
+      GoRoute(
+        path: RoutesConstants.watchListMoviesScreen,
+        name: RoutesConstants.watchListMoviesScreen,
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: Duration(milliseconds: 200),
+          child: WatchListMoviesScreen(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: CurveTween(curve: Curves.easeInOut).animate(animation),

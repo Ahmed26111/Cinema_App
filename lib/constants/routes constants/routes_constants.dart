@@ -15,4 +15,7 @@ abstract class RoutesConstants{
   static final String ticketsReserveScreen = "/ticketsReserveScreen";
   static final String showYourSeatScreenUrl = "/showYourSeatScreen:moviePosterImage&:movieTitle&:seatNumber";
   static final String showYourSeatScreenName = "/showYourSeatScreen";
+  static final String editProfileScreen = "/editProfileScreen";
+  static final String favouriteMoviesScreen = "/favouriteMoviesScreen";
+  static final String watchListMoviesScreen = "/watchListMoviesScreen";
 }

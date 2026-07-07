@@ -1,20 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
-import 'package:cinema_app/data/models/movie/movie_model.dart';
+import 'package:cinema_app/ui/favourite_movies_screen/favourite_movies_state_management/favourite_movies_cubit.dart';
+import 'package:cinema_app/ui/watch_list_movies_screen/watch_list_movies_state_management/watch_list_movies_cubit.dart';
 import 'package:cinema_app/utils/components/default_movie_rate_container.dart';
-import 'package:cinema_app/utils/shared/conversion.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../constants/api constants/api_constants.dart';
+import '../../constants/color constants/colors_manager.dart';
 import '../../constants/routes constants/routes_constants.dart';
+import '../../data/models/movie/movie_model.dart';
 
-class DefaultDetailsMovieCardWidget extends StatelessWidget {
-  const DefaultDetailsMovieCardWidget({super.key, required this.movieModel, required this.isLandscape, this.isDummy = false});
+class DefaultFavouriteOrWatchListMovieCardWidget extends StatelessWidget {
+  const DefaultFavouriteOrWatchListMovieCardWidget({super.key, required this.movieModel, required this.isLandscape, required this.isDummy, required this.isFavourite});
 
   final MovieModel movieModel;
   final bool isLandscape;
   final bool isDummy;
+  final bool isFavourite;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class DefaultDetailsMovieCardWidget extends StatelessWidget {
         context.pushNamed(RoutesConstants.detailsMovieScreenName , pathParameters: {"movieId" : movieModel.movieId.toString()});
       },
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
             height: 180,
@@ -66,60 +69,39 @@ class DefaultDetailsMovieCardWidget extends StatelessWidget {
             child: Column(
               spacing: 14,
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                _getOriginalLanguageButton(context),
                 Text(
                   movieModel.movieTitle ,
                   style: (isLandscape) ? Theme.of(context).textTheme.labelSmall : Theme.of(context).textTheme.labelLarge,
-                  maxLines: 1,
+                  maxLines: 5,
                   overflow: TextOverflow.ellipsis,
                 ),
-                _getReleaseYearRow(context , isLandscape),
                 _getGenreRow(context , isLandscape),
               ],
             ),
-          )
+          ),
+          SizedBox(width: 16,),
+          IconButton(
+              onPressed: (){
+                if(isFavourite){
+                  context.read<FavouriteMoviesCubit>().removeMovieFromFavourites(movieModel);
+                }
+                else{
+                  context.read<WatchListMoviesCubit>().removeMovieFromWatchLists(movieModel);
+                }
+              },
+              icon: Icon(Icons.remove_circle_outline),
+              color:  ColorsManager.redColor,
+              iconSize: 25,
+          ),
         ],
       ),
     );
   }
-
-  FilledButton _getOriginalLanguageButton(BuildContext context) {
-    return FilledButton(
-      onPressed: () {},
-      style: FilledButton.styleFrom(
-          backgroundColor: ColorsManager.orangeColor,
-          fixedSize: Size(80, 20),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
-          )
-      ),
-      child: Text(
-        movieModel.originalLanguage,
-        style: Theme
-            .of(context)
-            .textTheme
-            .labelSmall
-            ?.copyWith(fontSize: 12),
-      ),
-    );
-  }
-
-  Row _getReleaseYearRow(BuildContext context , bool isLandscape) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(Icons.calendar_month, color: ColorsManager.greyColor,),
-        SizedBox(width: 4,),
-        Text(movieModel.releaseDate.year.toString(), style: (isLandscape) ? Theme.of(context).textTheme.bodyLarge : Theme.of(context).textTheme.titleSmall,),
-      ],
-    );
-  }
-
   Row _getGenreRow(BuildContext context , bool isLandscape) {
-    String genresString = movieModel.genreIds
-        ?.map((id) => Conversion.getGenreNameByGenreId(id))
-        .join(', ') ?? '';
+    String genreString = movieModel.genres?[0].name ?? "";
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -127,7 +109,7 @@ class DefaultDetailsMovieCardWidget extends StatelessWidget {
         SizedBox(width: 4,),
         Expanded(
           child: Text(
-            genresString,
+            genreString,
             style: (isLandscape) ? Theme.of(context).textTheme.bodyLarge : Theme.of(context).textTheme.titleSmall,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

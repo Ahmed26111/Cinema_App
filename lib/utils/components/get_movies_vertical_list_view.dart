@@ -1,4 +1,4 @@
-import 'package:cinema_app/data/models/movie_model.dart';
+import 'package:cinema_app/data/models/movie/movie_model.dart';
 import 'package:cinema_app/utils/components/default_details_movie_card_widget.dart';
 import 'package:flutter/material.dart';
 

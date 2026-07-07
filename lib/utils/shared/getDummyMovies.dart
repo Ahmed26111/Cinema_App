@@ -1,4 +1,4 @@
-import 'package:cinema_app/data/models/movie_model.dart';
+import 'package:cinema_app/data/models/movie/movie_model.dart';
 
 List<MovieModel> getDummyMovies(int lengthOfDummies){
   return List.generate(lengthOfDummies, (index){

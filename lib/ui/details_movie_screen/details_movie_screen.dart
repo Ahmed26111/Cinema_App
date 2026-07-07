@@ -2,13 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cinema_app/constants/api%20constants/api_constants.dart';
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
 import 'package:cinema_app/data/models/cast_model.dart';
-import 'package:cinema_app/data/models/company_model.dart';
-import 'package:cinema_app/data/models/genre_model.dart';
-import 'package:cinema_app/data/models/movie_model.dart';
+import 'package:cinema_app/data/models/company/company_model.dart';
+import 'package:cinema_app/data/models/genre/genre_model.dart';
+import 'package:cinema_app/data/models/movie/movie_model.dart';
 import 'package:cinema_app/ui/details_movie_screen/cast_cubit/cast_cubit.dart';
 import 'package:cinema_app/ui/details_movie_screen/details_movie_cubit/details_movie_cubit.dart';
 import 'package:cinema_app/ui/details_movie_screen/movie_certification_cubit/movie_certification_cubit.dart';
 import 'package:cinema_app/ui/details_movie_screen/similar_movies_cubit/similar_movies_cubit.dart';
+import 'package:cinema_app/ui/favourite_movies_screen/favourite_movies_state_management/favourite_movies_cubit.dart';
+import 'package:cinema_app/ui/watch_list_movies_screen/watch_list_movies_state_management/watch_list_movies_cubit.dart';
 import 'package:cinema_app/utils/components/default_failed_to_load_widget.dart';
 import 'package:cinema_app/utils/components/default_list_movies_cards_widget.dart';
 import 'package:cinema_app/utils/components/default_movie_rate_container.dart';
@@ -99,6 +101,7 @@ class DetailsMovieScreen extends StatelessWidget {
     return IconButton.filled(
         onPressed: () {
           context.pop();
+          context.read<FavouriteMoviesCubit>().getFavouriteMovies();
         },
         icon: Icon(Icons.arrow_back_ios_new, color: ColorsManager.whiteColor , size: 20,),
         style: IconButton.styleFrom(
@@ -131,6 +134,7 @@ class DetailsMovieScreen extends StatelessWidget {
           IconButton.filled(
             onPressed: () {
               context.read<DetailsMovieCubit>().toggleFavouriteMovie();
+              context.read<FavouriteMoviesCubit>().getFavouriteMovies();
             },
             icon: Icon(
               (isFavourite)? Icons.favorite_outlined : Icons.favorite_outline,
@@ -272,6 +276,7 @@ class DetailsMovieScreen extends StatelessWidget {
                   IconButton.filled(
                       onPressed: (){
                         context.read<DetailsMovieCubit>().toggleFavouriteMovie();
+                        context.read<FavouriteMoviesCubit>().getFavouriteMovies();
                       },
                       icon: Icon(
                           (isFavourite)? Icons.favorite_outlined : Icons.favorite_outline,
@@ -286,6 +291,7 @@ class DetailsMovieScreen extends StatelessWidget {
                   IconButton.filled(
                     onPressed: () {
                       context.read<DetailsMovieCubit>().toggleWatchListMovie();
+                      context.read<WatchListMoviesCubit>().getWatchListMovies();
                     },
                     icon: Icon(
                         (isWatchList) ? Icons.bookmark : Icons.bookmark_border,

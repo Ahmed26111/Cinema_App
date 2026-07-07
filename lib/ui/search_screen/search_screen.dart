@@ -1,5 +1,5 @@
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
-import 'package:cinema_app/data/models/movie_model.dart';
+import 'package:cinema_app/data/models/movie/movie_model.dart';
 import 'package:cinema_app/ui/home_screen/get_top_rated_movies_state_management/get_top_rated_movies_cubit.dart';
 import 'package:cinema_app/utils/components/default_details_movie_card_widget.dart';
 import 'package:cinema_app/utils/components/default_failed_to_load_widget.dart';

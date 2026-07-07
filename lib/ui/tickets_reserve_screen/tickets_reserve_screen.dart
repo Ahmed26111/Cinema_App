@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cinema_app/constants/hall%20tickets%20enum/hall_enum.dart';
 import 'package:cinema_app/constants/period%20tickets%20enum/period_enum.dart';
-import 'package:cinema_app/data/models/movie_model.dart';
+import 'package:cinema_app/data/models/movie/movie_model.dart';
 import 'package:cinema_app/ui/tickets_reserve_screen/seats_cinema/seats_cinema_widget.dart';
 import 'package:cinema_app/ui/tickets_reserve_screen/tickets_reserve_cubit/tickets_reserve_cubit.dart';
 import 'package:cinema_app/ui/tickets_screen/tickets_state_management/tickets_cubit.dart';

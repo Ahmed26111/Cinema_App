@@ -1,9 +1,10 @@
 import 'package:cinema_app/constants/api%20constants/movie_key_constants.dart';
-import 'package:cinema_app/data/models/company_model.dart';
-import 'package:cinema_app/data/models/genre_model.dart';
+import 'package:cinema_app/data/models/company/company_model.dart';
+import 'package:cinema_app/data/models/genre/genre_model.dart';
 import 'package:cinema_app/utils/shared/conversion.dart';
+import 'package:equatable/equatable.dart';
 
-class MovieModel {
+class MovieModel extends Equatable{
   final bool isAdult;
   final String ? backdropPathImage;
   final List<int> ?genreIds;
@@ -23,7 +24,7 @@ class MovieModel {
   final List<GenreModel>? genres;
 
 
-  MovieModel({
+  const MovieModel({
     required this.isAdult,
     required this.backdropPathImage,
     required this.genreIds,
@@ -69,4 +70,7 @@ class MovieModel {
         ,
     );
   }
+
+  @override
+  List<Object?> get props => [movieId];
 }

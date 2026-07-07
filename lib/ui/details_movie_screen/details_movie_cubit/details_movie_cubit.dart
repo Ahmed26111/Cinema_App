@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:cinema_app/data/models/movie_model.dart';
+import 'package:cinema_app/data/models/movie/movie_model.dart';
 import 'package:cinema_app/data/models/user/user_model.dart';
 import 'package:cinema_app/data/repositories/movie_repository.dart';
 import 'package:cinema_app/data/services/dio_helper.dart';
@@ -20,8 +20,8 @@ class DetailsMovieCubit extends Cubit<DetailsMovieState> {
      emit(DetailsMovieLoading());
      try{
        MovieModel movieModel = await _movieRepository.getDetailsMovieById(movieId);
-       isFavourite = _activeUser.favouritesMoviesIds.contains(movieId);
-       isWatchList = _activeUser.watchListMoviesIds.contains(movieId);
+       isFavourite = _activeUser.favouritesMovies.contains(movieModel);
+       isWatchList = _activeUser.watchListMovies.contains(movieModel);
        emit(DetailsMovieSuccess(movie: movieModel , isFavourite: isFavourite , isWatchList: isWatchList));
      }catch(e){
        emit(DetailsMovieFailed(errorMessage: e.toString()));
@@ -31,19 +31,20 @@ class DetailsMovieCubit extends Cubit<DetailsMovieState> {
   void toggleFavouriteMovie(){
      final currentState = state;
     if (currentState is DetailsMovieSuccess) {
-     final int movieId = currentState.movie.movieId;
-      final bool isFavourite = _activeUser.favouritesMoviesIds.contains(movieId);
-      List<int> favouritesList = List.from(_activeUser.favouritesMoviesIds);
+      final MovieModel movie = currentState.movie;
+      final bool isFavourite = _activeUser.favouritesMovies.contains(movie);
+      List<MovieModel> favouritesList = List.from(_activeUser.favouritesMovies);
       if(isFavourite){
         //? isFavourite true then will deleted from the _activeUser.favouritesMoviesIds
-        favouritesList.remove(movieId);
+        favouritesList.remove(movie);
       }
       else{
         //? isFavourite false then will added to _activeUser.favouritesMoviesIds
-        favouritesList.add(movieId);
+        favouritesList.add(movie);
       }
-     _activeUser = _activeUser.copyWith(favouritesMoviesIds: favouritesList);
+     _activeUser = _activeUser.copyWith(favouritesMovies: favouritesList);
      HiveHandler.addAndUpdateActiveUser(_activeUser);
+     HiveHandler.addAndUpdateUsers(_activeUser);
       emit(DetailsMovieSuccess(movie: currentState.movie , isFavourite: !isFavourite, isWatchList: currentState.isWatchList));
     }
   }
@@ -51,19 +52,20 @@ class DetailsMovieCubit extends Cubit<DetailsMovieState> {
   void toggleWatchListMovie(){
     final currentState = state;
     if (currentState is DetailsMovieSuccess) {
-      final int movieId = currentState.movie.movieId;
-      final bool isWatchList = _activeUser.watchListMoviesIds.contains(movieId);
-      List<int> watchList = List.from(_activeUser.watchListMoviesIds);
+      final MovieModel movie = currentState.movie;
+      final bool isWatchList = _activeUser.watchListMovies.contains(movie);
+      List<MovieModel> watchList = List.from(_activeUser.watchListMovies);
       if(isWatchList){
-        //? isWatchList true then will deleted from the _activeUser.watchListMoviesIds
-        watchList.remove(movieId);
+        //? isWatchList true then will deleted from the _activeUser.watchListMovies
+        watchList.remove(movie);
       }
       else{
-        //? isWatchList false then will added to _activeUser.watchListMoviesIds
-        watchList.add(movieId);
+        //? isWatchList false then will added to _activeUser.watchListMovies
+        watchList.add(movie);
       }
-      _activeUser = _activeUser.copyWith(watchListMoviesIds: watchList);
+      _activeUser = _activeUser.copyWith(watchListMovies: watchList);
       HiveHandler.addAndUpdateActiveUser(_activeUser);
+      HiveHandler.addAndUpdateUsers(_activeUser);
       emit(DetailsMovieSuccess(movie: currentState.movie , isFavourite: currentState.isFavourite, isWatchList: !isWatchList));
     }
   }

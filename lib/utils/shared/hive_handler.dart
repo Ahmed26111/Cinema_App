@@ -1,4 +1,7 @@
 import 'package:cinema_app/constants/hive%20constants/hive_constants.dart';
+import 'package:cinema_app/data/models/company/company_adapter.dart';
+import 'package:cinema_app/data/models/genre/genre_adapter.dart';
+import 'package:cinema_app/data/models/movie/movie_adapter.dart';
 import 'package:cinema_app/data/models/ticket/ticket_adapter.dart';
 import 'package:cinema_app/data/models/ticket/ticket_model.dart';
 import 'package:cinema_app/data/models/user/user_adapter.dart';
@@ -14,6 +17,9 @@ class HiveHandler{
     await Hive.initFlutter();
     Hive.registerAdapter(UserAdapter());
     Hive.registerAdapter(TicketAdapter());
+    Hive.registerAdapter(MovieAdapter());
+    Hive.registerAdapter(CompanyAdapter());
+    Hive.registerAdapter(GenreAdapter());
     usersBox =await Hive.openBox(HiveConstants.usersBox);
     activeUserBox =await Hive.openBox(HiveConstants.activeUserBox);
     ticketsBox =await Hive.openBox(HiveConstants.ticketsBox);
