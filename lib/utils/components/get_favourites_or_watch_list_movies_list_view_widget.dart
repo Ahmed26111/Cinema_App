@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import '../../data/models/movie/movie_model.dart';
 
 class GetFavouritesOrWatchListMoviesListViewWidget extends StatelessWidget {
-  const GetFavouritesOrWatchListMoviesListViewWidget({super.key, required this.movies, this.isLandscape = false, required this.isDummy, required this.isFavourite});
+  const GetFavouritesOrWatchListMoviesListViewWidget({super.key, required this.movies, required this.isDummy, required this.isFavourite});
 
   final List<MovieModel> movies;
-  final bool isLandscape;
   final bool isDummy;
   final bool isFavourite;
 
@@ -15,7 +14,7 @@ class GetFavouritesOrWatchListMoviesListViewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.separated(
       itemCount: movies.length,
-      itemBuilder: (BuildContext context, int index) => DefaultFavouriteOrWatchListMovieCardWidget(movieModel: movies[index], isLandscape: isLandscape , isDummy: isDummy, isFavourite: isFavourite,),
+      itemBuilder: (BuildContext context, int index) => DefaultFavouriteOrWatchListMovieCardWidget(movieModel: movies[index],isDummy: isDummy, isFavourite: isFavourite,),
       separatorBuilder: (BuildContext context, int index) => SizedBox(height: 16,),
     );
   }

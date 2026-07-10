@@ -8,8 +8,6 @@ class OnboardingScreen2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = ResponsiveSizeConstants.isLandscape(context);
-
     return Scaffold(
       backgroundColor: ColorsManager.blackColor,
       body: SingleChildScrollView(
@@ -21,27 +19,27 @@ class OnboardingScreen2 extends StatelessWidget {
                 Image.asset(
                   "images/Onboarding_2.png",
                   width: ResponsiveSizeConstants.widthScreen(context),
-                  height:  ResponsiveSizeConstants.heightScreen(context) * (isLandscape? 0.4 : 0.6),
+                  height:  ResponsiveSizeConstants.heightScreen(context) *  0.6,
                 ),
                 SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(context) * (isLandscape?0.0004 :0.001),
+                  height: ResponsiveSizeConstants.heightScreen(context) * 0.001,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     "Discover Your Next Favorite Film.",
                     textAlign: TextAlign.center,
-                    style: (isLandscape)? Theme.of(context).textTheme.labelLarge :Theme.of(context).textTheme.displayMedium,
+                    style: Theme.of(context).textTheme.displayMedium,
                   ),
                 ),
                 SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(context) * (isLandscape? 0.01 : 0.027),
+                  height: ResponsiveSizeConstants.heightScreen(context) *  0.027,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Text(
                     "Explore a vast library of movies — new releases, classics, and everything in between.",
-                    style: (isLandscape)?Theme.of(context).textTheme.bodyLarge :Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
               ],

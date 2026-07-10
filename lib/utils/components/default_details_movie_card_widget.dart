@@ -10,10 +10,9 @@ import '../../constants/api constants/api_constants.dart';
 import '../../constants/routes constants/routes_constants.dart';
 
 class DefaultDetailsMovieCardWidget extends StatelessWidget {
-  const DefaultDetailsMovieCardWidget({super.key, required this.movieModel, required this.isLandscape, this.isDummy = false});
+  const DefaultDetailsMovieCardWidget({super.key, required this.movieModel, this.isDummy = false});
 
   final MovieModel movieModel;
-  final bool isLandscape;
   final bool isDummy;
 
   @override
@@ -70,12 +69,12 @@ class DefaultDetailsMovieCardWidget extends StatelessWidget {
                 _getOriginalLanguageButton(context),
                 Text(
                   movieModel.movieTitle ,
-                  style: (isLandscape) ? Theme.of(context).textTheme.labelSmall : Theme.of(context).textTheme.labelLarge,
+                  style:  Theme.of(context).textTheme.labelLarge,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                _getReleaseYearRow(context , isLandscape),
-                _getGenreRow(context , isLandscape),
+                _getReleaseYearRow(context),
+                _getGenreRow(context),
               ],
             ),
           )
@@ -105,18 +104,18 @@ class DefaultDetailsMovieCardWidget extends StatelessWidget {
     );
   }
 
-  Row _getReleaseYearRow(BuildContext context , bool isLandscape) {
+  Row _getReleaseYearRow(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(Icons.calendar_month, color: ColorsManager.greyColor,),
         SizedBox(width: 4,),
-        Text(movieModel.releaseDate.year.toString(), style: (isLandscape) ? Theme.of(context).textTheme.bodyLarge : Theme.of(context).textTheme.titleSmall,),
+        Text(movieModel.releaseDate.year.toString(), style: Theme.of(context).textTheme.titleSmall,),
       ],
     );
   }
 
-  Row _getGenreRow(BuildContext context , bool isLandscape) {
+  Row _getGenreRow(BuildContext context) {
     String genresString = movieModel.genreIds
         ?.map((id) => Conversion.getGenreNameByGenreId(id))
         .join(', ') ?? '';
@@ -128,7 +127,7 @@ class DefaultDetailsMovieCardWidget extends StatelessWidget {
         Expanded(
           child: Text(
             genresString,
-            style: (isLandscape) ? Theme.of(context).textTheme.bodyLarge : Theme.of(context).textTheme.titleSmall,
+            style: Theme.of(context).textTheme.titleSmall,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),

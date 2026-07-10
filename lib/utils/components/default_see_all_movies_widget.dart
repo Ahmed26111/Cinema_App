@@ -12,11 +12,10 @@ class DefaultSeeAllMoviesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = ResponsiveSizeConstants.isLandscape(context);
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(appBarTitle , style: (isLandscape)? Theme.of(context).textTheme.labelMedium : Theme.of(context).textTheme.labelLarge,),
+          title: Text(appBarTitle , style: Theme.of(context).textTheme.labelLarge,),
           automaticallyImplyLeading: false,
           leading: IconButton(
               onPressed: ()=>context.pop(),
@@ -31,7 +30,7 @@ class DefaultSeeAllMoviesWidget extends StatelessWidget {
                 Expanded(
                     child: ListView.separated(
                       itemCount: movies.length,
-                      itemBuilder: (BuildContext context, int index) => DefaultDetailsMovieCardWidget(movieModel: movies[index], isLandscape : isLandscape),
+                      itemBuilder: (BuildContext context, int index) => DefaultDetailsMovieCardWidget(movieModel: movies[index]),
                       separatorBuilder: (BuildContext context, int index) => SizedBox(height: 16,),
                     )
                 ),

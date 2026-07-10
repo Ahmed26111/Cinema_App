@@ -1,6 +1,8 @@
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
 import 'package:cinema_app/data/models/movie/movie_model.dart';
 import 'package:cinema_app/ui/about_us_screen/about_us_screen.dart';
+import 'package:cinema_app/ui/change_password_screen/change_password_screen.dart';
+import 'package:cinema_app/ui/change_password_screen/change_password_state_management/change_password_cubit.dart';
 import 'package:cinema_app/ui/core/layout/change_bottom_navigation_bar_index_cubit.dart';
 import 'package:cinema_app/ui/core/layout/layout_screen.dart';
 import 'package:cinema_app/ui/create_new_password_screen/create_new_password_cubit.dart';
@@ -454,6 +456,31 @@ abstract class RoutesManager {
           key: state.pageKey,
           transitionDuration: Duration(milliseconds: 200),
           child: AboutUsScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.95, end: 1.0).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                ),
+                child: child,
+              ),
+            );
+          },
+        );
+        },
+      ),
+      GoRoute(
+        path: RoutesConstants.changePasswordScreen,
+        name: RoutesConstants.changePasswordScreen,
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: Duration(milliseconds: 200),
+          child: BlocProvider(
+            create: (context) => ChangePasswordCubit(),
+            child: ChangePasswordScreen(),
+          ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: CurveTween(curve: Curves.easeInOut).animate(animation),

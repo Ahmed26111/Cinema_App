@@ -12,10 +12,9 @@ import '../../constants/routes constants/routes_constants.dart';
 import '../../data/models/movie/movie_model.dart';
 
 class DefaultFavouriteOrWatchListMovieCardWidget extends StatelessWidget {
-  const DefaultFavouriteOrWatchListMovieCardWidget({super.key, required this.movieModel, required this.isLandscape, required this.isDummy, required this.isFavourite});
+  const DefaultFavouriteOrWatchListMovieCardWidget({super.key, required this.movieModel, required this.isDummy, required this.isFavourite});
 
   final MovieModel movieModel;
-  final bool isLandscape;
   final bool isDummy;
   final bool isFavourite;
 
@@ -73,11 +72,11 @@ class DefaultFavouriteOrWatchListMovieCardWidget extends StatelessWidget {
               children: [
                 Text(
                   movieModel.movieTitle ,
-                  style: (isLandscape) ? Theme.of(context).textTheme.labelSmall : Theme.of(context).textTheme.labelLarge,
+                  style: Theme.of(context).textTheme.labelLarge,
                   maxLines: 5,
                   overflow: TextOverflow.ellipsis,
                 ),
-                _getGenreRow(context , isLandscape),
+                _getGenreRow(context),
               ],
             ),
           ),
@@ -99,7 +98,7 @@ class DefaultFavouriteOrWatchListMovieCardWidget extends StatelessWidget {
       ),
     );
   }
-  Row _getGenreRow(BuildContext context , bool isLandscape) {
+  Row _getGenreRow(BuildContext context) {
     String genreString = movieModel.genres?[0].name ?? "";
 
     return Row(
@@ -110,7 +109,7 @@ class DefaultFavouriteOrWatchListMovieCardWidget extends StatelessWidget {
         Expanded(
           child: Text(
             genreString,
-            style: (isLandscape) ? Theme.of(context).textTheme.bodyLarge : Theme.of(context).textTheme.titleSmall,
+            style: Theme.of(context).textTheme.titleSmall,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),

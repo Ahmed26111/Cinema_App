@@ -31,8 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLandscape = ResponsiveSizeConstants.isLandscape(context);
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -44,13 +42,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 UserModel ? activeUser = context.read<HomeCubit>().getActiveUser();
                 return Text(
                     (activeUser == null)?"Hello, Guest":"Hello, ${activeUser.firstName}" ,
-                    style: (isLandscape)? Theme.of(context).textTheme.titleLarge :Theme.of(context).textTheme.displaySmall,
+                    style: Theme.of(context).textTheme.displaySmall,
                 );
               },
             ),
             Text(
               "Let`s stream your favourite movie",
-              style: (isLandscape)? Theme.of(context).textTheme.bodyLarge : Theme.of(context).textTheme.titleSmall,
+              style: Theme.of(context).textTheme.titleSmall,
             ),
           ],
         ),
@@ -61,8 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: ResponsiveSizeConstants.widthScreen(context) * 0.08 , vertical: (isLandscape)?0:10),
-                child: DefaultSearchBarWidget(controller: searchController, hintText: "Search a title.." , isLandscape: isLandscape),
+                padding: EdgeInsets.symmetric(horizontal: ResponsiveSizeConstants.widthScreen(context) * 0.08 , vertical:10),
+                child: DefaultSearchBarWidget(controller: searchController, hintText: "Search a title.."),
               ),
               SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.005,),
               BlocBuilder<GetUpcomingMoviesCubit , GetUpcomingMoviesState>(
@@ -71,33 +69,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: _getMostUpComingRow(context, isLandscape , state),
+                          child: _getMostUpComingRow(context, state),
                         ),
-                        SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.035 : ResponsiveSizeConstants.heightScreen(context) * 0.01,),
+                        SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.01,),
                         switch(state){
-                          GetUpcomingMoviesInitial() => Skeletonizer(
+                          GetUpcomingMoviesInitial() || GetUpComingMoviesLoading() => Skeletonizer(
                             containersColor: ColorsManager.greyColor,
                             effect: ShimmerEffect(
                               baseColor: ColorsManager.greyColor,
                               highlightColor: ColorsManager.lineDarkColor,
                             ),
                             enabled: true ,
-                            child: UpcomingMoviesSlider(movies: getDummyMovies(6) , isDummy: true, isLandscape: isLandscape)
+                            child: UpcomingMoviesSlider(movies: getDummyMovies(6) , isDummy: true)
                         ),
-                          GetUpComingMoviesLoading() => Skeletonizer(
-                            containersColor: ColorsManager.greyColor,
-                            effect: ShimmerEffect(
-                              baseColor: ColorsManager.greyColor,
-                              highlightColor: ColorsManager.lineDarkColor,
-                            ),
-                            enabled: true ,
-                            child: UpcomingMoviesSlider(movies: getDummyMovies(6) , isDummy: true, isLandscape: isLandscape)
-                        ),
-                          GetUpComingMoviesSuccess() => UpcomingMoviesSlider(movies: state.movies , isLandscape: isLandscape),
+                          GetUpComingMoviesSuccess() => UpcomingMoviesSlider(movies: state.movies ),
                           GetUpComingMoviesFailed() => DefaultFailedToLoadWidget(
                               errorMessage: "Sorry, Failed to load \nthe Upcoming movies :(",
                               helpMessage: "Please try to connect with internet",
-                              isLandscape:isLandscape
                           ),
                         }
                       ],
@@ -110,36 +98,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 24 , vertical: 14),
                     child: Column(
                       children: [
-                        _getCategoriesText(context , isLandscape),
-                        SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.035 :ResponsiveSizeConstants.heightScreen(context) * 0.022,),
-                        DefaultGenresButtonsWidget(currentMovieGenre: context.read<GetPopularMoviesCubit>().currentMovieGenre , isLandscape: isLandscape, onTapButton: (movieGenre)=>context.read<GetPopularMoviesCubit>().changeCurrentMovieGenre(movieGenre),),
-                        SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.035 : ResponsiveSizeConstants.heightScreen(context) * 0.02,),
-                        _getMostPopularRow(context , isLandscape , state),
-                        SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.035 : ResponsiveSizeConstants.heightScreen(context) * 0.01,),
+                        _getCategoriesText(context),
+                        SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.022,),
+                        DefaultGenresButtonsWidget(currentMovieGenre: context.read<GetPopularMoviesCubit>().currentMovieGenre , onTapButton: (movieGenre)=>context.read<GetPopularMoviesCubit>().changeCurrentMovieGenre(movieGenre),),
+                        SizedBox(height:  ResponsiveSizeConstants.heightScreen(context) * 0.02,),
+                        _getMostPopularRow(context , state),
+                        SizedBox(height:  ResponsiveSizeConstants.heightScreen(context) * 0.01,),
                         switch(state){
-                         GetPopularMoviesInitial() => Skeletonizer(
+                         GetPopularMoviesInitial() || GetPopularMoviesLoading() => Skeletonizer(
                            containersColor: ColorsManager.greyColor,
                            effect: ShimmerEffect(
                              baseColor: ColorsManager.greyColor,
                              highlightColor: ColorsManager.lineDarkColor,
                            ),
                            enabled: true ,
-                           child: DefaultListMoviesCardsWidget(movies: getDummyMovies(10) , isDummy: true, isLandscape : isLandscape),
+                           child: DefaultListMoviesCardsWidget(movies: getDummyMovies(10) , isDummy: true),
                          ),
-                         GetPopularMoviesLoading() => Skeletonizer(
-                           containersColor: ColorsManager.greyColor,
-                           effect: ShimmerEffect(
-                             baseColor: ColorsManager.greyColor,
-                             highlightColor: ColorsManager.lineDarkColor,
-                           ),
-                           enabled: true ,
-                           child: DefaultListMoviesCardsWidget(movies: getDummyMovies(10) , isDummy: true, isLandscape : isLandscape),
-                         ),
-                         GetPopularMoviesSuccess() => DefaultListMoviesCardsWidget(movies: state.movies , isLandscape: isLandscape),
+                         GetPopularMoviesSuccess() => DefaultListMoviesCardsWidget(movies: state.movies),
                          GetPopularMoviesFailed()  => DefaultFailedToLoadWidget(
                                  errorMessage: "Sorry, Failed to load \nthe Popular movies :(",
                                  helpMessage: "Please try to connect with internet",
-                                 isLandscape: isLandscape
                              ),
                         }
                       ],
@@ -154,24 +132,21 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Align _getCategoriesText(BuildContext context , bool isLandscape) {
+  Align _getCategoriesText(BuildContext context) {
     return Align(
         alignment: Alignment.centerLeft,
         child: Text(
           "Categories",
-          style: (isLandscape) ? Theme.of(context).textTheme.labelMedium : Theme.of(context).textTheme.displaySmall,
+          style: Theme.of(context).textTheme.displaySmall,
         )
     );
   }
 
-  Row _getMostPopularRow(BuildContext context , bool isLandscape , GetPopularMoviesState state) {
+  Row _getMostPopularRow(BuildContext context, GetPopularMoviesState state) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text("Most popular", style: (isLandscape) ? Theme
-            .of(context)
-            .textTheme
-            .labelMedium : Theme
+        Text("Most popular", style: Theme
             .of(context)
             .textTheme
             .displaySmall,),
@@ -184,9 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 .textTheme
                 .bodyMedium
                 ?.copyWith(fontSize:
-            (isLandscape)
-                ? ResponsiveSizeConstants.widthScreen(context) * 0.028
-                : ResponsiveSizeConstants.widthScreen(context) * 0.038 ,
+                   ResponsiveSizeConstants.widthScreen(context) * 0.038 ,
               color: (state is GetPopularMoviesSuccess) ? ColorsManager.primaryBlueAccentColor : ColorsManager.transparent,
             ),
             )
@@ -195,14 +168,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Row _getMostUpComingRow(BuildContext context , bool isLandscape , GetUpcomingMoviesState state) {
+  Row _getMostUpComingRow(BuildContext context , GetUpcomingMoviesState state) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text("Upcoming", style: (isLandscape) ? Theme
-            .of(context)
-            .textTheme
-            .labelMedium : Theme
+        Text("Upcoming", style: Theme
             .of(context)
             .textTheme
             .displaySmall,),
@@ -215,9 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 .textTheme
                 .bodyMedium
                 ?.copyWith(fontSize:
-            (isLandscape)
-                ? ResponsiveSizeConstants.widthScreen(context) * 0.028
-                : ResponsiveSizeConstants.widthScreen(context) * 0.038 ,
+               ResponsiveSizeConstants.widthScreen(context) * 0.038 ,
              color:  (state is GetUpComingMoviesSuccess) ? ColorsManager.primaryBlueAccentColor : ColorsManager.transparent,
             ),
             )

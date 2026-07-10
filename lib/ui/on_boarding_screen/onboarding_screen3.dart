@@ -8,7 +8,6 @@ class OnboardingScreen3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = ResponsiveSizeConstants.isLandscape(context);
 
     return Scaffold(
       backgroundColor: ColorsManager.blackColor,
@@ -23,42 +22,38 @@ class OnboardingScreen3 extends StatelessWidget {
                     Image.asset(
                       "images/onboarding_3.png",
                       width: ResponsiveSizeConstants.widthScreen(context),
-                      height: ResponsiveSizeConstants.heightScreen(context) * (isLandscape? 0.4 :0.5),
+                      height: ResponsiveSizeConstants.heightScreen(context) * 0.5,
                     ),
                     Positioned(
-                      // Portrait: 6.5% from left | Landscape: 25% from left
-                      left: ResponsiveSizeConstants.widthScreen(context) * (isLandscape ? 0.25 : 0.065),
-                      // Portrait: 8% from top | Landscape: 5% from top
-                      top: ResponsiveSizeConstants.heightScreen(context) * (isLandscape ? 0.05 : 0.08),
-                      child: _getRatingCard(context, isLandscape),
+                      left: ResponsiveSizeConstants.widthScreen(context) *  0.065,
+                      top: ResponsiveSizeConstants.heightScreen(context) *  0.08,
+                      child: _getRatingCard(context),
                     ),
                     Positioned(
-                      // Portrait: 70% from left | Landscape: 60% from left
-                      left: ResponsiveSizeConstants.widthScreen(context) * (isLandscape ? 0.6 : 0.7),
-                      // Portrait: 10% from top | Landscape: 8% from top
-                      top: ResponsiveSizeConstants.heightScreen(context) * (isLandscape ? 0.08 : 0.1),
-                      child: _getDurationCard(context, isLandscape),
+                      left: ResponsiveSizeConstants.widthScreen(context) *  0.7,
+                      top: ResponsiveSizeConstants.heightScreen(context) *  0.1,
+                      child: _getDurationCard(context),
                     ),
                   ],
                 ),
                 SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(context) * (isLandscape? 0.03 : 0.05),
+                  height: ResponsiveSizeConstants.heightScreen(context) *  0.05,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 28),
                   child: Text(
                     "Skip the Line, Catch the Film.",
-                    style: (isLandscape)? Theme.of(context).textTheme.labelLarge :Theme.of(context).textTheme.displayMedium,
+                    style: Theme.of(context).textTheme.displayMedium,
                   ),
                 ),
                 SizedBox(
-                  height: ResponsiveSizeConstants.heightScreen(context) * (isLandscape? 0.01 : 0.027),
+                  height: ResponsiveSizeConstants.heightScreen(context) *  0.027,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Text(
                     "Buy tickets instantly and secure your seat before it's gone.",
-                    style: (isLandscape)?Theme.of(context).textTheme.bodyLarge :Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
               ],
@@ -69,7 +64,7 @@ class OnboardingScreen3 extends StatelessWidget {
     );
   }
 
-  Widget _getRatingCard(BuildContext context , bool isLandScape){
+  Widget _getRatingCard(BuildContext context){
     return Card(
       color: ColorsManager.blackColor,
       shape: RoundedRectangleBorder(
@@ -85,15 +80,15 @@ class OnboardingScreen3 extends StatelessWidget {
           spacing: 5,
           children: [
             Icon(Icons.star , color: ColorsManager.primaryBlueAccentColor,),
-            Text("Rating" , style: (isLandScape)?Theme.of(context).textTheme.bodyLarge:Theme.of(context).textTheme.titleSmall,),
-            Text("9 / 10" , style: (isLandScape)?Theme.of(context).textTheme.titleLarge:Theme.of(context).textTheme.labelMedium,),
+            Text("Rating" , style: Theme.of(context).textTheme.titleSmall,),
+            Text("9 / 10" , style: Theme.of(context).textTheme.labelMedium,),
           ],
         ),
       ),
     );
   }
 
-  Widget _getDurationCard(BuildContext context ,  bool isLandScape){
+  Widget _getDurationCard(BuildContext context ){
     return Card(
       color: ColorsManager.blackColor,
       shape: RoundedRectangleBorder(
@@ -109,8 +104,8 @@ class OnboardingScreen3 extends StatelessWidget {
           spacing: 5,
           children: [
             Icon(Icons.access_time_outlined , color: ColorsManager.primaryBlueAccentColor,),
-            Text("Duration" , style: (isLandScape)?Theme.of(context).textTheme.bodyLarge:Theme.of(context).textTheme.titleSmall,),
-            Text("1h 20m" , style: (isLandScape)?Theme.of(context).textTheme.titleLarge:Theme.of(context).textTheme.labelMedium,),
+            Text("Duration" , style: Theme.of(context).textTheme.titleSmall,),
+            Text("1h 20m" , style: Theme.of(context).textTheme.labelMedium,),
           ],
         ),
       ),

@@ -32,8 +32,6 @@ class DetailsMovieScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = ResponsiveSizeConstants.isLandscape(context);
-
     return BlocBuilder<DetailsMovieCubit, DetailsMovieState>(
       builder: (context, state) {
         switch(state){
@@ -44,7 +42,7 @@ class DetailsMovieScreen extends StatelessWidget {
              return _getMovieDetailsSuccess(context, state.movie , state.isFavourite , state.isWatchList);
           }
           case DetailsMovieFailed():{
-            return _getFailedToLoadDetailsMovie(context , isLandscape);
+            return _getFailedToLoadDetailsMovie(context);
           }
         }
       },
@@ -75,7 +73,7 @@ class DetailsMovieScreen extends StatelessWidget {
     );
   }
 
-  Scaffold _getFailedToLoadDetailsMovie(BuildContext context , bool isLandscape){
+  Scaffold _getFailedToLoadDetailsMovie(BuildContext context){
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -89,7 +87,6 @@ class DetailsMovieScreen extends StatelessWidget {
             DefaultFailedToLoadWidget(
               errorMessage: "Sorry, Failed to load movie details :(",
               helpMessage: "Please try to connect with internet",
-              isLandscape: isLandscape,
             ),
           ],
         ),

@@ -24,7 +24,6 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = ResponsiveSizeConstants.isLandscape(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false, //? it does not resize the widgets when the key board is open
@@ -48,7 +47,6 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                           Expanded(
                             child: DefaultSearchBarWidget(
                               controller: _searchController,
-                              isLandscape: isLandscape,
                               hintText: "Type title, categories, years, etc",
                               isSearchResult: true,
                             ),
@@ -61,14 +59,14 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                             child: Text(
                               "Cancel",
                               style: Theme.of(context).textTheme.labelMedium
-                                  ?.copyWith(fontSize: (isLandscape) ? 14 : 12),
+                                  ?.copyWith(fontSize: 12),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: (isLandscape) ? ResponsiveSizeConstants.heightScreen(context) * 0.045 : ResponsiveSizeConstants.heightScreen(context) * 0.025 ,),
+                      SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.025 ,),
                       if (state is SearchResultEmpty || state is SearchResultFailed)
-                          SizedBox(height: (isLandscape) ? ResponsiveSizeConstants.heightScreen(context) * 0.09 : ResponsiveSizeConstants.heightScreen(context) * 0.07 ,),
+                          SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.07 ,),
 
                       switch(state){
                         SearchResultInitial() => SizedBox(),
@@ -82,19 +80,17 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                               enabled: true,
                               child: GetMoviesVerticalListView(
                                   movies: getDummyMovies(10),
-                                  isLandscape: isLandscape,
                                   isDummy: true,
                               ),
                           ),
                         ),
-                        SearchResultEmpty() => DefaultEmptyMovieWidget(searchQuery: _searchController.text, isLandscape: isLandscape,),
+                        SearchResultEmpty() => DefaultEmptyMovieWidget(searchQuery: _searchController.text),
                         SearchResultSuccess() => Expanded(
-                          child: GetMoviesVerticalListView(movies: state.movies, isLandscape: isLandscape),
+                          child: GetMoviesVerticalListView(movies: state.movies),
                         ),
                         SearchResultFailed() => DefaultFailedToLoadWidget(
                           errorMessage: "Failed to load the movies",
                           helpMessage: "Please try to connect with internet",
-                          isLandscape: isLandscape,
                         ),
                       }
                     ],

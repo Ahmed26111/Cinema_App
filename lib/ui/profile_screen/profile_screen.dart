@@ -1,6 +1,8 @@
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
 import 'package:cinema_app/constants/routes%20constants/routes_constants.dart';
+import 'package:cinema_app/data/models/ticket/ticket_model.dart';
 import 'package:cinema_app/ui/profile_screen/profile_state_management/profile_cubit.dart';
+import 'package:cinema_app/utils/components/account_deleted_successfully_snack_bar.dart';
 import 'package:cinema_app/utils/components/default_failed_to_load_widget.dart';
 import 'package:cinema_app/utils/components/log_out_successfully_snack_bar.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../constants/color constants/colors_manager.dart';
+import '../../data/models/user/user_model.dart';
 import '../../utils/shared/hive_handler.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -127,7 +130,7 @@ class ProfileScreen extends StatelessWidget {
                               title: Text("Change Password" , style: Theme.of(context).textTheme.labelMedium,),
                               trailing: IconButton(
                                 onPressed: (){
-                                  // Todo push to change password screen
+                                  context.pushNamed(RoutesConstants.changePasswordScreen);
                                 },
                                 icon: Icon(Icons.arrow_forward_ios_rounded),
                                 iconSize: 20,
@@ -146,7 +149,67 @@ class ProfileScreen extends StatelessWidget {
                               title: Text("Delete Account" , style: Theme.of(context).textTheme.labelMedium,),
                               trailing: IconButton(
                                 onPressed: (){
-                                  // Todo push to delete Account
+                                  showDialog(context: context, barrierDismissible: false ,builder: (context){
+                                    return AlertDialog(
+                                      backgroundColor: ColorsManager.primarySoftColor,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const SizedBox(height: 10),
+                                          Image.asset("images/warning.png"),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            "Are you sure you want to",
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context).textTheme.labelLarge,
+                                          ),
+                                          Text(
+                                            "Delete Account?",
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                              color: ColorsManager.redColor,
+                                              fontWeight: FontWeight.bold
+                                            ),
+                                          ),
+                                          Text(
+                                            "Be careful the account",
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context).textTheme.labelLarge,
+                                          ),
+                                          Text(
+                                            "will not return back",
+                                            textAlign: TextAlign.center,
+                                            style:  Theme.of(context).textTheme.labelLarge?.copyWith(
+                                                color: ColorsManager.redColor,
+                                                fontWeight: FontWeight.bold
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context),
+                                          child: Text(
+                                            "Cancel",
+                                            style: TextStyle(color: ColorsManager.greyColor),
+                                          ),
+                                        ),
+                                        FilledButton(
+                                          onPressed: () {
+                                            deleteAccount();
+                                            ScaffoldMessenger.of(context).showSnackBar(AccountDeletedSuccessfullySnackBar.get(context));
+                                            context.go(RoutesConstants.loginScreen);
+                                          },
+                                          style: FilledButton.styleFrom(
+                                            backgroundColor: ColorsManager.redColor,
+                                          ),
+                                          child: const Text("Delete"),
+                                        ),
+                                      ],
+                                    );
+                                  });
                                 },
                                 icon: Icon(Icons.arrow_forward_ios_rounded),
                                 iconSize: 20,
@@ -291,5 +354,16 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-
+  void deleteAccount(){
+    final UserModel ? activeUser = HiveHandler.getActiveUser();
+    HiveHandler.deleteActiveUser();
+    HiveHandler.deleteUser(activeUser?.userId ?? "");
+    List<TicketModel> tickets = HiveHandler.getReservedTickets();
+    if(activeUser != null) {
+      tickets = tickets.where((ticket) {
+        return (ticket.userId != activeUser.userId);
+      }).toList();
+    }
+    HiveHandler.addAndUpdateReservedTickets(tickets);
+  }
 }

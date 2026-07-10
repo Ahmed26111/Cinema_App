@@ -11,7 +11,6 @@ class DefaultTextFormField extends StatefulWidget {
     this.textInputType,
     this.maxLength,
     this.isPasswordField = false,
-    this.isLandscape = false,
   });
 
   final TextEditingController controller;
@@ -21,7 +20,6 @@ class DefaultTextFormField extends StatefulWidget {
   final TextInputType? textInputType;
   final int? maxLength;
   final bool isPasswordField;
-  final bool isLandscape;
 
   @override
   State<DefaultTextFormField> createState() => _DefaultTextFormFieldState();
@@ -44,7 +42,7 @@ class _DefaultTextFormFieldState extends State<DefaultTextFormField> {
         style: Theme.of(context).textTheme.headlineLarge,
         decoration: InputDecoration(
           labelText: widget.label,
-          labelStyle: (widget.isLandscape)?Theme.of(context).textTheme.labelSmall : Theme.of(context).textTheme.labelMedium,
+          labelStyle: Theme.of(context).textTheme.labelMedium,
           hintText: widget.hint,
           hintStyle: Theme.of(context).textTheme.titleSmall,
           enabledBorder: OutlineInputBorder(

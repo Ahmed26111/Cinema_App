@@ -2,6 +2,7 @@ import 'package:cinema_app/data/models/user/user_model.dart';
 import 'package:cinema_app/ui/edit_profile_screen/edit_profile_state_management/edit_profile_cubit.dart';
 import 'package:cinema_app/ui/home_screen/home_state_management/home_cubit.dart';
 import 'package:cinema_app/ui/profile_screen/profile_state_management/profile_cubit.dart';
+import 'package:cinema_app/utils/components/default_gesture_detector_authentication_screen.dart';
 import 'package:cinema_app/utils/components/default_user_authentication_screen.dart';
 import 'package:cinema_app/utils/components/edit_profile_successfully_snack_bar.dart';
 import 'package:cinema_app/utils/components/failed_to_edit_profile_snack_bar.dart';
@@ -41,104 +42,113 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
 
-    final bool isLandscape = ResponsiveSizeConstants.isLandscape(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Edit Profile" , style: Theme.of(context).textTheme.displaySmall,),
-        leading: _getBackFilledIconButton(context),
-        leadingWidth: 80,
-        automaticallyImplyLeading: false,
-      ),
-      body: BlocConsumer<EditProfileCubit , EditProfileState>(
-        listener: (context , state){
-          if(state is EditProfileFailed){
-            ScaffoldMessenger.of(context).showSnackBar(FailedToEditProfileSnackBar.get(context));
-          }
-          else if(state is EditProfileSuccess){
-            context.read<ProfileCubit>().getActiveUser();
-            context.read<HomeCubit>().getActiveUser();
-            ScaffoldMessenger.of(context).showSnackBar(EditProfileSuccessfullySnackBar.get(context));
-            context.pop();
-          }
-        },
-        builder: (context , state) {
-            return DefaultUserAuthenticationScreen(
-                globalKey: _globalKey,
-                padding: EdgeInsets.symmetric(horizontal: ResponsiveSizeConstants.widthScreen(context) * 0.05),
-                children: [
-                  CircleAvatar(
-                    backgroundColor: ColorsManager.transparent,
-                    foregroundColor: ColorsManager.transparent,
-                    foregroundImage: AssetImage("images/default_male_avatar.png"),
-                    radius: 50,
-                  ),
-                  Text(
-                    "${activeUser?.firstName??""} ${activeUser?.lastName??""}" ,
-                    style: Theme.of(context).textTheme.labelLarge,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    activeUser?.email ?? "",
-                    style: Theme.of(context).textTheme.headlineLarge,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(
-                    height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.03 : ResponsiveSizeConstants.heightScreen(context) * 0.02,
-                  ),
-                  DefaultTextFormField(
-                    controller: _firstNameController,
-                    label: "First Name",
-                    hint: "guest",
-                    validator: _getNameValidator,
-                    maxLength: 15,
-                    textInputType: TextInputType.name,
-                    isLandscape: isLandscape,
-                  ),
-                  SizedBox(
-                    height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.03 : ResponsiveSizeConstants.heightScreen(context) * 0.02,
-                  ),
-                  DefaultTextFormField(
-                    controller: _lastNameController,
-                    label: "Last Name",
-                    hint: "guest",
-                    validator: _getNameValidator,
-                    maxLength: 15,
-                    isLandscape: isLandscape,
-                    textInputType: TextInputType.name,
-                  ),
-                  SizedBox(
-                    height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.03 : ResponsiveSizeConstants.heightScreen(context) * 0.02,
-                  ),
-                  DefaultTextFormField(
-                    controller: _emailController,
-                    label: "Email Address",
-                    hint: "guest@gmail.com",
-                    validator: _getEmailValidator,
-                    maxLength: 30,
-                    isLandscape: isLandscape,
-                    textInputType: TextInputType.emailAddress,
-                  ),
-                  SizedBox(
-                    height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.03 : ResponsiveSizeConstants.heightScreen(context) * 0.02,
-                  ),
-                  _getSaveChangesFilledButton(context, state, isLandscape),
-                ],
-            );
+    return DefaultGestureDetectorAuthenticationScreen(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Edit Profile" , style: Theme.of(context).textTheme.displaySmall,),
+          leading: _getBackFilledIconButton(context),
+          leadingWidth: 80,
+          automaticallyImplyLeading: false,
+        ),
+        body: BlocConsumer<EditProfileCubit , EditProfileState>(
+          listener: (context , state) async {
+            FocusManager.instance.primaryFocus?.unfocus();
+            // 2. Wait for the closing animation to finish (approx 300ms)
+            await Future.delayed(const Duration(milliseconds: 300));
+
+            if (!context.mounted) return; // Safety check for async gap
+
+            if(state is EditProfileFailed){
+              ScaffoldMessenger.of(context).showSnackBar(FailedToEditProfileSnackBar.get(context));
+            }
+            else if(state is EditProfileSuccess){
+              context.read<ProfileCubit>().getActiveUser();
+              context.read<HomeCubit>().getActiveUser();
+              ScaffoldMessenger.of(context).showSnackBar(EditProfileSuccessfullySnackBar.get(context));
+              context.pop();
+            }
           },
+          builder: (context , state) {
+              return DefaultUserAuthenticationScreen(
+                  globalKey: _globalKey,
+                  padding: EdgeInsets.symmetric(horizontal: ResponsiveSizeConstants.widthScreen(context) * 0.05),
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: ColorsManager.transparent,
+                      foregroundColor: ColorsManager.transparent,
+                      foregroundImage: AssetImage("images/default_male_avatar.png"),
+                      radius: 50,
+                    ),
+                    Text(
+                      "${activeUser?.firstName??""} ${activeUser?.lastName??""}" ,
+                      style: Theme.of(context).textTheme.labelLarge,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      activeUser?.email ?? "",
+                      style: Theme.of(context).textTheme.headlineLarge,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(
+                      height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
+                    ),
+                    DefaultTextFormField(
+                      controller: _firstNameController,
+                      label: "First Name",
+                      hint: "guest",
+                      validator: _getNameValidator,
+                      maxLength: 15,
+                      textInputType: TextInputType.name,
+                    ),
+                    SizedBox(
+                      height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
+                    ),
+                    DefaultTextFormField(
+                      controller: _lastNameController,
+                      label: "Last Name",
+                      hint: "guest",
+                      validator: _getNameValidator,
+                      maxLength: 15,
+                      textInputType: TextInputType.name,
+                    ),
+                    SizedBox(
+                      height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
+                    ),
+                    DefaultTextFormField(
+                      controller: _emailController,
+                      label: "Email Address",
+                      hint: "guest@gmail.com",
+                      validator: _getEmailValidator,
+                      maxLength: 30,
+                      textInputType: TextInputType.emailAddress,
+                    ),
+                    SizedBox(
+                      height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
+                    ),
+                    _getSaveChangesFilledButton(context, state),
+                  ],
+              );
+            },
+        ),
       ),
     );
   }
 
-  Padding _getSaveChangesFilledButton(BuildContext context, EditProfileState state , bool isLandscape) {
+  Padding _getSaveChangesFilledButton(BuildContext context, EditProfileState state) {
     final editProfileCubit = context.read<EditProfileCubit>();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: DefaultUserAuthenticationFilledButton(
-        onPressed: () {
-          FocusScope.of(context).unfocus();
+        onPressed: () async {
+          // 2. Unfocus again just to be safe before popping
+          FocusManager.instance.primaryFocus?.unfocus();
+
+          await Future.delayed(const Duration(milliseconds: 300));
+          if (!context.mounted) return; // Safety check for async gap
+
           if (_globalKey.currentState!.validate()) {
             showDialog(context: context, barrierDismissible: false ,builder: (dialogContext){
               return AlertDialog(
@@ -167,9 +177,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
                   FilledButton(
-                    onPressed: () {
+                    onPressed: () async{
                       editProfileCubit.editUser(firstName: _firstNameController.text, lastName: _lastNameController.text, email: _emailController.text);
                       dialogContext.pop();
+                      // 2. Unfocus again just to be safe before popping
+                      FocusManager.instance.primaryFocus?.unfocus();
+
+                      // 2. Wait for the closing animation to finish (approx 300ms)
+                      await Future.delayed(const Duration(milliseconds: 300));
+
+                      if (!context.mounted) return; // Safety check for async gap
                     },
                     style: FilledButton.styleFrom(
                       backgroundColor: ColorsManager.primaryBlueAccentColor,
@@ -182,8 +199,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           }
         },
         text: "Save Changes",
-        textStyle:  (isLandscape)? Theme.of(context).textTheme.labelMedium : Theme.of(context).textTheme.labelLarge,
-        isLandscape: isLandscape,
+        textStyle: Theme.of(context).textTheme.labelLarge,
       ),
     );
   }

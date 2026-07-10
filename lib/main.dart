@@ -9,15 +9,21 @@ import 'package:cinema_app/ui/watch_list_movies_screen/watch_list_movies_state_m
 import 'package:cinema_app/utils/shared/hive_handler.dart';
 import 'package:cinema_app/routes/routes_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:uuid/uuid.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveHandler.init();
   await dotenv.load(fileName: "keys.env");
-  runApp(const MyApp());
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {

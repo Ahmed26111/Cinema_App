@@ -31,7 +31,6 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = ResponsiveSizeConstants.isLandscape(context);
 
     return DefaultGestureDetectorAuthenticationScreen(
       child: Scaffold(
@@ -43,13 +42,13 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
             listener: (context, state) {
               FocusScope.of(context).unfocus();
               if(state is NewPasswordEqualConfirmPasswordFailed){
-                ScaffoldMessenger.of(context).showSnackBar(ConfirmPasswordNotSameWithNewPasswordSnackBar.get(context , isLandscape));
+                ScaffoldMessenger.of(context).showSnackBar(ConfirmPasswordNotSameWithNewPasswordSnackBar.get(context));
               }
               else if(state is NewPasswordEqualConfirmPasswordSuccess){
                 context.read<CreateNewPasswordCubit>().updateUserPasswordByEmail(widget.email, _confirmPasswordController.text);
               }
               else if(state is UpdatePasswordFailed){
-                ScaffoldMessenger.of(context).showSnackBar(FailedToUpdatePasswordSnackBar.get(context , isLandscape));
+                ScaffoldMessenger.of(context).showSnackBar(FailedToUpdatePasswordSnackBar.get(context));
               }
               else if(state is UpdatePasswordSuccess){
                 context.pop();
@@ -61,9 +60,9 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                 globalKey: _globalKey,
                 padding: EdgeInsets.symmetric(horizontal: ResponsiveSizeConstants.widthScreen(context) * 0.05, vertical: 35),
                 children: [
-                  ...defaultAuthenticationTitleAndSubtitle(title: "Create New Password", subTitle: "Enter you new password", context: context , isLandscape:isLandscape ),
+                  ...defaultAuthenticationTitleAndSubtitle(title: "Create New Password", subTitle: "Enter you new password", context: context),
                   SizedBox(
-                    height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.05 : ResponsiveSizeConstants.heightScreen(context) * 0.07,
+                    height: ResponsiveSizeConstants.heightScreen(context) * 0.07,
                   ),
                   DefaultTextFormField(
                     controller: _newPasswordController,
@@ -73,10 +72,9 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                     isPasswordField: true,
                     textInputType: TextInputType.visiblePassword,
                     maxLength: 15,
-                    isLandscape: isLandscape,
                   ),
                   SizedBox(
-                    height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.03 : ResponsiveSizeConstants.heightScreen(context) * 0.02,
+                    height: ResponsiveSizeConstants.heightScreen(context) * 0.02,
                   ),
                   DefaultTextFormField(
                     controller: _confirmPasswordController,
@@ -86,12 +84,11 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                     isPasswordField: true,
                     textInputType: TextInputType.visiblePassword,
                     maxLength: 15,
-                    isLandscape: isLandscape,
                   ),
                   SizedBox(
-                    height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.06 : ResponsiveSizeConstants.heightScreen(context) * 0.05,
+                    height: ResponsiveSizeConstants.heightScreen(context) * 0.05,
                   ),
-                  _getResetFilledButton(context , isLandscape),
+                  _getResetFilledButton(context),
                 ],
               );
             }
@@ -100,7 +97,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
     );
   }
 
-  Padding _getResetFilledButton(BuildContext context , bool isLandscape){
+  Padding _getResetFilledButton(BuildContext context){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: DefaultUserAuthenticationFilledButton(
@@ -111,8 +108,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
           }
         },
         text: "Reset",
-        textStyle: (isLandscape)? Theme.of(context).textTheme.labelLarge : Theme.of(context).textTheme.displayLarge,
-        isLandscape:isLandscape,
+        textStyle: Theme.of(context).textTheme.displayLarge,
       ),
     );
   }

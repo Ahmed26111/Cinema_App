@@ -3,16 +3,15 @@ import 'package:cinema_app/utils/components/default_snack_bar.dart';
 import 'package:flutter/material.dart';
 
 abstract class ConfirmPasswordNotSameWithNewPasswordSnackBar {
-  static SnackBar get (BuildContext context , bool isLandscape) {
+  static SnackBar get (BuildContext context) {
     return DefaultSnackBar.get(
         context,
         "Passwords are not the same\nPlease,try again",
         EdgeInsets.only(
-          bottom: (isLandscape && ResponsiveSizeConstants.heightScreen(context) > 500 )?ResponsiveSizeConstants.heightScreen(context) - 255 :ResponsiveSizeConstants.heightScreen(context) - 180,
-          left: (isLandscape)? ResponsiveSizeConstants.widthScreen(context) * 0.07 : ResponsiveSizeConstants.widthScreen(context) * 0.045,
-          right: (isLandscape)? ResponsiveSizeConstants.widthScreen(context) * 0.07 :ResponsiveSizeConstants.widthScreen(context) * 0.045,
+          bottom: ResponsiveSizeConstants.heightScreen(context) - 180,
+          left:  ResponsiveSizeConstants.widthScreen(context) * 0.045,
+          right: ResponsiveSizeConstants.widthScreen(context) * 0.045,
         ),
-        isLandscape
     );
   }
 

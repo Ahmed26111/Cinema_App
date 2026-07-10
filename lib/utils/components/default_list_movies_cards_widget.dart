@@ -10,11 +10,10 @@ import 'package:go_router/go_router.dart';
 import '../../constants/api constants/api_constants.dart';
 
 class DefaultListMoviesCardsWidget extends StatefulWidget {
-  const DefaultListMoviesCardsWidget({super.key, required this.movies, this.isDummy = false, this.isLandscape = false});
+  const DefaultListMoviesCardsWidget({super.key, required this.movies, this.isDummy = false});
 
   final List<MovieModel> movies;
   final bool isDummy;
-  final bool isLandscape;
 
   @override
   State<DefaultListMoviesCardsWidget> createState() => _DefaultListMoviesCardsWidgetState();

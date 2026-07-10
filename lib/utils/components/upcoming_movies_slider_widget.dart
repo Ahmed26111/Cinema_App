@@ -16,12 +16,10 @@ class UpcomingMoviesSlider extends StatefulWidget {
     super.key,
     required this.movies,
     this.isDummy = false,
-    this.isLandscape = false,
   });
 
   final List<MovieModel> movies;
   final bool isDummy;
-  final bool isLandscape;
 
   @override
   State<UpcomingMoviesSlider> createState() => _UpcomingMoviesSliderState();
@@ -97,11 +95,7 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
 
   SizedBox getMovieImageSlider(BuildContext context) {
     return SizedBox(
-      height: (widget.isLandscape)
-          ? (ResponsiveSizeConstants.heightScreen(context) > 500)
-                ? ResponsiveSizeConstants.heightScreen(context) * 0.4
-                : ResponsiveSizeConstants.heightScreen(context) * 0.7
-          : ResponsiveSizeConstants.heightScreen(context) * 0.22,
+      height: ResponsiveSizeConstants.heightScreen(context) * 0.22,
       // Height of the slider
       child: PageView.builder(
         controller: _pageController,
@@ -120,11 +114,7 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
   }
 
   Widget getUpComingMovieContainer(MovieModel movie, BuildContext context) {
-    double horizontalMargin =
-        (widget.isLandscape &&
-            ResponsiveSizeConstants.heightScreen(context) > 500)
-        ? 60
-        : 8;
+    double horizontalMargin = 8;
 
     return GestureDetector(
       onTap: () {
@@ -177,9 +167,7 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
                 movie.movieTitle,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   fontWeight: FontWeight.w700,
-                  fontSize: (widget.isLandscape)
-                      ? ResponsiveSizeConstants.widthScreen(context) * 0.04
-                      : ResponsiveSizeConstants.widthScreen(context) * 0.05,
+                  fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.05,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -191,9 +179,7 @@ class _UpcomingMoviesSliderState extends State<UpcomingMoviesSlider> {
               right: 20,
               child: Text(
                 "On ${formatDate(movie.releaseDate, [M, " ", dd, " , ", yyyy])}",
-                style: (widget.isLandscape)
-                    ? Theme.of(context).textTheme.titleLarge
-                    : Theme.of(context).textTheme.labelSmall,
+                style: Theme.of(context).textTheme.labelSmall,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),

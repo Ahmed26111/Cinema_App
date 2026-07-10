@@ -26,7 +26,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLandscape = ResponsiveSizeConstants.isLandscape(context);
     return Scaffold(
       body: BlocBuilder<GetTopRatedMoviesCubit , GetTopRatedMoviesState>(
           builder: (context , state) {
@@ -36,14 +35,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 24 , vertical: 14),
                   child: Column(
                     children: [
-                      DefaultSearchBarWidget(controller: _searchController, hintText: "Type title, categories, years, etc" ,isLandscape: isLandscape),
-                      SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.045 : ResponsiveSizeConstants.heightScreen(context) * 0.03,),
+                      DefaultSearchBarWidget(controller: _searchController, hintText: "Type title, categories, years, etc"),
+                      SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.03,),
                       DefaultGenresButtonsWidget(
                         currentMovieGenre: context.read<GetTopRatedMoviesCubit>().currentMovieGenre,
                         onTapButton: (genre) => context.read<GetTopRatedMoviesCubit>().changeCurrentMovieGenre(genre),
-                        isLandscape: isLandscape,
                       ),
-                      SizedBox(height: (isLandscape)? ResponsiveSizeConstants.heightScreen(context) * 0.045 : ResponsiveSizeConstants.heightScreen(context) * 0.03,),
+                      SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.03,),
                       switch(state){
                         GetTopRatedMoviesInitial() || GetTopRatedMoviesLoading()  =>
                             Expanded(
@@ -56,16 +54,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                 enabled: true,
                                 child: GetMoviesVerticalListView(
                                   movies: getDummyMovies(10),
-                                  isLandscape: isLandscape,
                                   isDummy: true,
                                 ),
                               ),
                             ),
-                        GetTopRatedMoviesSuccess() => Expanded(child: GetMoviesVerticalListView(movies: state.movies, isLandscape: isLandscape)),
+                        GetTopRatedMoviesSuccess() => Expanded(child: GetMoviesVerticalListView(movies: state.movies)),
                         GetTopRatedMoviesFailed() => DefaultFailedToLoadWidget(
                             errorMessage: "Sorry, Failed to load \nthe Top Rated movies :(",
                             helpMessage: "Please try to connect with internet",
-                            isLandscape: isLandscape
                         ),
                       }
                     ],

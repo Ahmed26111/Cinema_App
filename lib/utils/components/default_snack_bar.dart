@@ -6,16 +6,15 @@ abstract class DefaultSnackBar {
   static SnackBar get(
     BuildContext context,
     String title,
-    EdgeInsetsGeometry? margin,
-    [bool isLandscape = false,]
+    EdgeInsetsGeometry? margin
   ) {
     return SnackBar(
-      content: Text(title, style: (isLandscape)? Theme.of(context).textTheme.titleLarge : Theme.of(context).textTheme.labelMedium),
+      content: Text(title, style: Theme.of(context).textTheme.labelMedium),
       margin: margin,
       behavior: SnackBarBehavior.floating,
       showCloseIcon: true,
       backgroundColor: ColorsManager.primaryBlueAccentColor,
-      shape: OutlineInputBorder(borderRadius: (isLandscape)? BorderRadius.circular(ResponsiveSizeConstants.widthScreen(context) * 0.022) : BorderRadius.circular(ResponsiveSizeConstants.widthScreen(context) * 0.06)),
+      shape: OutlineInputBorder(borderRadius: BorderRadius.circular(ResponsiveSizeConstants.widthScreen(context) * 0.06)),
       duration: Duration(seconds: 2),
       elevation: 10,
     );

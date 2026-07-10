@@ -1,14 +1,17 @@
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/ui/core/layout/change_bottom_navigation_bar_index_cubit.dart';
+import 'package:cinema_app/ui/favourite_movies_screen/favourite_movies_state_management/favourite_movies_cubit.dart';
 import 'package:cinema_app/ui/home_screen/get_popular_movies_state_management/get_popular_movies_cubit.dart';
 import 'package:cinema_app/ui/home_screen/get_top_rated_movies_state_management/get_top_rated_movies_cubit.dart';
 import 'package:cinema_app/ui/home_screen/get_upcoming_movies_state_management/get_upcoming_movies_cubit.dart';
 import 'package:cinema_app/ui/home_screen/home_screen.dart';
 import 'package:cinema_app/ui/home_screen/home_state_management/home_cubit.dart';
 import 'package:cinema_app/ui/profile_screen/profile_screen.dart';
+import 'package:cinema_app/ui/profile_screen/profile_state_management/profile_cubit.dart';
 import 'package:cinema_app/ui/search_screen/search_screen.dart';
 import 'package:cinema_app/ui/tickets_screen/tickets_screen.dart';
 import 'package:cinema_app/ui/tickets_screen/tickets_state_management/tickets_cubit.dart';
+import 'package:cinema_app/ui/watch_list_movies_screen/watch_list_movies_state_management/watch_list_movies_cubit.dart';
 import 'package:cinema_app/utils/shared/hive_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,6 +68,12 @@ class _LayoutScreenState extends State<LayoutScreen> {
         // If user clicked the "Tickets" tab (index 2)
         if (index == 2) {
           context.read<TicketsCubit>().getUserTickets();
+        }
+        // If user clicked the "Tickets" tab (index 2)
+        if (index == 3) {
+          context.read<ProfileCubit>().getActiveUser();
+          context.read<FavouriteMoviesCubit>().getFavouriteMovies();
+          context.read<WatchListMoviesCubit>().getWatchListMovies();
         }
       },
       child: AnimatedContainer(

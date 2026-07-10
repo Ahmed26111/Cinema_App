@@ -8,10 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DefaultGenresButtonsWidget extends StatelessWidget {
-  const DefaultGenresButtonsWidget({super.key, required this.currentMovieGenre, this.isLandscape = false, required this.onTapButton});
+  const DefaultGenresButtonsWidget({super.key, required this.currentMovieGenre, required this.onTapButton});
 
    final MovieGenreEnum currentMovieGenre;
-   final bool isLandscape;
    final void Function(MovieGenreEnum genre) onTapButton;
 
    final List<MovieGenreEnum> topSevenGenres = const <MovieGenreEnum>[

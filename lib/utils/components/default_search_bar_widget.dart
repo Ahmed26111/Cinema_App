@@ -7,11 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class DefaultSearchBarWidget extends StatefulWidget {
-  const DefaultSearchBarWidget({super.key, required this.controller, required this.isLandscape, required this.hintText , this.isSearchResult = false});
+  const DefaultSearchBarWidget({super.key, required this.controller, required this.hintText , this.isSearchResult = false});
 
   final TextEditingController controller;
 
-  final bool isLandscape;
 
   final bool isSearchResult; //? To Know if the search bar is active or it just a UI
 
@@ -34,12 +33,12 @@ class _DefaultSearchBarWidgetState extends State<DefaultSearchBarWidget> {
           autofocus: widget.isSearchResult, //? if the search bar is in search Result so it will auto focus on it
           controller: widget.controller,
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-            fontSize: (widget.isLandscape)? ResponsiveSizeConstants.widthScreen(context) * 0.02 : ResponsiveSizeConstants.widthScreen(context) * 0.04
+            fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.04
           ),
           decoration: InputDecoration(
             hintText: widget.hintText,
             hintStyle: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                fontSize: (widget.isLandscape)? ResponsiveSizeConstants.widthScreen(context) * 0.02 : ResponsiveSizeConstants.widthScreen(context) * 0.04
+                fontSize: ResponsiveSizeConstants.widthScreen(context) * 0.04
             ),
             filled: true,
             fillColor: ColorsManager.primarySoftColor,
