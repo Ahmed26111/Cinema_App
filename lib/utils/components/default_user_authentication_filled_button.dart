@@ -1,3 +1,4 @@
+import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
 import 'package:cinema_app/ui/core/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +9,14 @@ class DefaultUserAuthenticationFilledButton extends StatelessWidget {
     required this.onPressed,
     required this.text,
     required this.textStyle,
+    this.enable = true,
   });
 
 
   final void Function()? onPressed;
   final String text;
   final TextStyle? textStyle;
-
+  final bool enable;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,9 @@ class DefaultUserAuthenticationFilledButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(ResponsiveSizeConstants.widthScreen(context) * 0.07),
             ),
           ),
+          backgroundColor: (!enable) ? WidgetStateProperty.all(
+            ColorsManager.primarySoftColorLessOpacityLinearGradientStart
+          ) : null,
         ),
         child: Text(text, style: textStyle),
       ),

@@ -28,7 +28,10 @@ abstract class Validation{
   }
 
   static bool isValidateEmail(String email){
-    return RegExp(r'^[a-zA-Z0-9]+$').hasMatch(email);
+    // This is a standard professional Regex for general email validation
+    return RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"
+    ).hasMatch(email);
   }
 
   static bool isValidatePassword(String password){

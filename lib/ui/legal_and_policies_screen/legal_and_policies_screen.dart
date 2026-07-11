@@ -1,5 +1,6 @@
 import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
+import 'package:cinema_app/utils/components/default_pop_back_icon_button.dart';
 import 'package:flutter/material.dart';
 
 class LegalAndPoliciesScreen extends StatelessWidget {
@@ -13,6 +14,8 @@ class LegalAndPoliciesScreen extends StatelessWidget {
           "Privacy Policy",
           style: Theme.of(context).textTheme.displaySmall,
         ),
+        leading: DefaultPopBackIconButton(),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: Padding(

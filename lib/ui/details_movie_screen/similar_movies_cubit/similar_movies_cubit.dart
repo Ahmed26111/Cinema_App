@@ -15,7 +15,12 @@ class SimilarMoviesCubit extends Cubit<SimilarMoviesState> {
     emit(SimilarMoviesLoading());
     try{
       final List<MovieModel> movies = await _movieRepository.getSimilarMoviesById(movieId);
-      emit(SimilarMoviesSuccess(movies: movies));
+      if(movies.isEmpty){
+        emit(SimilarMoviesEmpty());
+      }
+      else{
+        emit(SimilarMoviesSuccess(movies: movies));
+      }
     }catch(e){
       emit(SimilarMoviesFailed(errorMessage: e.toString()));
     }

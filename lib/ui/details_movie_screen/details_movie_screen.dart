@@ -11,6 +11,7 @@ import 'package:cinema_app/ui/details_movie_screen/movie_certification_cubit/mov
 import 'package:cinema_app/ui/details_movie_screen/similar_movies_cubit/similar_movies_cubit.dart';
 import 'package:cinema_app/ui/favourite_movies_screen/favourite_movies_state_management/favourite_movies_cubit.dart';
 import 'package:cinema_app/ui/watch_list_movies_screen/watch_list_movies_state_management/watch_list_movies_cubit.dart';
+import 'package:cinema_app/utils/components/default_empty_list_widget.dart';
 import 'package:cinema_app/utils/components/default_failed_to_load_widget.dart';
 import 'package:cinema_app/utils/components/default_list_movies_cards_widget.dart';
 import 'package:cinema_app/utils/components/default_movie_rate_container.dart';
@@ -347,11 +348,27 @@ class DetailsMovieScreen extends StatelessWidget {
                                   highlightColor: ColorsManager.lineDarkColor,
                                 ),
                                 enabled: true ,
-                                child: _getCastAndCrew(context, _getDummyCasts(10)),
+                                child: _getCasts(context, _getDummyCasts(10)),
+                              );
+                            }
+                            case CastEmpty():{
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Cast and Crew" , style: Theme.of(context).textTheme.displaySmall),
+                                  SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.027,),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: DefaultEmptyListWidget(
+                                        message: "Sorry , there is no cast for this movie :-(",
+                                        helpMessage: ""
+                                    ),
+                                  ),
+                                ],
                               );
                             }
                             case CastSuccess():{
-                              return _getCastAndCrew(context, state.casts);
+                              return _getCasts(context, state.casts);
                             }
                             case CastFailed():{
                               return DefaultFailedToLoadWidget(
@@ -362,6 +379,7 @@ class DetailsMovieScreen extends StatelessWidget {
                           }
                         }
                     ),
+                    SizedBox(height: ResponsiveSizeConstants.heightScreen(context)*0.028,),
                     BlocBuilder<SimilarMoviesCubit , SimilarMoviesState>(
                      builder: (context , state){
                        switch(state){
@@ -374,6 +392,22 @@ class DetailsMovieScreen extends StatelessWidget {
                              ),
                              enabled: true ,
                                child: _getSimilarMovies(context,getDummyMovies(10),state,true),
+                           );
+                         }
+                         case SimilarMoviesEmpty():{
+                           return Column(
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                             children: [
+                               Text("Similar Movies" , style: Theme.of(context).textTheme.displaySmall),
+                               SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.027,),
+                               Align(
+                                 alignment: Alignment.center,
+                                 child: DefaultEmptyListWidget(
+                                     message: "Sorry , there is no similar movies for this movie :-(",
+                                     helpMessage: ""
+                                 ),
+                               ),
+                             ],
                            );
                          }
                          case SimilarMoviesSuccess():{
@@ -470,11 +504,11 @@ class DetailsMovieScreen extends StatelessWidget {
     );
   }
 
-  Column _getCastAndCrew(BuildContext context , List<CastModel> casts) {
+  Column _getCasts(BuildContext context , List<CastModel> casts) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children:[
-        Text("Cast and Crew" , style: Theme.of(context).textTheme.displaySmall),
+        Text("Casts" , style: Theme.of(context).textTheme.displaySmall),
         SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.027,),
         SizedBox(
           height: 150,
@@ -482,7 +516,7 @@ class DetailsMovieScreen extends StatelessWidget {
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext context, int index)=>Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CachedNetworkImage(
                   imageUrl: "${ApiConstants.baseImageUrl}${casts[index].profileImagePath}",
@@ -509,12 +543,8 @@ class DetailsMovieScreen extends StatelessWidget {
                       ),
                 ),
                 SizedBox(height: 10,),
-                Expanded(
-                  child: Text(casts[index].name , style: Theme.of(context).textTheme.labelMedium,overflow: TextOverflow.ellipsis,maxLines: 3,),
-                ),
-                Expanded(
-                    child: Text(casts[index].characterName, style: Theme.of(context).textTheme.titleSmall, overflow: TextOverflow.ellipsis, maxLines: 3,)
-                ),
+                Text(casts[index].name , style: Theme.of(context).textTheme.labelMedium,overflow: TextOverflow.ellipsis,maxLines: 3,),
+                Text(casts[index].characterName, style: Theme.of(context).textTheme.titleSmall, overflow: TextOverflow.ellipsis, maxLines: 3,),
               ],
             ),
             separatorBuilder: (BuildContext context, int index)=>SizedBox(width: 20,),
@@ -531,13 +561,17 @@ class DetailsMovieScreen extends StatelessWidget {
         children:[
           Text("Production Company" , style: Theme.of(context).textTheme.displaySmall),
           SizedBox(height: ResponsiveSizeConstants.heightScreen(context) * 0.027,),
-          SizedBox(
+          (companies?.isEmpty ?? false)
+              ? DefaultEmptyListWidget(
+              message: "Sorry , there is no production company for this movie :-(",
+              helpMessage: ""
+          )
+              : SizedBox(
             height: 130,
-            width: double.infinity,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index)=>Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CachedNetworkImage(
                     imageUrl: "${ApiConstants.baseImageUrl}${companies?[index].logoImagePath}",
@@ -562,21 +596,14 @@ class DetailsMovieScreen extends StatelessWidget {
                         ),
                   ),
                   SizedBox(height: 10,),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(companies?[index].companyName??"unknown company" , style: Theme.of(context).textTheme.labelMedium,overflow: TextOverflow.ellipsis,maxLines: 3,),
-                        Text(companies?[index].originCountry??"unknown origin country" , style: Theme.of(context).textTheme.titleSmall,overflow: TextOverflow.ellipsis,maxLines: 3,),
-                      ],
-                    ),
-                  )
+                  Text(companies?[index].companyName??"unknown company" , style: Theme.of(context).textTheme.labelMedium,overflow: TextOverflow.ellipsis,maxLines: 3,),
+                  Text(companies?[index].originCountry??"unknown origin country" , style: Theme.of(context).textTheme.titleSmall,overflow: TextOverflow.ellipsis,maxLines: 3,),
                 ],
               ),
               separatorBuilder: (BuildContext context, int index)=>SizedBox(width: 20,),
               itemCount: companies?.length ?? 0,
             ),
-          )
+          ),
         ]
     );
   }

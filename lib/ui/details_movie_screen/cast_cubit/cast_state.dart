@@ -7,6 +7,8 @@ final class CastInitial extends CastState {}
 
 final class CastLoading extends CastState {}
 
+final class CastEmpty extends CastState {}
+
 final class CastSuccess extends CastState {
   final List<CastModel> casts;
 

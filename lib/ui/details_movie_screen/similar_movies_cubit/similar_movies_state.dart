@@ -7,6 +7,8 @@ final class SimilarMoviesInitial extends SimilarMoviesState {}
 
 final class SimilarMoviesLoading extends SimilarMoviesState {}
 
+final class SimilarMoviesEmpty extends SimilarMoviesState {}
+
 final class SimilarMoviesSuccess extends SimilarMoviesState {
   final List<MovieModel> movies;
 

@@ -140,11 +140,12 @@ class _SignupScreenState extends State<SignupScreen> {
                   _passwordController.text
               );
           }
-        } : null,
+        } : (){},
         text: "Sign Up",
         textStyle: (state.isAcceptTerms)
             ? Theme.of(context).textTheme.displayLarge
-            : TextStyle(color: ColorsManager.primaryDarkColor),
+            : TextStyle(color: ColorsManager.greyColorLessOpacity),
+        enable: (state.isAcceptTerms),
       ),
     );
   }
@@ -223,21 +224,12 @@ class _SignupScreenState extends State<SignupScreen> {
       return "Please do not add space to your email";
     }
 
-    if(text.length <= 11){
-      return "please , Enter you email at this format \"yourname@gmail.com\" ";
+    // Use the shared validation logic for all email types
+    if (!Validation.isValidateEmail(text)) {
+      return "Please enter a valid email address (e.g., name@example.com)";
     }
 
-    String ? beforeAtGmailDotCom = text.substring(0 , text.length - 10);
-
-    if(! text.endsWith("@gmail.com")){
-      return "please , Enter you email at this format \"yourname@gmail.com\" ";
-    }
-
-    if (!(Validation.isValidateEmail(beforeAtGmailDotCom))) {
-      return "Please enter your email in english without special character";
-    }
-
-    if(! context.read<SignupCubit>().isUniqueUserEmail(text)){
+    if (!context.read<SignupCubit>().isUniqueUserEmail(text)) {
       return "This Email already used in another user account";
     }
 

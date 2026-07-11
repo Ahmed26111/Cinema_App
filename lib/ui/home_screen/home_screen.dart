@@ -43,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 return Text(
                     (activeUser == null)?"Hello, Guest":"Hello, ${activeUser.firstName}" ,
                     style: Theme.of(context).textTheme.displaySmall,
+                    overflow: TextOverflow.ellipsis,
                 );
               },
             ),

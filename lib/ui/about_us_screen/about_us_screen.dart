@@ -2,6 +2,8 @@ import 'package:cinema_app/constants/color%20constants/colors_manager.dart';
 import 'package:cinema_app/constants/responsive%20size%20contants/responsive_size_constants.dart';
 import 'package:flutter/material.dart';
 
+import '../../utils/components/default_pop_back_icon_button.dart';
+
 class AboutUsScreen extends StatelessWidget {
   const AboutUsScreen({super.key});
 
@@ -13,6 +15,8 @@ class AboutUsScreen extends StatelessWidget {
           "About Us",
           style: Theme.of(context).textTheme.displaySmall,
         ),
+        leading: DefaultPopBackIconButton(),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: Padding(

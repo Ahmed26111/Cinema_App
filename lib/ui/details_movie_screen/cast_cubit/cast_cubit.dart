@@ -15,7 +15,12 @@ class CastCubit extends Cubit<CastState> {
     emit(CastLoading());
     try{
       final List<CastModel> casts = await _movieRepository.getCastsByMovieId(movieId);
-      emit(CastSuccess(casts: casts));
+      if(casts.isEmpty){
+        emit(CastEmpty());
+      }
+      else{
+        emit(CastSuccess(casts: casts));
+      }
     }catch(e){
       emit(CastFailed(errorMessage: e.toString()));
     }
