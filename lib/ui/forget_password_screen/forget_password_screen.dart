@@ -14,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../utils/shared/debouncer.dart';
+
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({super.key});
 
@@ -26,6 +28,14 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   final TextEditingController _emailController = TextEditingController();
 
+  final Debouncer debouncer = Debouncer(delay: Duration(milliseconds: 200));
+
+  @override
+  void dispose() {
+    debouncer.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -36,11 +46,18 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             automaticallyImplyLeading: false, //? to hide default back button
         ),
         body: BlocConsumer<ForgetPasswordCubit,ForgetPasswordState>(
-          listener: (context,state){
-            FocusScope.of(context).unfocus();
+          listener: (context,state) async {
+            // 2. Unfocus again just to be safe before popping
+            FocusManager.instance.primaryFocus?.unfocus();
+
+            // 2. Wait for the closing animation to finish (approx 200ms)
+            await Future.delayed(const Duration(milliseconds: 200));
+
+            if (!context.mounted) return; // Safety check for async gap
             if(state is IsEmailExistsFailed){
               ScaffoldMessenger.of(context).showSnackBar(EmailDoesNotExistSnackBar.get(context));
             }else if(state is IsEmailExistsSuccess){
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
               context.pushNamed(RoutesConstants.createNewPasswordScreenName , pathParameters: {"email": _emailController.text});
             }
           },
@@ -79,7 +96,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       child: DefaultUserAuthenticationFilledButton(
         onPressed: () {
           if(_globalKey.currentState!.validate()){
-            context.read<ForgetPasswordCubit>().isEmailExists(_emailController.text);
+            debouncer.call((){
+              context.read<ForgetPasswordCubit>().isEmailExists(_emailController.text);
+            });
           }
         },
         text: "Next",

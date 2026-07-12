@@ -98,6 +98,7 @@ class DetailsMovieScreen extends StatelessWidget {
   IconButton _getBackFilledIconButton(BuildContext context) {
     return IconButton.filled(
         onPressed: () {
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
           context.pop();
           context.read<FavouriteMoviesCubit>().getFavouriteMovies();
         },

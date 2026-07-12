@@ -60,6 +60,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         trailing: IconButton(
                             onPressed: (){
+                              ScaffoldMessenger.of(context).removeCurrentSnackBar();
                               context.pushNamed(RoutesConstants.editProfileScreen);
                             },
                             icon: Icon(Icons.edit_square),
@@ -84,6 +85,7 @@ class ProfileScreen extends StatelessWidget {
                               title: Text("Favourite movies" , style: Theme.of(context).textTheme.labelMedium,),
                               trailing: IconButton(
                                 onPressed: (){
+                                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
                                   context.pushNamed(RoutesConstants.favouriteMoviesScreen);
                                 },
                                 icon: Icon(Icons.arrow_forward_ios_rounded),
@@ -103,6 +105,7 @@ class ProfileScreen extends StatelessWidget {
                               title: Text("Watch list movies" , style: Theme.of(context).textTheme.labelMedium,),
                               trailing: IconButton(
                                 onPressed: (){
+                                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
                                   context.pushNamed(RoutesConstants.watchListMoviesScreen);
                                 },
                                 icon: Icon(Icons.arrow_forward_ios_rounded),
@@ -129,7 +132,8 @@ class ProfileScreen extends StatelessWidget {
                               ),
                               title: Text("Change Password" , style: Theme.of(context).textTheme.labelMedium,),
                               trailing: IconButton(
-                                onPressed: (){
+                                onPressed: () {
+                                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
                                   context.pushNamed(RoutesConstants.changePasswordScreen);
                                 },
                                 icon: Icon(Icons.arrow_forward_ios_rounded),
@@ -149,6 +153,7 @@ class ProfileScreen extends StatelessWidget {
                               title: Text("Delete Account" , style: Theme.of(context).textTheme.labelMedium,),
                               trailing: IconButton(
                                 onPressed: (){
+                                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
                                   showDialog(context: context, barrierDismissible: false ,builder: (context){
                                     return AlertDialog(
                                       backgroundColor: ColorsManager.primarySoftColor,
@@ -236,6 +241,7 @@ class ProfileScreen extends StatelessWidget {
                               title: Text("Legal and Policies" , style: Theme.of(context).textTheme.labelMedium,),
                               trailing: IconButton(
                                 onPressed: (){
+                                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
                                   context.pushNamed(RoutesConstants.legalAndPoliciesScreen);
                                 },
                                 icon: Icon(Icons.arrow_forward_ios_rounded),
@@ -255,6 +261,7 @@ class ProfileScreen extends StatelessWidget {
                               title: Text("About Us" , style: Theme.of(context).textTheme.labelMedium,),
                               trailing: IconButton(
                                 onPressed: (){
+                                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
                                   context.pushNamed(RoutesConstants.aboutUsScreen);
                                 },
                                 icon: Icon(Icons.arrow_forward_ios_rounded),
@@ -273,6 +280,7 @@ class ProfileScreen extends StatelessWidget {
                           width: double.infinity,
                           child: ElevatedButton(
                               onPressed: (){
+                                ScaffoldMessenger.of(context).removeCurrentSnackBar();
                                 showDialog(context: context, barrierDismissible: false ,builder: (context){
                                   return AlertDialog(
                                     backgroundColor: ColorsManager.primarySoftColor,

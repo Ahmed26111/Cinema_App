@@ -14,6 +14,7 @@ import '../../constants/color constants/colors_manager.dart';
 import '../../constants/responsive size contants/responsive_size_constants.dart';
 import '../../utils/components/default_text_form_field.dart';
 import '../../utils/components/default_user_authentication_filled_button.dart';
+import '../../utils/shared/debouncer.dart';
 import '../../utils/shared/validation.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -30,6 +31,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   late UserModel ? activeUser;
+
+  final Debouncer debouncer = Debouncer(delay: Duration(milliseconds: 150));
+
+  @override
+  void dispose() {
+    debouncer.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -150,51 +160,53 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           if (!context.mounted) return; // Safety check for async gap
 
           if (_globalKey.currentState!.validate()) {
-            showDialog(context: context, barrierDismissible: false ,builder: (dialogContext){
-              return AlertDialog(
-                backgroundColor: ColorsManager.primarySoftColor,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 10),
-                    Image.asset("images/are_you_sure.png"),
-                    const SizedBox(height: 10),
-                    Text(
-                      "Are you sure you want to\nSave Changes?",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(dialogContext).textTheme.labelLarge,
+            debouncer.call((){
+              showDialog(context: context, barrierDismissible: false ,builder: (dialogContext){
+                return AlertDialog(
+                  backgroundColor: ColorsManager.primarySoftColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 10),
+                      Image.asset("images/are_you_sure.png"),
+                      const SizedBox(height: 10),
+                      Text(
+                        "Are you sure you want to\nSave Changes?",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(dialogContext).textTheme.labelLarge,
+                      ),
+                    ],
+                  ),
+                  actionsAlignment: MainAxisAlignment.spaceEvenly,
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(dialogContext),
+                      child: Text(
+                        "Cancel",
+                        style: Theme.of(dialogContext).textTheme.titleSmall,
+                      ),
+                    ),
+                    FilledButton(
+                      onPressed: () async{
+                        editProfileCubit.editUser(firstName: _firstNameController.text, lastName: _lastNameController.text, email: _emailController.text);
+                        dialogContext.pop();
+                        // 2. Unfocus again just to be safe before popping
+                        FocusManager.instance.primaryFocus?.unfocus();
+
+                        // 2. Wait for the closing animation to finish (approx 300ms)
+                        await Future.delayed(const Duration(milliseconds: 300));
+
+                        if (!context.mounted) return; // Safety check for async gap
+                      },
+                      style: FilledButton.styleFrom(
+                        backgroundColor: ColorsManager.primaryBlueAccentColor,
+                      ),
+                      child: Text("Save Changes" , style: Theme.of(dialogContext).textTheme.labelMedium,),
                     ),
                   ],
-                ),
-                actionsAlignment: MainAxisAlignment.spaceEvenly,
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(dialogContext),
-                    child: Text(
-                      "Cancel",
-                      style: Theme.of(dialogContext).textTheme.titleSmall,
-                    ),
-                  ),
-                  FilledButton(
-                    onPressed: () async{
-                      editProfileCubit.editUser(firstName: _firstNameController.text, lastName: _lastNameController.text, email: _emailController.text);
-                      dialogContext.pop();
-                      // 2. Unfocus again just to be safe before popping
-                      FocusManager.instance.primaryFocus?.unfocus();
-
-                      // 2. Wait for the closing animation to finish (approx 300ms)
-                      await Future.delayed(const Duration(milliseconds: 300));
-
-                      if (!context.mounted) return; // Safety check for async gap
-                    },
-                    style: FilledButton.styleFrom(
-                      backgroundColor: ColorsManager.primaryBlueAccentColor,
-                    ),
-                    child: Text("Save Changes" , style: Theme.of(dialogContext).textTheme.labelMedium,),
-                  ),
-                ],
-              );
+                );
+              });
             });
           }
         },

@@ -13,6 +13,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../utils/components/change_password_successfully_snack_bar.dart';
+import '../../utils/shared/debouncer.dart';
+
 class CreateNewPasswordScreen extends StatefulWidget {
   const CreateNewPasswordScreen({super.key, required this.email});
 
@@ -28,6 +31,14 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
   final TextEditingController _newPasswordController = TextEditingController();
 
   final TextEditingController _confirmPasswordController = TextEditingController();
+
+  final Debouncer debouncer = Debouncer(delay: Duration(milliseconds: 200));
+
+  @override
+  void dispose() {
+    debouncer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +62,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(FailedToUpdatePasswordSnackBar.get(context));
               }
               else if(state is UpdatePasswordSuccess){
+                ScaffoldMessenger.of(context).showSnackBar(ChangePasswordSuccessfullySnackBar.get(context));
                 context.pop();
                 context.pop();
               }
@@ -104,7 +116,9 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
         onPressed: (){
           FocusScope.of(context).unfocus();
           if(_globalKey.currentState!.validate()){
-            context.read<CreateNewPasswordCubit>().isNewPasswordEqualToConfirmPassword(_newPasswordController.text, _confirmPasswordController.text);
+            debouncer.call((){
+              context.read<CreateNewPasswordCubit>().isNewPasswordEqualToConfirmPassword(_newPasswordController.text, _confirmPasswordController.text);
+            });
           }
         },
         text: "Reset",

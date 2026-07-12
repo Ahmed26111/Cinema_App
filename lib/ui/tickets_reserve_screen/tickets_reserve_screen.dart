@@ -21,6 +21,7 @@ import 'package:go_router/go_router.dart';
 import '../../constants/api constants/api_constants.dart';
 import '../../constants/color constants/colors_manager.dart';
 import '../../constants/responsive size contants/responsive_size_constants.dart';
+import '../../utils/shared/debouncer.dart';
 
 class TicketsReserveScreen extends StatefulWidget {
   const TicketsReserveScreen({super.key, required this.movieModel});
@@ -32,6 +33,13 @@ class TicketsReserveScreen extends StatefulWidget {
 }
 
 class _TicketsReserveScreenState extends State<TicketsReserveScreen> {
+  final Debouncer debouncer = Debouncer(delay: Duration(milliseconds: 200));
+
+  @override
+  void dispose() {
+    debouncer.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final DateTime startDate = getSelectedDateTime(widget.movieModel.releaseDate);
@@ -342,7 +350,9 @@ class _TicketsReserveScreenState extends State<TicketsReserveScreen> {
   Widget _getBuyTicketButton(BuildContext context){
     return FilledButton(
       onPressed: (){
-        context.read<TicketsReserveCubit>().isAllChairsNotSelected();
+        debouncer.call((){
+          context.read<TicketsReserveCubit>().isAllChairsNotSelected();
+        });
       },
       style: FilledButton.styleFrom(
         backgroundColor: ColorsManager.primaryBlueAccentColor,

@@ -8,6 +8,7 @@ class DefaultPopBackIconButton extends StatelessWidget {
     return IconButton(
       onPressed: () {
         FocusScope.of(context).unfocus();
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
         Navigator.pop(context);
       },
       icon: Icon(Icons.arrow_back_ios_new),

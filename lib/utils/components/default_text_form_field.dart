@@ -28,6 +28,17 @@ class DefaultTextFormField extends StatefulWidget {
 class _DefaultTextFormFieldState extends State<DefaultTextFormField> {
   bool isSecure = true;
 
+  // 1. Create the FocusNode
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    // 2. Always dispose focus nodes to avoid memory leaks
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return TextSelectionTheme(
@@ -38,6 +49,7 @@ class _DefaultTextFormFieldState extends State<DefaultTextFormField> {
       ),
       child: TextFormField(
         controller: widget.controller,
+        focusNode: _focusNode, // 3. Assign the FocusNode
         validator: widget.validator,
         style: Theme.of(context).textTheme.headlineLarge,
         decoration: InputDecoration(
@@ -94,7 +106,22 @@ class _DefaultTextFormFieldState extends State<DefaultTextFormField> {
         keyboardType: widget.textInputType,
         obscureText: (widget.isPasswordField) ? isSecure: false,
         cursorErrorColor: ColorsManager.redColor,
+        autofocus: false,
+        onTap: () async{
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          // --- Magic Code to Delay Keyboard ---
+          // Check if it's not already focused to avoid double-delaying
+          if (!_focusNode.hasFocus) {
+            // Temporarily take focus away to stop the keyboard from jumping up
+            _focusNode.unfocus();
 
+            // Wait for 500ms (or any time you want)
+            await Future.delayed(const Duration(milliseconds: 200));
+
+            // Now show the keyboard
+            _focusNode.requestFocus();
+          }
+        },
       ),
     );
   }

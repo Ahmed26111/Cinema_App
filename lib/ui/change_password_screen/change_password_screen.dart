@@ -16,6 +16,7 @@ import '../../utils/components/default_authentication_title_and_subtitle.dart';
 import '../../utils/components/default_pop_back_icon_button.dart';
 import '../../utils/components/default_text_form_field.dart';
 import '../../utils/components/default_user_authentication_filled_button.dart';
+import '../../utils/shared/debouncer.dart';
 import '../../utils/shared/validation.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -31,6 +32,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
+  final Debouncer debouncer = Debouncer(delay: Duration(milliseconds: 200));
+
+  @override
+  void dispose() {
+    debouncer.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultGestureDetectorAuthenticationScreen(
@@ -125,7 +133,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         onPressed: (){
           FocusScope.of(context).unfocus();
           if(_globalKey.currentState!.validate()){
-            context.read<ChangePasswordCubit>().changeUserPassword(_oldPasswordController.text, _newPasswordController.text, _confirmPasswordController.text);
+            debouncer.call((){
+              context.read<ChangePasswordCubit>().changeUserPassword(_oldPasswordController.text, _newPasswordController.text, _confirmPasswordController.text);
+            });
           }
         },
         text: "Reset",

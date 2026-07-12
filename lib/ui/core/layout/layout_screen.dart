@@ -64,6 +64,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
     bool isSelected = (state.index == index);
     return GestureDetector(
       onTap: () {
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
         context.read<ChangeBottomNavigationBarIndexCubit>().changeBottomNavigationBarIndex(index , screens.length);
         // If user clicked the "Tickets" tab (index 2)
         if (index == 2) {

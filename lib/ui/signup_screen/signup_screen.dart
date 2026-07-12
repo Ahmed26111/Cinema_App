@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../utils/shared/debouncer.dart';
 import 'signup_cubit.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -35,6 +36,13 @@ class _SignupScreenState extends State<SignupScreen> {
 
   final TextEditingController _passwordController = TextEditingController();
 
+  final Debouncer debouncer = Debouncer(delay: Duration(milliseconds: 200));
+
+  @override
+  void dispose() {
+    debouncer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +60,7 @@ class _SignupScreenState extends State<SignupScreen> {
           listener: (context, state) {
               FocusScope.of(context).unfocus();
               if(state is AddNewUserSuccessState){
+                ScaffoldMessenger.of(context).removeCurrentSnackBar();
                 context.go(RoutesConstants.layoutScreen);
               }
               else if(state is AddNewUserFailedState){
@@ -133,12 +142,14 @@ class _SignupScreenState extends State<SignupScreen> {
         onPressed: (state.isAcceptTerms) ? () {
           FocusScope.of(context).unfocus();
           if (_globalKey.currentState!.validate()) {
+            debouncer.call((){
               context.read<SignupCubit>().addNewUser(
                   _firstNameController.text,
                   _lastNameController.text,
                   _emailController.text,
                   _passwordController.text
               );
+            });
           }
         } : (){},
         text: "Sign Up",

@@ -9,6 +9,7 @@ import 'package:cinema_app/utils/components/default_text_form_field.dart';
 import 'package:cinema_app/utils/components/default_user_authentication_filled_button.dart';
 import 'package:cinema_app/utils/components/default_user_authentication_screen.dart';
 import 'package:cinema_app/utils/components/invalid_user_account_snackbar.dart';
+import 'package:cinema_app/utils/shared/debouncer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +28,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final TextEditingController _passwordController = TextEditingController();
 
+  final Debouncer debouncer = Debouncer(delay: Duration(milliseconds: 200));
+
+  @override
+  void dispose() {
+    debouncer.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultGestureDetectorAuthenticationScreen(
@@ -41,6 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(InvalidUserAccountSnackBar.get(context));
               }
               else if(state is UserAccountExistSuccessState){
+                ScaffoldMessenger.of(context).removeCurrentSnackBar();
                 context.go(RoutesConstants.layoutScreen);
               }
             },
@@ -92,7 +102,9 @@ class _LoginScreenState extends State<LoginScreen> {
       child: DefaultUserAuthenticationFilledButton(
         onPressed: () {
           FocusScope.of(context).unfocus();
-          context.read<LoginCubit>().isUserAccountExist(_emailController.text, _passwordController.text);
+          debouncer.call((){
+            context.read<LoginCubit>().isUserAccountExist(_emailController.text, _passwordController.text);
+          });
         },
         text: "Login",
         textStyle: Theme.of(context).textTheme.displayLarge,
@@ -104,8 +116,15 @@ class _LoginScreenState extends State<LoginScreen> {
     return Row(
       children: [
         TextButton(
-          onPressed: () {
-            FocusScope.of(context).unfocus();
+          onPressed: () async{
+            // 2. Unfocus again just to be safe before popping
+            FocusManager.instance.primaryFocus?.unfocus();
+
+            // 2. Wait for the closing animation to finish (approx 200ms)
+            await Future.delayed(const Duration(milliseconds: 200));
+
+            if (!context.mounted) return; // Safety check for async gap
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
             context.pushNamed(RoutesConstants.signupScreen);
           },
           child: Text(
@@ -115,8 +134,15 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         Spacer(),
         TextButton(
-          onPressed: () {
-            FocusScope.of(context).unfocus();
+          onPressed: () async{
+            // 2. Unfocus again just to be safe before popping
+            FocusManager.instance.primaryFocus?.unfocus();
+
+            // 2. Wait for the closing animation to finish (approx 200ms)
+            await Future.delayed(const Duration(milliseconds: 200));
+
+            if (!context.mounted) return; // Safety check for async gap
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
             context.pushNamed(RoutesConstants.forgetPasswordScreen);
           },
           child: Text(
