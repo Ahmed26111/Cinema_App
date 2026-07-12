@@ -1,5 +1,6 @@
 name: cinema_app
 description: "A new Flutter project."
+# License: MIT
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -75,7 +76,6 @@ flutter:
   assets:
     - keys.env
     - images/
-    - ScreenShots/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -89,9 +89,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: AG
-       fonts:
-         - asset: fonts/AG Schoolbook Regular.ttf
+    - family: AG
+      fonts:
+        - asset: fonts/AG Schoolbook Regular.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
