@@ -62,7 +62,7 @@ Full, exact versions are pinned in [`pubspec.yaml`](pubspec.yaml) / [`pubspec.lo
 
 ## Features & Screenshots
 
-All screenshots below live in [`/screenshots`](screenshot), organized into one folder per screen/flow, with lowercase `snake_case` folder and file names for consistency. These are **documentation assets only** — they are not bundled into the app itself (see [Build notes](#build-notes-on-screenshots) below).
+All screenshots below live in [`/screenshots`](screenshots), organized into one folder per screen/flow, with lowercase `snake_case` folder and file names for consistency. These are **documentation assets only** — they are not bundled into the app itself (see [Build notes](#build-notes-on-screenshots) below).
 
 <details open>
 <summary><strong>Onboarding & Splash</strong></summary>
@@ -146,7 +146,7 @@ Additional views: `ticket_reserve_screens/ticket_reserve_screen_3.png` & `_4.png
 
 </details>
 
-**Other features covered by the app (see full gallery in [`/screenshots`](screenshot)):**
+**Other features covered by the app (see full gallery in [`/screenshots`](screenshots)):**
 
 - **Onboarding flow** — a 3-screen animated introduction shown to first-time users.
 - **Authentication** — sign up, log in, forgot/reset password, change password, delete account, and log out, backed by local Hive storage rather than a remote auth server.
